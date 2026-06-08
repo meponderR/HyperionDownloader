@@ -2,9 +2,9 @@ name: Wails v3 Build CI
 
 on:
     push:
-        branches: [main]
+        branches: [master]
     pull_request:
-        branches: [main]
+        branches: [master]
     workflow_dispatch:
 
 jobs:
@@ -62,7 +62,7 @@ jobs:
 
             # 6. Upload Artifacts
             - name: Upload Build Artifacts
-              uses: actions/artifacts@v4
+              uses: actions/upload-artifact@v7
               with:
                   name: hyperion-downloader-${{ matrix.platform }}
                   path: |
