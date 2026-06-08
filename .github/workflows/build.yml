@@ -62,8 +62,21 @@ jobs:
               run: go install github.com/wailsapp/wails/v3/cmd/wails3@latest
 
             # 5. Build the Application
-            - name: Build Application
-              run: wails3 build
+            - name: Build Application (Windows)
+              if: matrix.platform == 'windows'
+              run: |
+                  wails3 build
+              #wails3 package GOOS=windows
+            - name: Build Application (Linux)
+              if: matrix.platform == 'linux'
+              run: |
+                  wails3 package GOOS=linux
+
+            - name: Build Application (macOS)
+              if: matrix.platform == 'darwin'
+              run: |
+                  wails3 package GOOS=darwin
+                  hdiutil create -volname "Hyperion Downloader" -srcfolder bin/Hyperion\ Downloader.app -ov -format UDZO Hyperion-Downloader-macos.dmg
 
             # 6. Upload Artifacts
             - name: Upload Build Artifacts
@@ -71,4 +84,7 @@ jobs:
               with:
                   name: hyperion-downloader-${{ matrix.platform }}
                   path: |
-                      bin/*
+                      bin/*.exe
+                      bin/*.AppImage
+                      bin/*.app
+                      bin/*.dmg
