@@ -50,6 +50,7 @@ jobs:
             - name: Install Frontend Dependencies
               run: |
                   cd frontend
+                  corepack enable pnpm
                   pnpm ci
 
             # 4. Install Wails v3 CLI
