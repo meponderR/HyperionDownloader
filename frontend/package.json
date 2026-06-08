@@ -21,6 +21,7 @@
         "dateformat": "^5.0.3",
         "notistack": "^3.0.2",
         "pretty-bytes": "^7.1.0",
+        "prop-types": "^15.8.1",
         "react": "^19.2.7",
         "react-dom": "^19.2.7",
         "react-router": "^7.17.0",
