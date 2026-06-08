@@ -71,6 +71,4 @@ jobs:
               with:
                   name: hyperion-downloader-${{ matrix.platform }}
                   path: |
-                      build/bin/*
-                      *.exe
-                      *.app
+                      bin/*
