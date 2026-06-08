@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.0
+Name=Hyperion Downloader
+Comment=A hyperion-downloader application
+# The Exec line includes %u to pass the URL to the application
+Exec=/usr/local/bin/hyperion-downloader %u
+Terminal=false
+Type=Application
+Icon=hyperion-downloader
+Categories=Utility;
+StartupWMClass=hyperion-downloader
+
+ 

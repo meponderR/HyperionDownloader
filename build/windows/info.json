@@ -1,0 +1,15 @@
+{
+    "fixed": {
+        "file_version": "0.1.0"
+    },
+    "info": {
+        "0000": {
+            "ProductVersion": "0.1.0",
+            "CompanyName": "meponder",
+            "FileDescription": "A hyperion-downloader application",
+            "LegalCopyright": "© 2026, meponder",
+            "ProductName": "Hyperion Downloader",
+            "Comments": "A multi-threaded downloader built with Go and Wails."
+        }
+    }
+}
