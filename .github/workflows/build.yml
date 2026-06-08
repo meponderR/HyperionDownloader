@@ -1,70 +1,71 @@
 name: Wails v3 Build CI
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    push:
+        branches: [main]
+    pull_request:
+        branches: [main]
+    workflow_dispatch:
 
 jobs:
-  build:
-    strategy:
-      matrix:
-        include:
-          - os: ubuntu-latest
-            platform: linux
-          - os: windows-latest
-            platform: windows
-          - os: macos-latest
-            platform: darwin
+    build:
+        strategy:
+            matrix:
+                include:
+                    - os: ubuntu-latest
+                      platform: linux
+                    - os: windows-latest
+                      platform: windows
+                    - os: macos-latest
+                      platform: darwin
 
-    runs-on: ${{ matrix.os }}
+        runs-on: ${{ matrix.os }}
 
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v6
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v6
 
-      # 1. Install System Dependencies (Crucial for Linux GUI building)
-      - name: Install Linux Dependencies
-        if: matrix.os == 'ubuntu-latest'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libgtk-4-dev libwebkitgtk-6.0-dev build-essential pkg-config
+            # 1. Install System Dependencies (Crucial for Linux GUI building)
+            - name: Install Linux Dependencies
+              if: matrix.os == 'ubuntu-latest'
+              run: |
+                  sudo apt-get update
+                  sudo apt-get install -y libgtk-4-dev libwebkitgtk-6.0-dev build-essential pkg-config
 
-      # 2. Setup Development Environment
-      - name: Setup Go
-        uses: actions/setup-go@v6
-        with:
-          go-version: '1.26' # Update to your specific Go version if needed
-          cache: true
+            # 2. Setup Development Environment
+            - name: Setup Go
+              uses: actions/setup-go@v6
+              with:
+                  go-version: "1.26" # Update to your specific Go version if needed
+                  cache: true
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: '24'
-          cache: 'pnpm'
-          cache-dependency-path: frontend/package-lock.json
+            - name: Setup Node.js
+              uses: actions/setup-node@v6
+              with:
+                  node-version: "24"
+                  cache: "pnpm"
+                  cache-dependency-path: frontend/package-lock.json
 
-      # 3. Install Frontend Dependencies
-      - name: Install Frontend Dependencies
-        run: |
-          cd frontend
-          pnpm ci
+            # 3. Install Frontend Dependencies
+            - name: Install Frontend Dependencies
+              run: |
+                  cd frontend
+                  pnpm ci
 
-      # 4. Install Wails v3 CLI
-      - name: Install Wails v3 CLI
-        run: go install github.com/wailsapp/wails/v3/cmd/wails3@latest
+            # 4. Install Wails v3 CLI
+            - name: Install Wails v3 CLI
+              run: go install github.com/wailsapp/wails/v3/cmd/wails3@latest
 
-      # 5. Build the Application
-      - name: Build Application
-        run: wails build
+            # 5. Build the Application
+            - name: Build Application
+              run: wails build
 
-      # 6. Upload Artifacts
-      - name: Upload Build Artifacts
-        uses: actions/artifacts@v4
-        with:
-          name: hyperion-downloader-${{ matrix.platform }}
-          path: |
-            build/bin/*
-            *.exe
-            *.app
+            # 6. Upload Artifacts
+            - name: Upload Build Artifacts
+              uses: actions/artifacts@v4
+              with:
+                  name: hyperion-downloader-${{ matrix.platform }}
+                  path: |
+                      build/bin/*
+                      *.exe
+                      *.app
