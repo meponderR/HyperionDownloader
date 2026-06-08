@@ -63,7 +63,7 @@ jobs:
 
             # 5. Build the Application
             - name: Build Application
-              run: wails build
+              run: wails3 build
 
             # 6. Upload Artifacts
             - name: Upload Build Artifacts
