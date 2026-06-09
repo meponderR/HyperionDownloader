@@ -12,10 +12,20 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"sync"
+	"sync/atomic"
 	"time"
 
 	"github.com/valyala/fasthttp"
 )
+
+// Create a highly tuned client specifically for blasting concurrent requests
+var fastClient = &fasthttp.Client{
+	MaxConnsPerHost:     1000,             // Prevents bottlenecking if concurrentDownloads is very high
+	MaxIdleConnDuration: 15 * time.Second, // Keeps TCP connections warm between chunks
+	ReadTimeout:         5 * time.Minute,  // Hard cutoff for hanging downloads
+	WriteTimeout:        10 * time.Second, // Time allowed to send the request headers
+}
 
 func ConstructHyperFile(urlString string, concurrentDownloads int, targetPartSize int64, advancedOptions *hyperStructs.HyperDownloadAdvancedOptions, redirectCount int) (*hyperStructs.HyperFile, error) {
 	// Make a HEAD request to get the file size and check if the server supports range requests
@@ -23,6 +33,7 @@ func ConstructHyperFile(urlString string, concurrentDownloads int, targetPartSiz
 	resp := fasthttp.AcquireResponse()
 	defer fasthttp.ReleaseRequest(req)
 	defer fasthttp.ReleaseResponse(resp)
+
 	req.SetRequestURI(urlString)
 	req.Header.SetMethod("HEAD")
 	req.Header.Set("Accept", "*/*")
@@ -40,7 +51,7 @@ func ConstructHyperFile(urlString string, concurrentDownloads int, targetPartSiz
 			req.Header.Set("Authorization", advancedOptions.AuthorizationHeader)
 		}
 	}
-	err := fasthttp.Do(req, resp)
+	err := fastClient.Do(req, resp)
 	if err != nil {
 		return nil, fmt.Errorf("failed to make HEAD request: %w", err)
 	}
@@ -81,7 +92,7 @@ func ConstructHyperFile(urlString string, concurrentDownloads int, targetPartSiz
 				req.Header.Set("Authorization", advancedOptions.AuthorizationHeader)
 			}
 		}
-		err := fasthttp.Do(req, resp)
+		err := fastClient.Do(req, resp)
 		if err != nil {
 			return nil, fmt.Errorf("failed to make GET request: %w", err)
 		}
@@ -122,20 +133,20 @@ func ConstructHyperFile(urlString string, concurrentDownloads int, targetPartSiz
 				if cdStr[filenameStart] == '"' {
 					filenameEnd := strings.Index(cdStr[filenameStart+1:], "\"")
 					if filenameEnd != -1 {
-						filename = cdStr[filenameStart+1 : filenameStart+1+filenameEnd]
+						rawFilename := cdStr[filenameStart+1 : filenameStart+1+filenameEnd]
+						filename = filepath.Base(rawFilename)
 					}
 				} else {
 					filenameEnd := strings.IndexAny(cdStr[filenameStart:], "; ")
 					if filenameEnd != -1 {
-						filename = cdStr[filenameStart : filenameStart+filenameEnd]
+						rawFilename := cdStr[filenameStart : filenameStart+filenameEnd]
+						filename = filepath.Base(rawFilename)
 					} else {
-						filename = cdStr[filenameStart:]
+						filename = filepath.Base(cdStr[filenameStart:])
 					}
 				}
 			}
-
 		}
-
 	}
 
 	// Parse the file size
@@ -147,12 +158,21 @@ func ConstructHyperFile(urlString string, concurrentDownloads int, targetPartSiz
 
 	// Calculate the size of each part and have the final part take the remainder
 	targetPartCount := int(fileSize / targetPartSize)
-
 	// If the target part count is less than the number of concurrent downloads, we can set the part count to the concurrent download count to better utilize the available concurrency
 	partCount := targetPartCount
+
+	// Safe concurrency sizing
 	if targetPartCount < concurrentDownloads {
 		partCount = concurrentDownloads
 	}
+	// Ensure the part count is not larger than the file size
+	if int64(partCount) > fileSize {
+		partCount = int(fileSize)
+	}
+	if partCount == 0 {
+		partCount = 1
+	}
+
 	partSize := fileSize / int64(partCount)
 	remainder := fileSize % int64(partCount)
 
@@ -183,9 +203,11 @@ func ConstructHyperFile(urlString string, concurrentDownloads int, targetPartSiz
 	}, nil
 }
 
-func DownloadPart(part hyperStructs.HyperFilePart, outputDir string, retryindex int, advancedOptions *hyperStructs.HyperDownloadAdvancedOptions) error {
+func DownloadPart(part hyperStructs.HyperFilePart, outputDir string, advancedOptions *hyperStructs.HyperDownloadAdvancedOptions) error {
+	safeFilename := filepath.Base(part.Filename)
+	filename := filepath.Join(outputDir, safeFilename)
+
 	// If file already exists, skip downloading this part
-	filename := fmt.Sprintf("%s/%s", outputDir, part.Filename)
 	if _, err := os.Stat(filename); err == nil {
 		return nil
 	}
@@ -195,11 +217,12 @@ func DownloadPart(part hyperStructs.HyperFilePart, outputDir string, retryindex 
 	resp := fasthttp.AcquireResponse()
 	defer fasthttp.ReleaseRequest(req)
 	defer fasthttp.ReleaseResponse(resp)
+
 	req.SetRequestURI(part.Url)
 	req.Header.SetMethod("GET")
 	req.Header.Set("Accept", "*/*")
-	rangeHeader := fmt.Sprintf("bytes=%d-%d", part.StartByte, part.EndByte)
-	req.Header.Set("Range", rangeHeader)
+	req.Header.Set("Range", fmt.Sprintf("bytes=%d-%d", part.StartByte, part.EndByte))
+
 	if advancedOptions != nil {
 		if advancedOptions.Cookies != "" {
 			req.Header.Set("Cookie", advancedOptions.Cookies)
@@ -214,74 +237,96 @@ func DownloadPart(part hyperStructs.HyperFilePart, outputDir string, retryindex 
 			req.Header.Set("Authorization", advancedOptions.AuthorizationHeader)
 		}
 	}
-	err := fasthttp.Do(req, resp)
-	if err != nil {
-		return fmt.Errorf("failed to download part: %w", err)
-	}
 
-	if resp.StatusCode() != fasthttp.StatusPartialContent {
-		// If the server returns an error starting in 5, we retry.
-		if resp.StatusCode() >= 500 && resp.StatusCode() < 600 {
-			if retryindex < 5 {
-				// Delay 1 second before retrying
-				time.Sleep(time.Second)
-				return DownloadPart(part, outputDir, retryindex+1, advancedOptions)
-			}
-			return fmt.Errorf("failed to download part after 5 retries: %d", resp.StatusCode())
-		}
-		return fmt.Errorf("download part request returned non-206 status code: %d", resp.StatusCode())
-	} else {
+	maxRetries := 5
+	timeoutDuration := 5 * time.Minute
 
-		// Save the part to a file
-		filename = fmt.Sprintf("%s/%s", outputDir, part.Filename)
-		err = os.WriteFile(filename, resp.Body(), 0644)
+	for attempt := 0; attempt <= maxRetries; attempt++ {
+		err := fastClient.DoTimeout(req, resp, timeoutDuration)
+
 		if err != nil {
-			return fmt.Errorf("failed to save part to file: %w", err)
+			if attempt < maxRetries {
+				// Delay 1 second + attempt before retrying
+				time.Sleep(time.Second * time.Duration(attempt+1))
+				continue
+			}
+			return fmt.Errorf("failed to download part after %d network retries: %w", maxRetries, err)
 		}
-		return nil
+
+		statusCode := resp.StatusCode()
+
+		if statusCode == fasthttp.StatusPartialContent || statusCode == fasthttp.StatusOK {
+			// Save the part to a file
+			err = os.WriteFile(filename, resp.Body(), 0644)
+			if err != nil {
+				return fmt.Errorf("failed to save part to file: %w", err)
+			}
+			return nil
+		}
+
+		if statusCode >= 500 && statusCode < 600 {
+			if attempt < maxRetries {
+				time.Sleep(time.Second * time.Duration(attempt+1))
+				continue
+			}
+			return fmt.Errorf("server failed with status %d after %d retries", statusCode, maxRetries)
+		}
+
+		return fmt.Errorf("fatal error: server returned status %d", statusCode)
 	}
+
+	return fmt.Errorf("exceeded maximum retries")
 }
 
-// Download parts using goroutines
+// Download parts concurrently using goroutines
 func DownloadParts(parts []hyperStructs.HyperFilePart, outputDir string, concurrentDownloads int, advancedOptions *hyperStructs.HyperDownloadAdvancedOptions, functions hyperStructs.HyperFunctions) error {
-	downloadedParts := 0
+	var downloadedParts int64 = 0
 	totalParts := len(parts)
 	sem := make(chan struct{}, concurrentDownloads)
 	errChan := make(chan error, len(parts))
+	var wg sync.WaitGroup
+
 	for _, part := range parts {
 		sem <- struct{}{}
+		wg.Add(1)
+
 		go func(part hyperStructs.HyperFilePart) {
-			defer func() { <-sem }()
+			defer func() {
+				<-sem
+				wg.Done()
+			}()
+
 			if functions.CheckPausedFunc != nil && functions.CheckPausedFunc() {
 				functions.TaskFunc("Download paused")
-				errChan <- nil
 				return
 			}
 			if functions.CheckCancelledFunc != nil && functions.CheckCancelledFunc() {
 				functions.TaskFunc("Download cancelled")
-				errChan <- nil
 				return
 			}
-			err := DownloadPart(part, outputDir, 0, advancedOptions)
+
+			err := DownloadPart(part, outputDir, advancedOptions)
 			if err != nil {
 				errChan <- fmt.Errorf("failed to download part %d: %w", part.PartNumber, err)
+				return
 			}
-			downloadedParts++
+
+			currentDownloaded := atomic.AddInt64(&downloadedParts, 1)
+
 			if functions.ProgressFunc != nil {
-				functions.ProgressFunc(((float64(downloadedParts) / float64(totalParts)) * 0.9) + 0.05)
+				functions.ProgressFunc(((float64(currentDownloaded) / float64(totalParts)) * 0.9) + 0.05)
 			}
 			if functions.TaskFunc != nil {
-				functions.TaskFunc(fmt.Sprintf("Downloaded part %d of %d", downloadedParts, totalParts))
+				functions.TaskFunc(fmt.Sprintf("Downloaded part %d of %d", currentDownloaded, totalParts))
 			}
 		}(part)
 	}
+
 	// Wait for all downloads to finish
-	for i := 0; i < cap(sem); i++ {
-		sem <- struct{}{}
-	}
+	wg.Wait()
 	close(errChan)
 
-	// Check for errors
+	// Collect the first fatal error if any occurred
 	for err := range errChan {
 		if err != nil {
 			return err
@@ -321,8 +366,13 @@ func CombineParts(partsDir string, outputFilePath string, functions hyperStructs
 	for _, entry := range filteredPartFiles {
 		name := entry.Name()
 
-		partNumberStr := strings.TrimPrefix(filepath.Ext(name), ".")
+		// Extension parsing
+		lastDot := strings.LastIndex(name, ".")
+		if lastDot == -1 {
+			return fmt.Errorf("failed to parse part number from missing extension in filename '%s'", name)
+		}
 
+		partNumberStr := name[lastDot+1:]
 		partNumber, err := strconv.Atoi(partNumberStr)
 		if err != nil {
 			return fmt.Errorf("failed to parse part number from filename '%s': %w", name, err)
@@ -336,30 +386,39 @@ func CombineParts(partsDir string, outputFilePath string, functions hyperStructs
 	})
 
 	for _, partFileInfo := range partFileInfos {
-
 		if functions.TaskFunc != nil {
 			functions.TaskFunc(fmt.Sprintf("Combining part %d", partFileInfo.partNumber+1))
 		}
 		if functions.ProgressFunc != nil {
 			functions.ProgressFunc(0.95 + (float64(partFileInfo.partNumber+1) / float64(len(partFileInfos)) * 0.05))
 		}
-		partFilePath := fmt.Sprintf("%s/%s", partsDir, partFileInfo.name)
-		partFile, err := os.Open(partFilePath)
-		if err != nil {
-			return fmt.Errorf("failed to open part file: %w", err)
-		}
-		_, err = io.Copy(outputFile, partFile)
-		partFile.Close()
+		partFilePath := filepath.Join(partsDir, partFileInfo.name)
+
+		// BUGFIX: Safely isolate the file descriptor to ensure closure on io.Copy failures
+		err := func() error {
+			partFile, err := os.Open(partFilePath)
+			if err != nil {
+				return err
+			}
+			defer partFile.Close()
+
+			_, err = io.Copy(outputFile, partFile)
+			return err
+		}()
+
 		if err != nil {
 			return fmt.Errorf("failed to write part to output file: %w", err)
 		}
-		err = os.Remove(partFilePath)
+
+		_ = os.Remove(partFilePath)
+
 		if functions.CheckCancelledFunc != nil && functions.CheckCancelledFunc() {
 			functions.TaskFunc("Download cancelled")
+			outputFile.Close()
 			// Delete output file
-			os.Remove(outputFilePath)
+			_ = os.Remove(outputFilePath)
 			// Delete temp directory and all its contents
-			os.RemoveAll(partsDir)
+			_ = os.RemoveAll(partsDir)
 			return nil
 		}
 	}
@@ -368,10 +427,11 @@ func CombineParts(partsDir string, outputFilePath string, functions hyperStructs
 
 func DownloadFile(url string, outputDir string, tempDir string, concurrentDownloads int, targetPartSize int64, advancedOptions *hyperStructs.HyperDownloadAdvancedOptions, functions hyperStructs.HyperFunctions) error {
 	// Check if a download.json file exists in the tempDir, if it does, we can assume that this is a resumed download and we can skip the metadata fetching and go straight to downloading the parts, otherwise we need to fetch the metadata and emit the gotMetadata event
-	downloadJsonPath := fmt.Sprintf("%s/download.json", tempDir)
+	downloadJsonPath := filepath.Join(tempDir, "download.json")
 	_, err := os.Stat(downloadJsonPath)
 	isResumed := err == nil
 	var hyperFile *hyperStructs.HyperFile
+
 	if isResumed {
 		functions.TaskFunc("Resuming download")
 		functions.ProgressFunc(0.05)
@@ -380,23 +440,28 @@ func DownloadFile(url string, outputDir string, tempDir string, concurrentDownlo
 			return fmt.Errorf("failed to read download.json file: %w", err)
 		}
 		err = json.Unmarshal(downloadJsonData, &hyperFile)
-		if err != nil {
-			return fmt.Errorf("failed to unmarshal download.json file: %w", err)
-		}
 
-		if functions.GotMetadataFunc != nil {
-			err = functions.GotMetadataFunc(hyperFile)
-			if err != nil {
-				return fmt.Errorf("failed to execute GotMetadataFunc: %w", err)
+		// Handle corrupted resume files
+		if err != nil {
+			_ = os.Remove(downloadJsonPath)
+			isResumed = false
+		} else {
+			if functions.GotMetadataFunc != nil {
+				err = functions.GotMetadataFunc(hyperFile)
+				if err != nil {
+					return fmt.Errorf("failed to execute GotMetadataFunc: %w", err)
+				}
 			}
 		}
-	} else {
+	}
 
+	if !isResumed {
 		functions.TaskFunc("Getting file metadata")
 		hyperFile, err = ConstructHyperFile(url, concurrentDownloads, targetPartSize, advancedOptions, 0)
 		if err != nil {
 			return fmt.Errorf("failed to construct hyper file: %w", err)
 		}
+
 		// Emit gotMetadata event with the hyperFile metadata, so the frontend can use this information to display the file name, size, and progress of the download
 		if functions.GotMetadataFunc != nil {
 			err = functions.GotMetadataFunc(hyperFile)
@@ -433,10 +498,7 @@ func DownloadFile(url string, outputDir string, tempDir string, concurrentDownlo
 	if functions.CheckCancelledFunc != nil && functions.CheckCancelledFunc() {
 		functions.TaskFunc("Download cancelled")
 		// Delete temp directory and all its contents
-		err = os.RemoveAll(tempDir)
-		if err != nil {
-			return fmt.Errorf("failed to delete temp directory: %w", err)
-		}
+		_ = os.RemoveAll(tempDir)
 		return nil
 	}
 
@@ -452,14 +514,11 @@ func DownloadFile(url string, outputDir string, tempDir string, concurrentDownlo
 	if functions.CheckCancelledFunc != nil && functions.CheckCancelledFunc() {
 		functions.TaskFunc("Download cancelled")
 		// Delete temp directory and all its contents
-		err = os.RemoveAll(tempDir)
-		if err != nil {
-			return fmt.Errorf("failed to delete temp directory: %w", err)
-		}
+		_ = os.RemoveAll(tempDir)
 		return nil
 	}
 
-	outputFilePath := fmt.Sprintf("%s/%s", outputDir, hyperFile.Filename)
+	outputFilePath := filepath.Join(outputDir, hyperFile.Filename)
 	functions.TaskFunc("Combining parts")
 	err = CombineParts(tempDir, outputFilePath, functions)
 	if err != nil {
@@ -467,10 +526,8 @@ func DownloadFile(url string, outputDir string, tempDir string, concurrentDownlo
 	}
 
 	// Delete temp directory
-	err = os.RemoveAll(tempDir)
-	if err != nil {
-		return fmt.Errorf("failed to delete temp directory: %w", err)
-	}
+	_ = os.RemoveAll(tempDir)
+
 	functions.TaskFunc("Download completed")
 
 	return nil

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=hyperion-downloader
+Exec=hyperion-downloader
+Icon=hyperion-downloader
+Categories=Development;
+Terminal=false
+Keywords=wails
+Version=1.0
+StartupNotify=false

@@ -80,7 +80,16 @@ function TaskCard(props) {
                                 spacing={2}
                                 direction={"column"}
                             >
-                                <Typography id="infoModalUrl">{task.url ? "URL: " + task.url : ""}</Typography>
+                                <Typography
+                                    id="infoModalUrl"
+                                    sx={{
+                                        overflowX: "scroll",
+                                        whiteSpace: "nowrap",
+                                        width: 1,
+                                    }}
+                                >
+                                    {task.url ? "URL: " + task.url : ""}
+                                </Typography>
                                 <Typography id="infoModalSize">{task.fileSize ? "File Size: " + prettyBytes(task.fileSize) : ""}</Typography>
                                 <Typography id="infoModalCreatedAt">{task.createdAt ? "Created At: " + dateformat(task.createdAt, "yyyy-mm-dd HH:MM:ss") : ""}</Typography>
                             </Grid>
@@ -150,7 +159,11 @@ function TaskCard(props) {
                                         aria-label="Pause"
                                         onClick={() => {
                                             setPauseButtonLoading(true);
-                                            PauseTask(task.uid);
+                                            try {
+                                                await PauseTask(task.uid);
+                                            } finally {
+                                                setPauseButtonLoading(false);
+                                            }
                                         }}
                                         sx={{
                                             height: "32px",
@@ -166,7 +179,11 @@ function TaskCard(props) {
                                         aria-label="cancel"
                                         onClick={() => {
                                             setCancelButtonLoading(true);
-                                            StopTask(task.uid);
+                                            try {
+                                                await StopTask(task.uid);
+                                            } finally {
+                                                setCancelButtonLoading(false);
+                                            }
                                         }}
                                         sx={{
                                             height: "32px",

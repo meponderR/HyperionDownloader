@@ -16,18 +16,16 @@ type HyperDownloadService struct {
 }
 
 type HyperDownloadTask struct {
-	CreatedAt           int64   `json:"createdAt"`
-	UID                 string  `json:"uid"`
-	URL                 string  `json:"url"`
-	Filename            string  `json:"filename"`
-	OutputDir           string  `json:"outputDir"`
-	Status              string  `json:"status"`
-	Progress            float64 `json:"progress"`
-	FileSize            int64   `json:"fileSize"`
-	ConcurrentDownloads int     `json:"concurrentDownloads"`
-	PartCount           int     `json:"partCount"`
-	Paused              bool    `json:"paused"`
-	Stopped             bool    `json:"stopped"`
+	CreatedAt int64   `json:"createdAt"`
+	UID       string  `json:"uid"`
+	URL       string  `json:"url"`
+	Filename  string  `json:"filename"`
+	OutputDir string  `json:"outputDir"`
+	Status    string  `json:"status"`
+	Progress  float64 `json:"progress"`
+	FileSize  int64   `json:"fileSize"`
+	Paused    bool    `json:"paused"`
+	Stopped   bool    `json:"stopped"`
 }
 
 type HyperDownloadTasksSnapshot struct {
@@ -262,7 +260,9 @@ func (h *HyperDownloadService) DownloadFile(url string, outputDir string, tempDi
 		return err
 	}
 
-	h.app.Event.Emit("downloadCompleted", h.store.tasks[uid])
+	if task, exists := h.store.Get(uid); exists {
+		h.app.Event.Emit("downloadCompleted", task)
+	}
 	h.DeleteTask(uid)
 	return nil
 }

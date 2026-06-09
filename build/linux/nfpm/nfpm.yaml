@@ -3,26 +3,26 @@
 #
 # The lines below are called `modelines`. See `:help modeline`
 
-name: "hyperion-downloader.exe"
+name: "hyperion-downloader"
 arch: ${GOARCH}
 platform: "linux"
 version: "0.1.0"
 section: "default"
 priority: "extra"
 maintainer: ${GIT_COMMITTER_NAME} <${GIT_COMMITTER_EMAIL}>
-description: "A hyperion-downloader application"
+description: "A multi-threaded downloader built with Go and Wails."
 vendor: "My Company"
 homepage: "https://wails.io"
 license: "MIT"
 release: "1"
 
 contents:
-  - src: "./bin/hyperion-downloader.exe"
-    dst: "/usr/local/bin/hyperion-downloader.exe"
+  - src: "./bin/hyperion-downloader"
+    dst: "/usr/local/bin/hyperion-downloader"
   - src: "./build/appicon.png"
-    dst: "/usr/share/icons/hicolor/128x128/apps/hyperion-downloader.exe.png"
-  - src: "./build/linux/hyperion-downloader.exe.desktop"
-    dst: "/usr/share/applications/hyperion-downloader.exe.desktop"
+    dst: "/usr/share/icons/hicolor/128x128/apps/hyperion-downloader.png"
+  - src: "./build/linux/hyperion-downloader.desktop"
+    dst: "/usr/share/applications/hyperion-downloader.desktop"
 
 # Default dependencies for the GTK4 + WebKitGTK 6.0 stack (Ubuntu 24.04+ / Debian 13+)
 depends:

@@ -51,16 +51,16 @@ export default function TasksPage() {
     const [downloadPath, setDownloadPath] = useState("");
 
     // Advanced Options
-    const [concurrentDownloads, setConcurrentDownloads] = useState(32);
-    const [targetPartSize, setTargetPartSize] = useState(12); // 12 MiB
+    const [concurrentDownloads, setConcurrentDownloads] = useState(64);
+    const [targetPartSize, setTargetPartSize] = useState(4); // 12 MiB
     const [cookies, setCookies] = useState("");
     const [userAgent, setUserAgent] = useState("");
     const [referer, setReferer] = useState("");
     const [authorizationHeader, setAuthorizationHeader] = useState("");
 
-    let defaultDownloadPath,
-        defaultCookies,
-        defaultUserAgent = "";
+    const [defaultDownloadPath, setDefaultDownloadPath] = useState("");
+    const [defaultCookies, setDefaultCookies] = useState("");
+    const [defaultUserAgent, setDefaultUserAgent] = useState("");
 
     // Error Dialog
     const [errorDialogOpen, setErrorDialogOpen] = useState(false);
@@ -73,16 +73,16 @@ export default function TasksPage() {
         });
 
         GetOutputDir().then((outputDir) => {
-            defaultDownloadPath = outputDir;
             setDownloadPath(outputDir);
+            setDefaultDownloadPath(outputDir);
         });
         GetDefaultCookie().then((cookie) => {
             setCookies(cookie);
-            defaultCookies = cookie;
+            setDefaultCookies(cookie);
         });
         GetDefaultUserAgent().then((userAgent) => {
             setUserAgent(userAgent);
-            defaultUserAgent = userAgent;
+            setDefaultUserAgent(userAgent);
         });
 
         const unsubscribeTasks = Events.On("tasksSnapshot", (tasksSnapshot) => {
@@ -93,14 +93,14 @@ export default function TasksPage() {
             enqueueSnackbar(`Download completed: ${task.data.filename}`, {
                 variant: "success",
             });
-            deleteTask(task.uid);
+            DeleteTask(task.uid);
         });
 
         const unsubscribeDownloadError = Events.On("downloadError", (err) => {
             setErrorDialogOpen(true);
             setErrorFilename(err.data.filename);
             setErrorMessage(`Download error: ${err.data.error}`);
-            deleteTask(err.data.uid);
+            DeleteTask(err.data.uid);
         });
 
         return () => {
@@ -187,7 +187,6 @@ export default function TasksPage() {
                                 spacing={1}
                                 alignItems="center"
                                 justifyContent="center"
-                                direction="column"
                                 sx={{
                                     width: 1,
                                 }}
@@ -288,7 +287,12 @@ export default function TasksPage() {
                                     >
                                         <Typography>Advanced Options</Typography>
                                     </AccordionSummary>
-                                    <AccordionDetails>
+                                    <AccordionDetails
+                                        sx={{
+                                            maxHeight: 0.18 * window.innerHeight,
+                                            overflowY: "scroll",
+                                        }}
+                                    >
                                         <Grid
                                             display="flex"
                                             container
@@ -480,6 +484,7 @@ export default function TasksPage() {
                                         let sortedTasks = [...tasks].sort((a, b) => b.createdAt - a.createdAt);
                                         return sortedTasks.map((task) => (
                                             <TaskCard
+                                                key={task.uid}
                                                 task={task}
                                                 sx={{
                                                     display: "flex",

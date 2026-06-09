@@ -12,7 +12,7 @@ import type * as services$0 from "../../../../../hyperion-downloader/services/mo
 declare module "@wailsio/runtime" {
     namespace Events {
         interface CustomEvents {
-            "downloadCompleted": string;
+            "downloadCompleted": services$0.HyperDownloadTask | null;
             "downloadError": services$0.HyperDownloadError;
             "tasksSnapshot": services$0.HyperDownloadTasksSnapshot;
         }

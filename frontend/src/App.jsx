@@ -75,7 +75,7 @@ function App() {
         <Box sx={classes.root}>
             <StyledEngineProvider injectFirst>
                 <ThemeProvider theme={theme}>
-                    <CssBaseline />
+                    <CssBaseline enableColorScheme />
                     <SnackbarProvider />
                     <HashRouter>
                         <HyperionAppBar theme={theme} />

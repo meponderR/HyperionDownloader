@@ -17,7 +17,7 @@ func init() {
 	// Register events
 	application.RegisterEvent[services.HyperDownloadTasksSnapshot]("tasksSnapshot")
 	application.RegisterEvent[services.HyperDownloadError]("downloadError")
-	application.RegisterEvent[string]("downloadCompleted")
+	application.RegisterEvent[*services.HyperDownloadTask]("downloadCompleted")
 }
 
 func main() {

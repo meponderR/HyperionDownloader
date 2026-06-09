@@ -152,20 +152,6 @@ export class HyperDownloadTask {
              */
             this["fileSize"] = 0;
         }
-        if (!("concurrentDownloads" in $$source)) {
-            /**
-             * @member
-             * @type {number}
-             */
-            this["concurrentDownloads"] = 0;
-        }
-        if (!("partCount" in $$source)) {
-            /**
-             * @member
-             * @type {number}
-             */
-            this["partCount"] = 0;
-        }
         if (!("paused" in $$source)) {
             /**
              * @member

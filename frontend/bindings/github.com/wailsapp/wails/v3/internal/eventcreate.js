@@ -12,13 +12,16 @@ import * as services$0 from "../../../../../hyperion-downloader/services/models.
 
 function configure() {
     Object.freeze(Object.assign($Create.Events, {
-        "downloadError": $$createType0,
-        "tasksSnapshot": $$createType1,
+        "downloadCompleted": $$createType1,
+        "downloadError": $$createType2,
+        "tasksSnapshot": $$createType3,
     }));
 }
 
 // Private type creation functions
-const $$createType0 = services$0.HyperDownloadError.createFrom;
-const $$createType1 = services$0.HyperDownloadTasksSnapshot.createFrom;
+const $$createType0 = services$0.HyperDownloadTask.createFrom;
+const $$createType1 = $Create.Nullable($$createType0);
+const $$createType2 = services$0.HyperDownloadError.createFrom;
+const $$createType3 = services$0.HyperDownloadTasksSnapshot.createFrom;
 
 configure();
