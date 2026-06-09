@@ -157,7 +157,7 @@ function TaskCard(props) {
                                 <Tooltip title="Pause">
                                     <IconButton
                                         aria-label="Pause"
-                                        onClick={() => {
+                                        onClick={async () => {
                                             setPauseButtonLoading(true);
                                             try {
                                                 await PauseTask(task.uid);
@@ -177,7 +177,7 @@ function TaskCard(props) {
                                 <Tooltip title="Cancel">
                                     <IconButton
                                         aria-label="cancel"
-                                        onClick={() => {
+                                        onClick={async () => {
                                             setCancelButtonLoading(true);
                                             try {
                                                 await StopTask(task.uid);
