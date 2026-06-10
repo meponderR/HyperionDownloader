@@ -77,7 +77,7 @@ jobs:
               run: |
                   wails3 package GOOS=darwin
                   mv bin/hyperion-downloader.app bin/Hyperion\ Downloader.app
-                  hdiutil create -volname "Hyperion Downloader" -srcfolder bin/Hyperion\ Downloader.app -ov -format UDZO Hyperion-Downloader-macos.dmg
+                  hdiutil create -volname "Hyperion Downloader" -srcfolder bin/Hyperion\ Downloader.app -ov -format UDZO bin/Hyperion-Downloader-macos.dmg
 
             # 6. Upload Artifacts
             - name: Upload Build Artifacts
