@@ -49,6 +49,7 @@ jobs:
               with:
                   node-version: "24"
                   cache: "pnpm"
+                  cache-dependency-path: frontend/pnpm-lock.yaml
 
             # 3. Install Frontend Dependencies
             - name: Install Frontend Dependencies
