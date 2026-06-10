@@ -33,7 +33,6 @@ import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 import ContentPasteIcon from "@mui/icons-material/ContentPaste";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-import shajs from "sha.js";
 import { Events } from "@wailsio/runtime";
 
 import TaskCard from "../components/TaskCard";
@@ -135,10 +134,19 @@ export default function TasksPage() {
         setAuthorizationHeader("");
     }
 
+    async function sha256(str) {
+        const utf8 = new TextEncoder().encode(str);
+        const hashBuffer = await crypto.subtle.digest("SHA-256", utf8);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        const hashHex = hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
+        return hashHex;
+    }
+
     async function handleSingleDownload(downloadURL) {
         const cacheDir = await GetCacheDir();
-        // Hash url to create unique temp folder that is resumable across app restarts. Use crc32 for speed since the url can be long and we just need a unique identifier for the temp folder. Base64 encode the hash to get a string representation that can be used as a folder name.
-        const urlHash = shajs("sha256").update(downloadURL).digest("base64");
+        // Hash url to create unique temp folder that is resumable across app restarts. Use sha256 for uniqueness since the url can be long and we just need a unique identifier for the temp folder. Trim the hash to get a string representation that can be used as a folder name.
+        const urlHash = (await sha256(downloadURL)).slice(0, 12);
+
         const tempDir = `${cacheDir}/Temp/${urlHash}`;
         await DownloadFile(downloadURL, downloadPath, tempDir, parseInt(concurrentDownloads), parseInt(targetPartSize * 1024 * 1024), {
             Cookies: cookies,
