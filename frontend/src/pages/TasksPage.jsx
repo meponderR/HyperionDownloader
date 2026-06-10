@@ -52,7 +52,7 @@ export default function TasksPage() {
 
     // Advanced Options
     const [concurrentDownloads, setConcurrentDownloads] = useState(64);
-    const [targetPartSize, setTargetPartSize] = useState(4); // 12 MiB
+    const [targetPartSize, setTargetPartSize] = useState(4); // 64*4 = 256 MiB
     const [cookies, setCookies] = useState("");
     const [userAgent, setUserAgent] = useState("");
     const [referer, setReferer] = useState("");

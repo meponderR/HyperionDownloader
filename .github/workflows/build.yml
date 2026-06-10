@@ -65,7 +65,7 @@ jobs:
             - name: Build Application (Windows)
               if: matrix.platform == 'windows'
               run: |
-                  wails3 build
+                  wails3 build -devtools
               #wails3 package GOOS=windows
             - name: Build Application (Linux)
               if: matrix.platform == 'linux'
