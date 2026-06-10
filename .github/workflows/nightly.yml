@@ -1,0 +1,91 @@
+name: Nightly Build CI
+
+on:
+    push:
+        branches: [master]
+    pull_request:
+        branches: [master]
+    workflow_dispatch:
+
+jobs:
+    build:
+        strategy:
+            matrix:
+                include:
+                    - os: ubuntu-latest
+                      platform: linux
+                    - os: windows-latest
+                      platform: windows
+                    - os: macos-latest
+                      platform: darwin
+
+        runs-on: ${{ matrix.os }}
+
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v6
+
+            # 1. Install System Dependencies (Crucial for Linux GUI building)
+            - name: Install Linux Dependencies
+              if: matrix.os == 'ubuntu-latest'
+              run: |
+                  sudo apt-get update
+                  sudo apt-get install -y libgtk-4-dev libwebkitgtk-6.0-dev build-essential pkg-config
+
+            # 2. Setup Development Environment
+            - name: Setup Go
+              uses: actions/setup-go@v6
+              with:
+                  go-version: "1.26" # Update to your specific Go version if needed
+                  cache: true
+
+            - name: Setup pnpm
+              uses: pnpm/action-setup@v6
+              with:
+                  version: latest
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v6
+              with:
+                  node-version: "24"
+                  cache: "pnpm"
+                  cache-dependency-path: frontend/pnpm-lock.yaml
+
+            # 3. Install Frontend Dependencies
+            - name: Install Frontend Dependencies
+              run: |
+                  cd frontend
+                  pnpm ci
+
+            # 4. Install Wails v3 CLI
+            - name: Install Wails v3 CLI
+              run: go install github.com/wailsapp/wails/v3/cmd/wails3@latest
+
+            # 5. Build the Application
+            - name: Build Application (Windows)
+              if: matrix.platform == 'windows'
+              run: |
+                  wails3 build
+              #wails3 package GOOS=windows
+            - name: Build Application (Linux)
+              if: matrix.platform == 'linux'
+              run: |
+                  wails3 package GOOS=linux
+
+            - name: Build Application (macOS)
+              if: matrix.platform == 'darwin'
+              run: |
+                  wails3 package GOOS=darwin
+                  mv bin/hyperion-downloader.app bin/Hyperion\ Downloader.app
+                  hdiutil create -volname "Hyperion Downloader" -srcfolder bin/Hyperion\ Downloader.app -ov -format UDZO bin/Hyperion-Downloader-macos.dmg
+
+            # 6. Upload Artifacts
+            - name: Upload Build Artifacts
+              uses: actions/upload-artifact@v7
+              with:
+                  name: hyperion-downloader-${{ matrix.platform }}
+                  path: |
+                      bin/*.exe
+                      bin/*.AppImage
+                      bin/*.app
+                      bin/*.dmg

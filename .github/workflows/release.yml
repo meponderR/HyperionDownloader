@@ -1,11 +1,9 @@
-name: Wails v3 Build CI
+name: Nightly Build CI
 
 on:
     push:
-        branches: [master]
-    pull_request:
-        branches: [master]
-    workflow_dispatch:
+        tags:
+            - "v*.*.*"
 
 jobs:
     build:
@@ -71,6 +69,8 @@ jobs:
               if: matrix.platform == 'linux'
               run: |
                   wails3 package GOOS=linux
+                  mv bin/hyperion-downloader bin/hyperion-downloader-linux
+                  mv bin/hyperion-downloader.AppImage bin/hyperion-downloader-linux.AppImage
 
             - name: Build Application (macOS)
               if: matrix.platform == 'darwin'
@@ -78,6 +78,7 @@ jobs:
                   wails3 package GOOS=darwin
                   mv bin/hyperion-downloader.app bin/Hyperion\ Downloader.app
                   hdiutil create -volname "Hyperion Downloader" -srcfolder bin/Hyperion\ Downloader.app -ov -format UDZO bin/Hyperion-Downloader-macos.dmg
+                  zip -r bin/hyperion-downloader-macos.zip bin/Hyperion\ Downloader.app
 
             # 6. Upload Artifacts
             - name: Upload Build Artifacts
@@ -89,3 +90,15 @@ jobs:
                       bin/*.AppImage
                       bin/*.app
                       bin/*.dmg
+                      bin/hyperion-downloader
+
+            # 7. Create a Release
+            - name: Create Release
+              uses: softprops/action-gh-release@v3.0.0
+              with:
+                  files: |
+                      bin/hyperion-downloader-windows.exe
+                      bin/hyperion-downloader-linux
+                      bin/hyperion-downloader-linux.AppImage
+                      bin/Hyperion-Downloader-macos.dmg
+                      bin/hyperion-downloader-macos.zip
