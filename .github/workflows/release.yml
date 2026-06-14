@@ -80,11 +80,11 @@ jobs:
                   wails3 package GOOS=linux GOARCH=arm64
                   mv bin/hyperion-downloader bin/hyperion-downloader-arm64-linux
                   mv bin/hyperion-downloader-aarch64.AppImage bin/hyperion-downloader-arm64-linux.AppImage
-            #Universal binary
+
             - name: Build Application (macOS)
               if: matrix.platform == 'darwin'
               run: |
-                  wails3 task -taskfile ./build/darwin/Taskfile.yml package:universal
+                  wails3 task darwin:package:universal
                   mv bin/hyperion-downloader.app bin/Hyperion\ Downloader.app
                   hdiutil create -volname "Hyperion Downloader" -srcfolder bin/Hyperion\ Downloader.app -ov -format UDZO bin/Hyperion-Downloader-macos.dmg
                   zip -r bin/hyperion-downloader-macos.zip bin/Hyperion\ Downloader.app
