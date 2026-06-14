@@ -66,10 +66,6 @@ jobs:
                   mv bin/hyperion-downloader.exe bin/hyperion-downloader-amd64-windows.exe
                   mv bin/hyperion-downloader-amd64-installer.exe bin/hyperion-downloader-amd64-windows-installer.exe
 
-                  wails3 package GOOS=windows GOARCH=arm64
-                  mv bin/hyperion-downloader.exe bin/hyperion-downloader-arm64-windows.exe
-                  mv bin/hyperion-downloader-arm64-installer.exe bin/hyperion-downloader-arm64-windows-installer.exe
-
             - name: Build Application (Linux)
               if: matrix.platform == 'linux'
               run: |
@@ -115,7 +111,5 @@ jobs:
                       bin/hyperion-downloader-arm64-windows-installer.exe
                       bin/hyperion-downloader-linux
                       bin/hyperion-downloader-x86_64-linux.AppImage
-                      bin/hyperion-downloader-arm64-linux
-                      bin/hyperion-downloader-aarch64-linux.AppImage
                       bin/Hyperion-Downloader-macos.dmg
                       bin/hyperion-downloader-macos.zip

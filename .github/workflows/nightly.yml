@@ -79,10 +79,6 @@ jobs:
                   mv bin/hyperion-downloader bin/hyperion-downloader-linux
                   mv bin/hyperion-downloader-x86_64.AppImage bin/hyperion-downloader-x86_64-linux.AppImage
 
-                  wails3 package GOOS=linux GOARCH=arm64
-                  mv bin/hyperion-downloader bin/hyperion-downloader-arm64-linux
-                  mv bin/hyperion-downloader-aarch64.AppImage bin/hyperion-downloader-arm64-linux.AppImage
-
             - name: Build Application (macOS)
               if: matrix.platform == 'darwin'
               run: |
@@ -102,7 +98,5 @@ jobs:
                       bin/hyperion-downloader-arm64-windows-installer.exe
                       bin/hyperion-downloader-linux
                       bin/hyperion-downloader-x86_64-linux.AppImage
-                      bin/hyperion-downloader-arm64-linux
-                      bin/hyperion-downloader-aarch64-linux.AppImage
                       bin/Hyperion-Downloader-macos.dmg
                       bin/hyperion-downloader-macos.zip
