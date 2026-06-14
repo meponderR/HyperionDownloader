@@ -1,47 +1,16 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   height="24"
-   viewBox="0 0 24 24"
-   width="24"
-   version="1.1"
-   id="svg6"
-   sodipodi:docname="icon.svg"
-   inkscape:version="1.2.1 (9c6d41e410, 2022-07-14)"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
-  <defs
-     id="defs10" />
-  <sodipodi:namedview
-     id="namedview8"
-     pagecolor="#ffffff"
-     bordercolor="#999999"
-     borderopacity="1"
-     inkscape:showpageshadow="0"
-     inkscape:pageopacity="0"
-     inkscape:pagecheckerboard="0"
-     inkscape:deskcolor="#d1d1d1"
-     showgrid="false"
-     inkscape:zoom="41.75"
-     inkscape:cx="12"
-     inkscape:cy="12"
-     inkscape:window-width="3440"
-     inkscape:window-height="1369"
-     inkscape:window-x="1912"
-     inkscape:window-y="-8"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="svg6" />
-  <path
-     d="M0 0h24v24H0z"
-     fill="none"
-     id="path2" />
-  <path
-     d="M18 2h-8L4.02 8 4 20c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-6 6h-2V4h2v4zm3 0h-2V4h2v4zm3 0h-2V4h2v4z"
-     fill="#3f51b5"
-     id="path4" />
-  <path
-     style="fill:#00e5ff;stroke-width:0.0028503;paint-order:stroke fill markers;fill-opacity:1"
-     d="M 5.7125749,21.971064 C 5.2981469,21.912859 4.8723782,21.687618 4.5599676,21.36131 4.3065808,21.096652 4.1561539,20.820337 4.0666166,20.45509 l -0.049909,-0.203593 0.00576,-6.118665 0.00576,-6.1186651 2.9835938,-3.0015509 2.9835937,-3.0015506 4.1819299,0.00707 c 3.959568,0.00669 4.189571,0.00938 4.325642,0.050544 0.741409,0.2242911 1.270885,0.7800656 1.440607,1.5121608 0.0428,0.1846349 0.04442,0.4913994 0.04442,8.4191618 0,7.927762 -0.0016,8.234527 -0.04442,8.419162 -0.16972,0.732088 -0.698255,1.286931 -1.440607,1.512317 -0.137345,0.0417 -0.422313,0.04377 -6.431138,0.04666 -3.4580834,0.0017 -6.3197601,-0.0015 -6.359281,-0.0071 z M 12,6 V 4 H 10.994012 9.988024 V 6 8 H 10.994012 12 Z m 3.017964,0 V 4 H 14 12.982036 V 6 8 H 14 15.017964 Z m 2.994012,0 V 4 H 17.005988 16 v 2 2 h 1.005988 1.005988 z"
-     id="path308" />
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #f37021;
+      }
+    </style>
+  </defs>
+  <g id="Layer_3" data-name="Layer 3">
+    <path class="cls-1" d="M512,837.6l-154.4-154.4,34.4-34.4,96,96v-296.8h48v296.8l96-96,34.4,34.4-154.4,154.4ZM304,960c-12.8,0-24-4.8-33.6-14.4s-14.4-20.8-14.4-33.6v-114.4h48v114.4h416v-114.4h48v114.4c0,12.8-4.8,24-14.4,33.6s-20.8,14.4-33.6,14.4h-416Z"/>
+  </g>
+  <g id="Layer_2" data-name="Layer 2">
+    <path class="cls-1" d="M128,325.82v-34.91h202.47v34.91h-202.47ZM401.38,224.69l-52.36-52.36,27.49-27.49,52.36,52.36-27.49,27.49ZM494.55,165.24v-101.24h34.91v101.24h-34.91ZM622.62,224.69l-27.49-27.49,52.36-52.36,27.49,27.49-52.36,52.36ZM693.53,325.82v-34.91h202.47v34.91h-202.47ZM448.73,371.64c-17.16-17.16-25.75-38.25-25.75-63.27s8.58-46.11,25.75-63.27,38.25-25.75,63.27-25.75,46.11,8.58,63.27,25.75c17.16,17.16,25.75,38.25,25.75,63.27s-8.58,46.11-25.75,63.27c-17.16,17.16-38.25,25.75-63.27,25.75s-46.11-8.58-63.27-25.75ZM650.76,474.07l-55.64-55.64,27.49-27.49,55.64,55.64-27.49,27.49ZM373.24,474.07l-27.49-27.49,55.64-55.64,27.49,27.49-55.64,55.64ZM494.55,552.73v-101.24h34.91v101.24h-34.91Z"/>
+  </g>
 </svg>
