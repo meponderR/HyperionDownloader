@@ -3,7 +3,7 @@ name: Release
 on:
     push:
         tags:
-            - "v*.*.*"
+            - "*.*.*"
 
 jobs:
     build:
@@ -84,7 +84,7 @@ jobs:
             - name: Build Application (macOS)
               if: matrix.platform == 'darwin'
               run: |
-                  wails3 task package:universal
+                  wails3 task -taskfile ./build/darwin/Taskfile.yml package:universal
                   mv bin/hyperion-downloader.app bin/Hyperion\ Downloader.app
                   hdiutil create -volname "Hyperion Downloader" -srcfolder bin/Hyperion\ Downloader.app -ov -format UDZO bin/Hyperion-Downloader-macos.dmg
                   zip -r bin/hyperion-downloader-macos.zip bin/Hyperion\ Downloader.app

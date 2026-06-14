@@ -4,8 +4,8 @@ set -e
 # Build configuration
 APP_NAME="hyperion-downloader.exe"
 BUNDLE_ID="com.example.hyperiondownloader"
-VERSION="0.1.1"
-BUILD_NUMBER="0.1.1"
+VERSION="0.1.2"
+BUILD_NUMBER="0.1.2"
 BUILD_DIR="build/ios"
 TARGET="simulator"
 
