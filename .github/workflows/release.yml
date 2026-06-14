@@ -1,4 +1,4 @@
-name: Nightly Build CI
+name: Release
 
 on:
     push:
@@ -23,14 +23,12 @@ jobs:
             - name: Checkout Code
               uses: actions/checkout@v6
 
-            # 1. Install System Dependencies (Crucial for Linux GUI building)
             - name: Install Linux Dependencies
               if: matrix.os == 'ubuntu-latest'
               run: |
                   sudo apt-get update
                   sudo apt-get install -y libgtk-4-dev libwebkitgtk-6.0-dev build-essential pkg-config
 
-            # 2. Setup Development Environment
             - name: Setup Go
               uses: actions/setup-go@v6
               with:
@@ -49,56 +47,75 @@ jobs:
                   cache: "pnpm"
                   cache-dependency-path: frontend/pnpm-lock.yaml
 
-            # 3. Install Frontend Dependencies
             - name: Install Frontend Dependencies
               run: |
                   cd frontend
                   pnpm ci
 
-            # 4. Install Wails v3 CLI
+            - name: Install NSIS
+              if: matrix.platform == 'windows'
+              uses: negrutiu/nsis-install@v2
+
             - name: Install Wails v3 CLI
               run: go install github.com/wailsapp/wails/v3/cmd/wails3@latest
 
-            # 5. Build the Application
             - name: Build Application (Windows)
               if: matrix.platform == 'windows'
               run: |
-                  wails3 build
-              #wails3 package GOOS=windows
+                  wails3 package GOOS=windows
+                  mv bin/hyperion-downloader.exe bin/hyperion-downloader-amd64-windows.exe
+                  mv bin/hyperion-downloader-amd64-installer.exe bin/hyperion-downloader-amd64-windows-installer.exe
+
+                  wails3 package GOOS=windows GOARCH=arm64
+                  mv bin/hyperion-downloader.exe bin/hyperion-downloader-arm64-windows.exe
+                  mv bin/hyperion-downloader-arm64-installer.exe bin/hyperion-downloader-arm64-windows-installer.exe
+
             - name: Build Application (Linux)
               if: matrix.platform == 'linux'
               run: |
                   wails3 package GOOS=linux
                   mv bin/hyperion-downloader bin/hyperion-downloader-linux
-                  mv bin/hyperion-downloader.AppImage bin/hyperion-downloader-linux.AppImage
+                  mv bin/hyperion-downloader-x86_64.AppImage bin/hyperion-downloader-x86_64-linux.AppImage
 
+                  wails3 package GOOS=linux GOARCH=arm64
+                  mv bin/hyperion-downloader bin/hyperion-downloader-arm64-linux
+                  mv bin/hyperion-downloader-aarch64.AppImage bin/hyperion-downloader-arm64-linux.AppImage
+            #Universal binary
             - name: Build Application (macOS)
               if: matrix.platform == 'darwin'
               run: |
-                  wails3 package GOOS=darwin
+                  wails3 task package:universal
                   mv bin/hyperion-downloader.app bin/Hyperion\ Downloader.app
                   hdiutil create -volname "Hyperion Downloader" -srcfolder bin/Hyperion\ Downloader.app -ov -format UDZO bin/Hyperion-Downloader-macos.dmg
                   zip -r bin/hyperion-downloader-macos.zip bin/Hyperion\ Downloader.app
 
-            # 6. Upload Artifacts
             - name: Upload Build Artifacts
               uses: actions/upload-artifact@v7
               with:
                   name: hyperion-downloader-${{ matrix.platform }}
                   path: |
-                      bin/*.exe
-                      bin/*.AppImage
-                      bin/*.app
-                      bin/*.dmg
-                      bin/hyperion-downloader
+                      bin/hyperion-downloader-amd64-windows.exe
+                      bin/hyperion-downloader-arm64-windows.exe
+                      bin/hyperion-downloader-amd64-windows-installer.exe
+                      bin/hyperion-downloader-arm64-windows-installer.exe
+                      bin/hyperion-downloader-linux
+                      bin/hyperion-downloader-x86_64-linux.AppImage
+                      bin/hyperion-downloader-arm64-linux
+                      bin/hyperion-downloader-aarch64-linux.AppImage
+                      bin/Hyperion-Downloader-macos.dmg
+                      bin/hyperion-downloader-macos.zip
 
-            # 7. Create a Release
             - name: Create Release
               uses: softprops/action-gh-release@v3.0.0
               with:
                   files: |
-                      bin/hyperion-downloader-windows.exe
+                      bin/hyperion-downloader-amd64-windows.exe
+                      bin/hyperion-downloader-arm64-windows.exe
+                      bin/hyperion-downloader-amd64-windows-installer.exe
+                      bin/hyperion-downloader-arm64-windows-installer.exe
                       bin/hyperion-downloader-linux
-                      bin/hyperion-downloader-linux.AppImage
+                      bin/hyperion-downloader-x86_64-linux.AppImage
+                      bin/hyperion-downloader-arm64-linux
+                      bin/hyperion-downloader-aarch64-linux.AppImage
                       bin/Hyperion-Downloader-macos.dmg
                       bin/hyperion-downloader-macos.zip

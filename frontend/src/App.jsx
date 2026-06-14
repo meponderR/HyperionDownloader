@@ -33,7 +33,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 
 //React Router
 import { HashRouter, Routes, Route, Link } from "react-router";
-import { cyan, grey } from "@mui/material/colors";
+import { amber, grey } from "@mui/material/colors";
 import { SnackbarProvider } from "notistack";
 import HyperionDrawer from "./components/HyperionDrawer";
 import HyperionAppBar from "./components/HyperionAppBar";
@@ -51,11 +51,11 @@ function App() {
         palette: {
             mode: darkMode,
             primary: {
-                main: cyan[500],
+                main: amber[900],
                 contrastText: "#fff",
             },
             secondary: {
-                main: cyan["A400"],
+                main: amber["A400"],
             },
         },
     });

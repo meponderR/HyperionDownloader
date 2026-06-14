@@ -1,5 +1,8 @@
 # Hyperion Downloader
+![Latest Release](https://img.shields.io/github/v/release/meponderR/HyperionDownloader) ![GitHub](https://img.shields.io/github/license/meponderR/HyperionDownloader) ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/meponderR/HyperionDownloader/nightly.yml?label=nightly) ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/meponderR/HyperionDownloader/release.yml?label=release) ![GitHub All Releases](https://img.shields.io/github/downloads/meponderR/HyperionDownloader/total) ![GitHub Issues](https://img.shields.io/github/issues/meponderR/HyperionDownloader) ![GitHub Pull Requests](https://img.shields.io/github/issues-pr/meponderR/HyperionDownloader) 
 Hyperion Downloader is a lightweight multithreaded downloader built with Wails. It currently supports Windows, macOS, and Linux. Mobile support is planned for when Wails finishes mobile support.
+
+![Hyperion Downloader Logo](https://raw.githubusercontent.com/meponderR/HyperionDownloader/master/assets/icon.png)
 
 ## Features
 - Multithreaded downloading
