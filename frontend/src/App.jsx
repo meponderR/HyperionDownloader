@@ -38,6 +38,16 @@ import { SnackbarProvider } from "notistack";
 import HyperionDrawer from "./components/HyperionDrawer";
 import HyperionAppBar from "./components/HyperionAppBar";
 
+const platform = (() => {
+    if (typeof window.wails?.platform === "function") return window.wails.platform(); // Android
+    if (window.webkit?.messageHandlers?.external) return "ios";
+    return "desktop";
+})();
+
+const isIOS = platform === "ios";
+const isAndroid = platform === "android";
+const isMobile = isIOS || isAndroid;
+
 function App() {
     const [isSettingsOpen, setIsSettingsOpen] = useState(window.location.hash === "#/Settings");
 
@@ -61,51 +71,70 @@ function App() {
     });
 
     const classes = {
-        root: {
-            width: "100%",
-        },
         content: {
             flexGrow: 1,
             padding: theme.spacing(3),
-            marginLeft: theme.spacing(7) + 1,
+            marginLeft: isMobile ? 0 : theme.spacing(7) + 1,
         },
     };
 
     return (
-        <Box sx={classes.root}>
+        <Box
+            sx={{
+                width: "100%",
+                overflowX: "hidden",
+                overscrollBehaviorX: "none",
+            }}
+        >
             <StyledEngineProvider injectFirst>
                 <ThemeProvider theme={theme}>
                     <CssBaseline enableColorScheme />
                     <SnackbarProvider />
                     <HashRouter>
-                        <HyperionAppBar theme={theme} />
-                        <HyperionDrawer
+                        <HyperionAppBar
                             isSettingsOpen={isSettingsOpen}
                             setIsSettingsOpen={setIsSettingsOpen}
-                            prefersDarkMode={prefersDarkMode}
                             theme={theme}
                         />
+                        {isMobile ? null : (
+                            <HyperionDrawer
+                                isSettingsOpen={isSettingsOpen}
+                                setIsSettingsOpen={setIsSettingsOpen}
+                                prefersDarkMode={prefersDarkMode}
+                                theme={theme}
+                            />
+                        )}
 
-                        <Toolbar variant="dense" />
+                        <Toolbar
+                            variant="dense"
+                            sx={{
+                                marginBottom: isMobile ? "env(safe-area-inset-top)" : 0,
+                            }}
+                        />
                         <Box
                             sx={{
                                 flexGrow: 1,
                                 padding: 2,
-                                marginLeft: 11,
+                                marginLeft: isMobile ? 0 : 11,
                                 overflow: "auto",
-                                height: `calc(100vh - 48px)`,
+                                height: isMobile
+                                    ? "calc(100vh - 48px - env(safe-area-inset-top)-env(safe-area-inset-bottom))"
+                                    : "calc(100vh - 48px)",
+                                overscrollBehaviorX: "none",
                             }}
                             component="main"
                         >
                             <Routes>
-                                <Route
-                                    exact
-                                    path="/"
-                                    element={<TasksPage />}
-                                />
+                                <Route exact path="/" element={<TasksPage />} />
                                 <Route
                                     path="/Settings"
-                                    element={<SettingsPage />}
+                                    element={
+                                        <SettingsPage
+                                            isSettingsOpen={isSettingsOpen}
+                                            setIsSettingsOpen={setIsSettingsOpen}
+                                            theme={theme}
+                                        />
+                                    }
                                 />
                             </Routes>
                         </Box>

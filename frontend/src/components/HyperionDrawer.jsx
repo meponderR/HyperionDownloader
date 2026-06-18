@@ -1,9 +1,10 @@
+import { Fragment } from "react";
+import PropTypes from "prop-types";
 import { Box, Drawer, List, ListItemButton, ListItemIcon, ListItemText, Paper, Stack, Toolbar } from "@mui/material";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { grey } from "@mui/material/colors";
 import { Link } from "react-router";
-import { Fragment } from "react";
 
 export default function HyperionDrawer({ isSettingsOpen, setIsSettingsOpen, prefersDarkMode, theme }) {
     return (

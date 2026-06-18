@@ -2,7 +2,22 @@
 import { useEffect, useState } from "react";
 
 //Material UI Components
-import { Switch, Divider, FormControlLabel, Grid, IconButton, TextField, Typography, InputAdornment, Select, MenuItem, FormControl, InputLabel, Box } from "@mui/material";
+import {
+    Switch,
+    Divider,
+    FormControlLabel,
+    Grid,
+    IconButton,
+    TextField,
+    Typography,
+    InputAdornment,
+    Select,
+    MenuItem,
+    FormControl,
+    InputLabel,
+    Box,
+    Button,
+} from "@mui/material";
 
 //Material UI Icons
 import ContentPasteIcon from "@mui/icons-material/ContentPaste";
@@ -10,12 +25,31 @@ import SaveIcon from "@mui/icons-material/Save";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 
 //Bindings
-import { GetDefaultCookie, GetDefaultUserAgent, GetOutputDir, SetDefaultCookie, SetDefaultUserAgent, SetOutputDir, PickDir } from "../../bindings/hyperion-downloader/services/configservice";
+import {
+    GetDefaultCookie,
+    GetDefaultUserAgent,
+    GetOutputDir,
+    SetDefaultCookie,
+    SetDefaultUserAgent,
+    SetOutputDir,
+    PickDir,
+} from "../../bindings/hyperion-downloader/services/configservice";
 
 //Utils
 import { enqueueSnackbar } from "notistack";
+import { Link } from "react-router";
 
-export default function SettingsPage() {
+const platform = (() => {
+    if (typeof window.wails?.platform === "function") return window.wails.platform(); // Android
+    if (window.webkit?.messageHandlers?.external) return "ios";
+    return "desktop";
+})();
+
+const isIOS = platform === "ios";
+const isAndroid = platform === "android";
+const isMobile = isIOS || isAndroid;
+
+export default function SettingsPage({ isSettingsOpen, setIsSettingsOpen, theme }) {
     // Download
     const [outputLocation, setOutputLocation] = useState("");
     const [defaultCookie, setDefaultCookie] = useState("");
@@ -46,7 +80,9 @@ export default function SettingsPage() {
                 event.preventDefault();
                 (async function () {
                     try {
-                        await SetOutputDir(outputLocation);
+                        if (!isMobile) {
+                            await SetOutputDir(outputLocation);
+                        }
                         await SetDefaultCookie(defaultCookie);
                         await SetDefaultUserAgent(defaultUserAgent);
                         enqueueSnackbar("Settings saved", { variant: "success" });
@@ -78,45 +114,59 @@ export default function SettingsPage() {
                 >
                     Settings
                 </Typography>
+                {isMobile ? (
+                    <Button
+                        variant="contained"
+                        sx={{ mb: 4 }}
+                        onClick={() => {
+                            setIsSettingsOpen(false);
+                            window.location.hash = "/";
+                        }}
+                    >
+                        Return to Home
+                    </Button>
+                ) : null}
 
-                <TextField
-                    variant="outlined"
-                    sx={{
-                        width: 0.8,
-                    }}
-                    id="outputLocation"
-                    label="Default Download Output Location"
-                    onChange={(event) => {
-                        setOutputLocation(event.target.value);
-                    }}
-                    value={outputLocation}
-                    slotProps={{
-                        input: {
-                            endAdornment: (
-                                <InputAdornment position="end">
-                                    <IconButton
-                                        aria-label="pick file"
-                                        onClick={async () => {
-                                            const pickFile = await PickDir("Select Output Directory");
-                                            if (pickFile) {
-                                                setOutputLocation(pickFile);
-                                            }
-                                        }}
-                                        onMouseDown={(event) => event.preventDefault()}
-                                        edge="end"
-                                        sx={{
-                                            height: "40px",
-                                            width: "40px",
-                                            mr: 0.25,
-                                        }}
-                                    >
-                                        <FolderOpenIcon />
-                                    </IconButton>
-                                </InputAdornment>
-                            ),
-                        },
-                    }}
-                />
+                {isMobile ? null : (
+                    <TextField
+                        variant="outlined"
+                        sx={{
+                            width: 0.8,
+                        }}
+                        id="outputLocation"
+                        label="Default Download Output Location"
+                        onChange={(event) => {
+                            setOutputLocation(event.target.value);
+                        }}
+                        value={outputLocation}
+                        slotProps={{
+                            input: {
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            aria-label="pick file"
+                                            onClick={async () => {
+                                                const pickFile = await PickDir("Select Output Directory");
+                                                if (pickFile) {
+                                                    setOutputLocation(pickFile);
+                                                }
+                                            }}
+                                            onMouseDown={(event) => event.preventDefault()}
+                                            edge="end"
+                                            sx={{
+                                                height: "40px",
+                                                width: "40px",
+                                                mr: 0.25,
+                                            }}
+                                        >
+                                            <FolderOpenIcon />
+                                        </IconButton>
+                                    </InputAdornment>
+                                ),
+                            },
+                        }}
+                    />
+                )}
                 <TextField
                     variant="outlined"
                     sx={{

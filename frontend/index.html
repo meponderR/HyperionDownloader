@@ -2,25 +2,28 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
-        <link
-            rel="icon"
-            type="image/svg+xml"
-            href="/hyperion_appicon.png"
-        />
-        <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1.0"
-        />
+        <link rel="icon" type="image/svg+xml" href="/hyperion_appicon.png" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+        <style>
+            body {
+                margin: 0;
+                font-family: "Roboto", sans-serif;
+                background-color: #fff;
+                margin: 0;
+                padding: 0;
+                width: 100%;
+                min-height: 100vh;
+            }
+            @media (prefers-color-scheme: dark) {
+                body {
+                    background-color: #121212;
+                }
+            }
+        </style>
         <title>Hyperion Downloader</title>
     </head>
-    <body style="--wails-resize: all">
-        <div
-            id="root"
-            style="width: 100%"
-        ></div>
-        <script
-            type="module"
-            src="/src/main.jsx"
-        ></script>
+    <body style="--wails-resize: all; overflow-x: hidden">
+        <div id="root" style="width: 100%"></div>
+        <script type="module" src="/src/main.jsx"></script>
     </body>
 </html>

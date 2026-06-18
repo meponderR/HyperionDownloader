@@ -1,8 +1,9 @@
 // !$*UTF8*$!
 {
 	archiveVersion = 1;
-	classes = {};
-	objectVersion = 56;
+	classes = {
+	};
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -13,36 +14,58 @@
 		C0DEBEEF00000000000000F4 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C0DEBEEF0000000000000104 /* Security.framework */; };
 		C0DEBEEF00000000000000F5 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C0DEBEEF0000000000000105 /* CoreFoundation.framework */; };
 		C0DEBEEF00000000000000F6 /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = C0DEBEEF0000000000000106 /* libresolv.tbd */; };
-		C0DEBEEF00000000000000F7 /* My Product.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C0DEBEEF0000000000000107 /* My Product.a */; };
+		E85A13DF2FE381800016ACC0 /* HyperionIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = E8DDFD032FE2B31C000CFFFB /* HyperionIcon.icon */; };
+		E8DDFD052FE36CED000CFFFB /* Hyperion Downloader.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C0DEBEEF0000000000000107 /* Hyperion Downloader.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		C0DEBEEF0000000000000002 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		C0DEBEEF0000000000000003 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		C0DEBEEF0000000000000004 /* My Product.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "My Product.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C0DEBEEF0000000000000004 /* Hyperion Downloader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Hyperion Downloader.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C0DEBEEF0000000000000101 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		C0DEBEEF0000000000000102 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		C0DEBEEF0000000000000103 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		C0DEBEEF0000000000000104 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		C0DEBEEF0000000000000105 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
-		C0DEBEEF0000000000000106 /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.text-based-dylib-definition; name = libresolv.tbd; path = usr/lib/libresolv.tbd; sourceTree = SDKROOT; };
-		C0DEBEEF0000000000000107 /* My Product.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "My Product.a"; path = ../../../bin/My Product.a; sourceTree = SOURCE_ROOT; };
+		C0DEBEEF0000000000000106 /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = usr/lib/libresolv.tbd; sourceTree = SDKROOT; };
+		C0DEBEEF0000000000000107 /* Hyperion Downloader.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "Hyperion Downloader.a"; path = "../../../bin/Hyperion Downloader.a"; sourceTree = SOURCE_ROOT; };
+		E8DDFD032FE2B31C000CFFFB /* HyperionIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = HyperionIcon.icon; sourceTree = "<group>"; };
+		E8DDFD042FE2B400000CFFFB /* Hyperion Downloader.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Hyperion Downloader.entitlements"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C0DEBEEF0000000000000056 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C0DEBEEF00000000000000F1 /* UIKit.framework in Frameworks */,
+				C0DEBEEF00000000000000F2 /* Foundation.framework in Frameworks */,
+				C0DEBEEF00000000000000F3 /* WebKit.framework in Frameworks */,
+				C0DEBEEF00000000000000F4 /* Security.framework in Frameworks */,
+				C0DEBEEF00000000000000F5 /* CoreFoundation.framework in Frameworks */,
+				C0DEBEEF00000000000000F6 /* libresolv.tbd in Frameworks */,
+				E8DDFD052FE36CED000CFFFB /* Hyperion Downloader.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		C0DEBEEF0000000000000010 = {
 			isa = PBXGroup;
 			children = (
+				E8DDFD042FE2B400000CFFFB /* Hyperion Downloader.entitlements */,
 				C0DEBEEF0000000000000020 /* Products */,
 				C0DEBEEF0000000000000045 /* Frameworks */,
 				C0DEBEEF0000000000000030 /* main */,
+				E8DDFD032FE2B31C000CFFFB /* HyperionIcon.icon */,
 			);
 			sourceTree = "<group>";
 		};
 		C0DEBEEF0000000000000020 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				C0DEBEEF0000000000000004 /* My Product.app */,
+				C0DEBEEF0000000000000004 /* Hyperion Downloader.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -65,7 +88,7 @@
 				C0DEBEEF0000000000000104 /* Security.framework */,
 				C0DEBEEF0000000000000105 /* CoreFoundation.framework */,
 				C0DEBEEF0000000000000106 /* libresolv.tbd */,
-				C0DEBEEF0000000000000107 /* My Product.a */,
+				C0DEBEEF0000000000000107 /* Hyperion Downloader.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -73,21 +96,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		C0DEBEEF0000000000000040 /* My Product */ = {
+		C0DEBEEF0000000000000040 /* Hyperion Downloader */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C0DEBEEF0000000000000070 /* Build configuration list for PBXNativeTarget "My Product" */;
+			buildConfigurationList = C0DEBEEF0000000000000070 /* Build configuration list for PBXNativeTarget "Hyperion Downloader" */;
 			buildPhases = (
+				E85A136E2FE372AE0016ACC0 /* Build Frontend */,
 				C0DEBEEF0000000000000055 /* Prebuild: Wails Go Archive */,
 				C0DEBEEF0000000000000050 /* Sources */,
+				E85A13A72FE3814F0016ACC0 /* Resources */,
 				C0DEBEEF0000000000000056 /* Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = "My Product";
-			productName = "My Product";
-			productReference = C0DEBEEF0000000000000004 /* My Product.app */;
+			name = "Hyperion Downloader";
+			productName = "Hyperion Downloader";
+			productReference = C0DEBEEF0000000000000004 /* Hyperion Downloader.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -97,7 +122,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 1500;
-				ORGANIZATIONNAME = "My Company";
+				ORGANIZATIONNAME = meponder;
 				TargetAttributes = {
 					C0DEBEEF0000000000000040 = {
 						CreatedOnToolsVersion = 15.0;
@@ -116,31 +141,26 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				C0DEBEEF0000000000000040 /* My Product */,
+				C0DEBEEF0000000000000040 /* Hyperion Downloader */,
 			);
 		};
 /* End PBXProject section */
 
-/* Begin PBXFrameworksBuildPhase section */
-		C0DEBEEF0000000000000056 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
+/* Begin PBXResourcesBuildPhase section */
+		E85A13A72FE3814F0016ACC0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C0DEBEEF00000000000000F7 /* My Product.a in Frameworks */,
-				C0DEBEEF00000000000000F1 /* UIKit.framework in Frameworks */,
-				C0DEBEEF00000000000000F2 /* Foundation.framework in Frameworks */,
-				C0DEBEEF00000000000000F3 /* WebKit.framework in Frameworks */,
-				C0DEBEEF00000000000000F4 /* Security.framework in Frameworks */,
-				C0DEBEEF00000000000000F5 /* CoreFoundation.framework in Frameworks */,
-				C0DEBEEF00000000000000F6 /* libresolv.tbd in Frameworks */,
+				E85A13DF2FE381800016ACC0 /* HyperionIcon.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-/* End PBXFrameworksBuildPhase section */
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
 		C0DEBEEF0000000000000055 /* Prebuild: Wails Go Archive */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -154,8 +174,34 @@
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "set -e\nAPP_ROOT=\"${PROJECT_DIR}/../../..\"\nSDK_PATH=$(xcrun --sdk iphonesimulator --show-sdk-path)\nexport GOOS=ios\nexport GOARCH=arm64\nexport CGO_ENABLED=1\nexport CGO_CFLAGS=\"-isysroot ${SDK_PATH} -target arm64-apple-ios15.0-simulator -mios-simulator-version-min=15.0\"\nexport CGO_LDFLAGS=\"-isysroot ${SDK_PATH} -target arm64-apple-ios15.0-simulator\"\ncd \"${APP_ROOT}\"\n# Ensure overlay exists\nif [ ! -f build/ios/xcode/overlay.json ]; then\n  wails3 ios overlay:gen -out build/ios/xcode/overlay.json -config build/config.yml || true\nfi\n# Build Go c-archive if missing or older than sources\nif [ ! -f bin/My Product.a ]; then\n  echo \"Building Go c-archive...\"\n  go build -buildmode=c-archive -overlay build/ios/xcode/overlay.json -o bin/My Product.a\nfi\n";
+			shellPath = /bin/zsh;
+			shellScript = "set -e\nAPP_ROOT=\"${PROJECT_DIR}/../../..\"\nPLATFORM=${PLATFORM_NAME:-iphonesimulator}\nSDK_PATH=${SDKROOT:-$(xcrun --sdk ${PLATFORM} --show-sdk-path)}\nif [ ${PLATFORM} = iphonesimulator ]; then GO_TARGET=arm64-apple-ios15.0-simulator; MIN_FLAG=-mios-simulator-version-min=15.0; else GO_TARGET=arm64-apple-ios15.0; MIN_FLAG=-miphoneos-version-min=15.0; fi\nexport GOOS=ios\nexport GOARCH=arm64\nexport CGO_ENABLED=1\nexport CGO_CFLAGS=\"-isysroot ${SDK_PATH} -target ${GO_TARGET} ${MIN_FLAG}\"\nexport CGO_LDFLAGS=\"-isysroot ${SDK_PATH} -target ${GO_TARGET}\"\ncd \"${APP_ROOT}\"\n# Ensure overlay exists\nif [ ! -f build/ios/xcode/overlay.json ]; then\n  wails3 ios overlay:gen -out build/ios/xcode/overlay.json -config build/config.yml || true\nfi\n# Always rebuild the Go c-archive; Go's build cache keeps this fast\n# and avoids stale binaries when .go sources change.\necho \"Building Go c-archive...\"\n/usr/local/go/bin/go build -buildmode=c-archive -overlay build/ios/xcode/overlay.json -o \"bin/Hyperion Downloader.a\"\n";
+		};
+		E85A136E2FE372AE0016ACC0 /* Build Frontend */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PROJECT_DIR}/../../../frontend/src",
+				"${PROJECT_DIR}/../../../frontend/package.json",
+				"$(SRCROOT)/${PROJECT_DIR}/../../../frontend/public",
+				"${PROJECT_DIR}/../../../frontend/src/pages/*",
+				"${PROJECT_DIR}/../../../frontend/src/components/*",
+				"${PROJECT_DIR}/../../../frontend/src/*",
+			);
+			name = "Build Frontend";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${PROJECT_DIR}/../../../frontend/dist/*",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/zsh;
+			shellScript = "export NVM_DIR=\"$HOME/.nvm\"\n[ -s \"$NVM_DIR/nvm.sh\" ] && \\. \"$NVM_DIR/nvm.sh\"  # This loads nvm\nAPP_ROOT=\"${PROJECT_DIR}/../../..\"\ncd \"${APP_ROOT}/frontend\"\npnpm vite build\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -174,31 +220,67 @@
 		C0DEBEEF0000000000000090 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = HyperionIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGNING_ALLOWED = YES;
+				CODE_SIGN_ENTITLEMENTS = "Hyperion Downloader.entitlements";
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = 8H4KB9HHSC;
+				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = main/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Hyperion DL";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "(c) 2026, meponder";
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIRequiredDeviceCapabilities = arm64;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportsDocumentBrowser = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.mycompany.myproduct";
-				PRODUCT_NAME = "My Product";
-				CODE_SIGNING_ALLOWED = NO;
-				SDKROOT = iphonesimulator;
+				LIBRARY_SEARCH_PATHS = "\"$(PROJECT_DIR)/../../../bin\"";
+				MARKETING_VERSION = 0.1.2;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_BUNDLE_IDENTIFIER = com.meponder.hyperiondownloader;
+				PRODUCT_NAME = "Hyperion Downloader";
+				SDKROOT = iphoneos;
 			};
 			name = Debug;
 		};
 		C0DEBEEF00000000000000A0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = HyperionIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGNING_ALLOWED = YES;
+				CODE_SIGN_ENTITLEMENTS = "Hyperion Downloader.entitlements";
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = 8H4KB9HHSC;
+				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = main/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Hyperion DL";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "(c) 2026, meponder";
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIRequiredDeviceCapabilities = arm64;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportsDocumentBrowser = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.mycompany.myproduct";
-				PRODUCT_NAME = "My Product";
-				CODE_SIGNING_ALLOWED = NO;
-				SDKROOT = iphonesimulator;
+				LIBRARY_SEARCH_PATHS = "\"$(PROJECT_DIR)/../../../bin\"";
+				MARKETING_VERSION = 0.1.2;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_BUNDLE_IDENTIFIER = com.meponder.hyperiondownloader;
+				PRODUCT_NAME = "Hyperion Downloader";
+				SDKROOT = iphoneos;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		C0DEBEEF0000000000000070 /* Build configuration list for PBXNativeTarget "My Product" */ = {
+		C0DEBEEF0000000000000070 /* Build configuration list for PBXNativeTarget "Hyperion Downloader" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C0DEBEEF0000000000000090 /* Debug */,

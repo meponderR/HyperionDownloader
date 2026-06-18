@@ -1,13 +1,25 @@
+import PropTypes from "prop-types";
+
 import { AppBar, Box, IconButton, Toolbar, Typography } from "@mui/material";
 import RemoveIcon from "@mui/icons-material/Remove";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CloseIcon from "@mui/icons-material/Close";
+import SettingsIcon from "@mui/icons-material/Settings";
+import { Link } from "react-router";
 
 import { Minimise, Maximise, Close } from "../../bindings/hyperion-downloader/services/windowcontrols";
 
-function HyperionAppBar({ theme }) {
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+const platform = (() => {
+    if (typeof window.wails?.platform === "function") return window.wails.platform(); // Android
+    if (window.webkit?.messageHandlers?.external) return "ios";
+    return "desktop";
+})();
 
+const isIOS = platform === "ios";
+const isAndroid = platform === "android";
+const isMobile = isIOS || isAndroid;
+
+function HyperionAppBar({ isSettingsOpen, setIsSettingsOpen, theme }) {
     return (
         <AppBar
             position="fixed"
@@ -26,12 +38,10 @@ function HyperionAppBar({ theme }) {
                 variant="dense"
                 style={{
                     paddingRight: "12px",
+                    paddingTop: isMobile ? "env(safe-area-inset-top)" : 0,
                 }}
             >
-                <Typography
-                    variant="h6"
-                    noWrap
-                >
+                <Typography variant="h6" noWrap>
                     Hyperion Downloader
                 </Typography>
                 <Box sx={{ flexGrow: 1 }} />
@@ -84,12 +94,38 @@ function HyperionAppBar({ theme }) {
                             <CloseIcon />
                         </IconButton>
                     </Box>
-                ) : null}
+                ) : (
+                    <IconButton
+                        size="large"
+                        aria-label="settings"
+                        component={Link}
+                        to={window.location.hash.includes("Settings") ? "/" : "/Settings"}
+                        color="inherit"
+                        style={{
+                            "--wails-draggable": "no-drag",
+                        }}
+                        sx={{
+                            borderRadius: 0,
+                        }}
+                        onClick={() => setIsSettingsOpen(!window.location.hash.includes("Settings"))}
+                    >
+                        <SettingsIcon
+                            sx={{
+                                transform: isSettingsOpen ? "rotate(150deg)" : "none",
+                                transition: "transform 0.5s",
+                            }}
+                        />
+                    </IconButton>
+                )}
             </Toolbar>
         </AppBar>
     );
 }
 
-HyperionAppBar.propTypes = {};
+HyperionAppBar.propTypes = {
+    isSettingsOpen: PropTypes.bool.isRequired,
+    setIsSettingsOpen: PropTypes.func.isRequired,
+    theme: PropTypes.object.isRequired,
+};
 
 export default HyperionAppBar;

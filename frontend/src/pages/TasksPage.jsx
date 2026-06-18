@@ -1,5 +1,5 @@
 //React
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 
 //Material UI Components
 import {
@@ -37,9 +37,25 @@ import { Events } from "@wailsio/runtime";
 
 import TaskCard from "../components/TaskCard";
 import { DeleteTask, DownloadFile, GetTasks } from "../../bindings/hyperion-downloader/services/hyperdownloadservice";
-import { GetAppDataDir, GetCacheDir, GetDefaultCookie, GetDefaultUserAgent, GetOutputDir, PickDir } from "../../bindings/hyperion-downloader/services/configservice";
+import {
+    GetCacheDir,
+    GetDefaultCookie,
+    GetDefaultUserAgent,
+    GetOutputDir,
+    PickDir,
+} from "../../bindings/hyperion-downloader/services/configservice";
 import { enqueueSnackbar } from "notistack";
 import NumberField from "../components/NumberField";
+
+const platform = (() => {
+    if (typeof window.wails?.platform === "function") return window.wails.platform(); // Android
+    if (window.webkit?.messageHandlers?.external) return "ios";
+    return "desktop";
+})();
+
+const isIOS = platform === "ios";
+const isAndroid = platform === "android";
+const isMobile = isIOS || isAndroid;
 
 export default function TasksPage() {
     const [tasks, setTasks] = useState([]);
@@ -121,7 +137,7 @@ export default function TasksPage() {
         await Promise.all(
             urls.map(async (url) => {
                 await handleSingleDownload(url);
-            })
+            }),
         );
 
         setDownloadURL("");
@@ -148,12 +164,19 @@ export default function TasksPage() {
         const urlHash = (await sha256(downloadURL)).slice(0, 12);
 
         const tempDir = `${cacheDir}/Temp/${urlHash}`;
-        await DownloadFile(downloadURL, downloadPath, tempDir, parseInt(concurrentDownloads), parseInt(targetPartSize * 1024 * 1024), {
-            Cookies: cookies,
-            UserAgent: userAgent,
-            Referer: referer,
-            AuthorizationHeader: authorizationHeader,
-        });
+        await DownloadFile(
+            downloadURL,
+            downloadPath,
+            tempDir,
+            parseInt(concurrentDownloads),
+            parseInt(targetPartSize * 1024 * 1024),
+            {
+                Cookies: cookies,
+                UserAgent: userAgent,
+                Referer: referer,
+                AuthorizationHeader: authorizationHeader,
+            },
+        );
     }
 
     return (
@@ -175,11 +198,7 @@ export default function TasksPage() {
                 >
                     Tasks
                 </Typography>
-                <Dialog
-                    open={taskAddDialogOpen}
-                    onClose={() => setTaskAddDialogOpen(false)}
-                    fullWidth
-                >
+                <Dialog open={taskAddDialogOpen} onClose={() => setTaskAddDialogOpen(false)} fullWidth>
                     <DialogTitle
                         sx={{
                             userSelect: "none",
@@ -244,41 +263,44 @@ export default function TasksPage() {
                                         marginBottom: 1,
                                     }}
                                 >
-                                    <TextField
-                                        variant="filled"
-                                        id="outputLocationInput"
-                                        label="Output Location"
-                                        value={downloadPath}
-                                        onChange={(event) => {
-                                            setDownloadPath(event.target.value);
-                                        }}
-                                        slotProps={{
-                                            input: {
-                                                endAdornment: (
-                                                    <InputAdornment position="end">
-                                                        <IconButton
-                                                            aria-label="pick file"
-                                                            onClick={async () => {
-                                                                const pickFile = await PickDir("Select Output Directory");
-                                                                if (pickFile) {
-                                                                    setDownloadPath(pickFile);
-                                                                }
-                                                            }}
-                                                            onMouseDown={(event) => event.preventDefault()}
-                                                            edge="end"
-                                                            sx={{
-                                                                width: 40,
-                                                                height: 40,
-                                                                mr: 0.5,
-                                                            }}
-                                                        >
-                                                            <FolderOpenIcon />
-                                                        </IconButton>
-                                                    </InputAdornment>
-                                                ),
-                                            },
-                                        }}
-                                    />
+                                    {isMobile ? null : (
+                                        <TextField
+                                            variant="filled"
+                                            id="outputLocationInput"
+                                            label="Output Location"
+                                            value={downloadPath}
+                                            onChange={(event) => {
+                                                setDownloadPath(event.target.value);
+                                            }}
+                                            slotProps={{
+                                                input: {
+                                                    endAdornment: (
+                                                        <InputAdornment position="end">
+                                                            <IconButton
+                                                                aria-label="pick file"
+                                                                onClick={async () => {
+                                                                    const pickFile =
+                                                                        await PickDir("Select Output Directory");
+                                                                    if (pickFile) {
+                                                                        setDownloadPath(pickFile);
+                                                                    }
+                                                                }}
+                                                                onMouseDown={(event) => event.preventDefault()}
+                                                                edge="end"
+                                                                sx={{
+                                                                    width: 40,
+                                                                    height: 40,
+                                                                    mr: 0.5,
+                                                                }}
+                                                            >
+                                                                <FolderOpenIcon />
+                                                            </IconButton>
+                                                        </InputAdornment>
+                                                    ),
+                                                },
+                                            }}
+                                        />
+                                    )}
                                 </FormControl>
                                 {/* Additional includes: Concurrent Downloads, Max Part Size, Cookies, UserAgent, Referer, AuthorizationHeader */}
                                 <Accordion
@@ -301,53 +323,96 @@ export default function TasksPage() {
                                             overflowY: "scroll",
                                         }}
                                     >
-                                        <Grid
-                                            display="flex"
-                                            container
-                                            spacing={1}
-                                            direction="row"
-                                            sx={{
-                                                width: 1,
-                                                flexWrap: "nowrap",
-                                            }}
-                                        >
-                                            <FormControl
+                                        {isMobile ? (
+                                            <Fragment>
+                                                <FormControl
+                                                    sx={{
+                                                        marginBottom: 1,
+                                                        flexGrow: 1,
+                                                    }}
+                                                    fullWidth
+                                                >
+                                                    <NumberField
+                                                        variant="filled"
+                                                        id="concurrentDownloadsInput"
+                                                        label="Concurrent Downloads"
+                                                        value={concurrentDownloads}
+                                                        onValueChange={(value) => {
+                                                            setConcurrentDownloads(value);
+                                                        }}
+                                                        min={1}
+                                                    />
+                                                </FormControl>
+                                                <FormControl
+                                                    sx={{
+                                                        marginBottom: 1,
+                                                        flexGrow: 1,
+                                                    }}
+                                                    fullWidth
+                                                >
+                                                    <NumberField
+                                                        variant="filled"
+                                                        id="targetPartSizeInput"
+                                                        label="Max Part Size"
+                                                        value={targetPartSize}
+                                                        onValueChange={(value) => {
+                                                            setTargetPartSize(value);
+                                                        }}
+                                                        min={0.5}
+                                                        step={0.5}
+                                                        endAdornment="MiB"
+                                                    />
+                                                </FormControl>
+                                            </Fragment>
+                                        ) : (
+                                            <Grid
+                                                display="flex"
+                                                container
+                                                spacing={1}
+                                                direction="row"
                                                 sx={{
-                                                    marginBottom: 1,
-                                                    flexGrow: 1,
+                                                    width: 1,
+                                                    flexWrap: "nowrap",
                                                 }}
                                             >
-                                                <NumberField
-                                                    variant="filled"
-                                                    id="concurrentDownloadsInput"
-                                                    label="Concurrent Downloads"
-                                                    value={concurrentDownloads}
-                                                    onValueChange={(value) => {
-                                                        setConcurrentDownloads(value);
+                                                <FormControl
+                                                    sx={{
+                                                        marginBottom: 1,
+                                                        flexGrow: 1,
                                                     }}
-                                                    min={1}
-                                                />
-                                            </FormControl>
-                                            <FormControl
-                                                sx={{
-                                                    marginBottom: 1,
-                                                    flexGrow: 1,
-                                                }}
-                                            >
-                                                <NumberField
-                                                    variant="filled"
-                                                    id="targetPartSizeInput"
-                                                    label="Max Part Size"
-                                                    value={targetPartSize}
-                                                    onValueChange={(value) => {
-                                                        setTargetPartSize(value);
+                                                >
+                                                    <NumberField
+                                                        variant="filled"
+                                                        id="concurrentDownloadsInput"
+                                                        label="Concurrent Downloads"
+                                                        value={concurrentDownloads}
+                                                        onValueChange={(value) => {
+                                                            setConcurrentDownloads(value);
+                                                        }}
+                                                        min={1}
+                                                    />
+                                                </FormControl>
+                                                <FormControl
+                                                    sx={{
+                                                        marginBottom: 1,
+                                                        flexGrow: 1,
                                                     }}
-                                                    min={0.5}
-                                                    step={0.5}
-                                                    endAdornment="MiB"
-                                                />
-                                            </FormControl>
-                                        </Grid>
+                                                >
+                                                    <NumberField
+                                                        variant="filled"
+                                                        id="targetPartSizeInput"
+                                                        label="Max Part Size"
+                                                        value={targetPartSize}
+                                                        onValueChange={(value) => {
+                                                            setTargetPartSize(value);
+                                                        }}
+                                                        min={0.5}
+                                                        step={0.5}
+                                                        endAdornment="MiB"
+                                                    />
+                                                </FormControl>
+                                            </Grid>
+                                        )}
                                         <FormControl
                                             sx={{
                                                 marginBottom: 1,
@@ -461,6 +526,7 @@ export default function TasksPage() {
                                     alignItems: "center",
                                     justifyContent: "center",
                                     opacity: 0.5,
+                                    userSelect: "none",
                                 }}
                             >
                                 <IconButton
@@ -478,13 +544,7 @@ export default function TasksPage() {
                             </Box>
                         </Box>
                     ) : (
-                        <Grid
-                            display="flex"
-                            container
-                            spacing={1}
-                            alignItems="center"
-                            justifyContent="center"
-                        >
+                        <Grid display="flex" container spacing={1} alignItems="center" justifyContent="center">
                             {(() => {
                                 if (tasks) {
                                     if (tasks.length >= 1) {

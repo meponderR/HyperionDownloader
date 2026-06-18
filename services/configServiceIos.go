@@ -1,4 +1,4 @@
-//go:build !ios && !android
+//go:build ios
 
 package services
 
@@ -15,7 +15,6 @@ type ConfigService struct {
 }
 
 type Config struct {
-	OutputDir        string `json:"outputDir"`
 	DefaultCookie    string `json:"defaultCookie"`
 	DefaultUserAgent string `json:"defaultUserAgent"`
 }
@@ -24,18 +23,25 @@ func NewConfigService(app *application.App) *ConfigService {
 	return &ConfigService{app: app}
 }
 
+func getSandboxDir() string {
+	sandboxDir, _ := os.UserHomeDir()
+	return sandboxDir
+}
+
 func (cs *ConfigService) GetAppDataDir() string {
-	dataDir := filepath.Join(application.Path(application.PathDataHome), "HyperionDownloader")
+	dataDir := filepath.Join(getSandboxDir(), "Library", "Application Support")
+	// Ensure the directory exists
+	os.MkdirAll(dataDir, 0755)
 	return dataDir
 }
 
 func (cs *ConfigService) GetDownloadsDir() string {
-	downloadsDir := application.Path(application.PathDownload)
+	downloadsDir := filepath.Join(getSandboxDir(), "Documents")
 	return downloadsDir
 }
 
 func (cs *ConfigService) GetCacheDir() string {
-	cacheDir := filepath.Join(application.Path(application.PathCacheHome), "HyperionDownloader")
+	cacheDir := filepath.Join(getSandboxDir(), "Library", "Caches", "HyperionDownloader")
 	return cacheDir
 }
 
@@ -47,7 +53,6 @@ func (cs *ConfigService) ReadConfig() (*Config, error) {
 	if err != nil {
 		if os.IsNotExist(err) {
 			return &Config{
-				OutputDir:        cs.GetDownloadsDir(),
 				DefaultCookie:    "",
 				DefaultUserAgent: "",
 			}, nil
@@ -79,19 +84,10 @@ func (cs *ConfigService) SaveConfig(config *Config) error {
 }
 
 func (cs *ConfigService) GetOutputDir() string {
-	config, err := cs.ReadConfig()
-	if err != nil {
-		return cs.GetDownloadsDir()
-	}
-	return config.OutputDir
+	return cs.GetDownloadsDir()
 }
 func (cs *ConfigService) SetOutputDir(outputDir string) error {
-	config, err := cs.ReadConfig()
-	if err != nil {
-		return err
-	}
-	config.OutputDir = outputDir
-	return cs.SaveConfig(config)
+	return nil
 }
 
 func (cs *ConfigService) GetDefaultCookie() string {
@@ -127,11 +123,5 @@ func (cs *ConfigService) SetDefaultUserAgent(userAgent string) error {
 }
 
 func (cs *ConfigService) PickDir(title string) (string, error) {
-	dir, err := cs.app.Dialog.OpenFile().
-		SetTitle(title).
-		CanChooseFiles(false).
-		CanChooseDirectories(true).
-		PromptForSingleSelection()
-
-	return dir, err
+	return "", nil
 }

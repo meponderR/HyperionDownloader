@@ -6,6 +6,7 @@ import (
 	"log"
 
 	"hyperion-downloader/services"
+	"hyperion-downloader/setups"
 
 	"github.com/wailsapp/wails/v3/pkg/application"
 )
@@ -21,8 +22,7 @@ func init() {
 }
 
 func main() {
-	// Create application
-	app := application.New(application.Options{
+	appOptions := application.Options{
 		Name:        "Hyperion Downloader",
 		Description: "A multi-threaded downloader built with Go and Wails.",
 		Services:    []application.Service{},
@@ -32,7 +32,22 @@ func main() {
 		Mac: application.MacOptions{
 			ApplicationShouldTerminateAfterLastWindowClosed: true,
 		},
-	})
+		IOS: application.IOSOptions{
+			DisableInputAccessoryView: true,
+			DisableSafeAreaInsets:     true,
+			DisableBounce:             true,
+			BackgroundColour:          application.NewRGBA(18, 18, 18, 255),
+		},
+	}
+
+	// Platform-specific options setup
+	setups.IosSpecificOptionsSetup(&appOptions)
+
+	// Create application
+	app := application.New(appOptions)
+
+	// Platform-specific app setups
+	setups.IosSpecificAppSetup(app)
 
 	// Register services
 	app.RegisterService(application.NewService(services.NewConfigService(app)))
@@ -51,7 +66,7 @@ func main() {
 			Backdrop:                application.MacBackdropTranslucent,
 			TitleBar:                application.MacTitleBarHiddenInset,
 		},
-		BackgroundColour: application.NewRGB(27, 38, 54),
+		BackgroundColour: application.NewRGBA(18, 18, 18, 255),
 		URL:              "/",
 	})
 
