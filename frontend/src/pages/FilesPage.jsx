@@ -39,7 +39,7 @@ import { Events } from "@wailsio/runtime";
 import FileCard from "../components/FileCard";
 import { DeleteTask, DownloadFile, GetTasks } from "../../bindings/hyperion-downloader/services/hyperdownloadservice";
 import { GetOutputDir } from "../../bindings/hyperion-downloader/services/configservice";
-import { GetFiles, DeleteFile } from "../../bindings/hyperion-downloader/services/downloadedFilesService";
+import { GetFiles, DeleteFile } from "../../bindings/hyperion-downloader/services/downloadedfilesservice";
 import { enqueueSnackbar } from "notistack";
 import NumberField from "../components/NumberField";
 
