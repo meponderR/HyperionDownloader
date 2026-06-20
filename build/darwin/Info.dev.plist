@@ -6,7 +6,7 @@
         <key>CFBundleName</key>
             <string>Hyperion Downloader</string>
         <key>CFBundleExecutable</key>
-            <string>hyperion-downloader.exe</string>
+            <string>hyperion-downloader</string>
         <key>CFBundleIdentifier</key>
             <string>com.meponder.hyperiondownloader</string>
         <key>CFBundleVersion</key>
