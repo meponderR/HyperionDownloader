@@ -15,6 +15,8 @@
 		C0DEBEEF00000000000000F5 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C0DEBEEF0000000000000105 /* CoreFoundation.framework */; };
 		C0DEBEEF00000000000000F6 /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = C0DEBEEF0000000000000106 /* libresolv.tbd */; };
 		E85A13DF2FE381800016ACC0 /* HyperionIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = E8DDFD032FE2B31C000CFFFB /* HyperionIcon.icon */; };
+		E88DD4562FE68FB200E154F1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E88DD4552FE68FB200E154F1 /* Assets.xcassets */; };
+		E88DD4582FE68FD900E154F1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E88DD4572FE68FD900E154F1 /* LaunchScreen.storyboard */; };
 		E8DDFD052FE36CED000CFFFB /* Hyperion Downloader.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C0DEBEEF0000000000000107 /* Hyperion Downloader.a */; };
 /* End PBXBuildFile section */
 
@@ -29,6 +31,8 @@
 		C0DEBEEF0000000000000105 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		C0DEBEEF0000000000000106 /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = usr/lib/libresolv.tbd; sourceTree = SDKROOT; };
 		C0DEBEEF0000000000000107 /* Hyperion Downloader.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "Hyperion Downloader.a"; path = "../../../bin/Hyperion Downloader.a"; sourceTree = SOURCE_ROOT; };
+		E88DD4552FE68FB200E154F1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E88DD4572FE68FD900E154F1 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E8DDFD032FE2B31C000CFFFB /* HyperionIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = HyperionIcon.icon; sourceTree = "<group>"; };
 		E8DDFD042FE2B400000CFFFB /* Hyperion Downloader.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Hyperion Downloader.entitlements"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -54,11 +58,13 @@
 		C0DEBEEF0000000000000010 = {
 			isa = PBXGroup;
 			children = (
+				E88DD4552FE68FB200E154F1 /* Assets.xcassets */,
 				E8DDFD042FE2B400000CFFFB /* Hyperion Downloader.entitlements */,
 				C0DEBEEF0000000000000020 /* Products */,
 				C0DEBEEF0000000000000045 /* Frameworks */,
 				C0DEBEEF0000000000000030 /* main */,
 				E8DDFD032FE2B31C000CFFFB /* HyperionIcon.icon */,
+				E88DD4572FE68FD900E154F1 /* LaunchScreen.storyboard */,
 			);
 			sourceTree = "<group>";
 		};
@@ -151,6 +157,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E88DD4582FE68FD900E154F1 /* LaunchScreen.storyboard in Resources */,
+				E88DD4562FE68FB200E154F1 /* Assets.xcassets in Resources */,
 				E85A13DF2FE381800016ACC0 /* HyperionIcon.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
