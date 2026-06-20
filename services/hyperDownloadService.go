@@ -264,5 +264,7 @@ func (h *HyperDownloadService) DownloadFile(url string, outputDir string, tempDi
 		h.app.Event.Emit("downloadCompleted", task)
 	}
 	h.DeleteTask(uid)
+
+	h.app.Event.Emit("fileUpdate", "")
 	return nil
 }

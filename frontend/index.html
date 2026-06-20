@@ -5,7 +5,11 @@
         <link rel="icon" type="image/svg+xml" href="/hyperion_appicon.png" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
         <style>
+            html {
+                --wails-resize: all;
+            }
             body {
+                --wails-resize: all;
                 margin: 0;
                 font-family: "Roboto", sans-serif;
                 background-color: #fff;
@@ -22,7 +26,7 @@
         </style>
         <title>Hyperion Downloader</title>
     </head>
-    <body style="--wails-resize: all; overflow-x: hidden">
+    <body style="overflow-x: hidden">
         <div id="root" style="width: 100%"></div>
         <script type="module" src="/src/main.jsx"></script>
     </body>

@@ -1,5 +1,6 @@
 //React
 import { Fragment, useEffect, useState } from "react";
+import PropTypes from "prop-types";
 
 //Material UI Components
 import {
@@ -47,17 +48,7 @@ import {
 import { enqueueSnackbar } from "notistack";
 import NumberField from "../components/NumberField";
 
-const platform = (() => {
-    if (typeof window.wails?.platform === "function") return window.wails.platform(); // Android
-    if (window.webkit?.messageHandlers?.external) return "ios";
-    return "desktop";
-})();
-
-const isIOS = platform === "ios";
-const isAndroid = platform === "android";
-const isMobile = isIOS || isAndroid;
-
-export default function TasksPage() {
+function TasksPage({ isMobile }) {
     const [tasks, setTasks] = useState([]);
     const [taskAddDialogOpen, setTaskAddDialogOpen] = useState(false);
 
@@ -161,7 +152,7 @@ export default function TasksPage() {
     async function handleSingleDownload(downloadURL) {
         const cacheDir = await GetCacheDir();
         // Hash url to create unique temp folder that is resumable across app restarts. Use sha256 for uniqueness since the url can be long and we just need a unique identifier for the temp folder. Trim the hash to get a string representation that can be used as a folder name.
-        const urlHash = (await sha256(downloadURL)).slice(0, 12);
+        const urlHash = (await sha256(downloadURL + downloadPath)).slice(0, 12);
 
         const tempDir = `${cacheDir}/Temp/${urlHash}`;
         await DownloadFile(
@@ -527,6 +518,8 @@ export default function TasksPage() {
                                     justifyContent: "center",
                                     opacity: 0.5,
                                     userSelect: "none",
+                                    textAlign: "center",
+                                    paddingX: 1,
                                 }}
                             >
                                 <IconButton
@@ -534,11 +527,11 @@ export default function TasksPage() {
                                     onClick={() => setTaskAddDialogOpen(true)}
                                     edge="end"
                                     sx={{
-                                        height: 48,
-                                        width: 48,
+                                        height: "3rem",
+                                        width: "3rem",
                                     }}
                                 >
-                                    <AddTaskIcon sx={{ fontSize: 64 }} />
+                                    <AddTaskIcon sx={{ fontSize: "4rem" }} />
                                 </IconButton>
                                 <Typography variant="h4">No Active Tasks</Typography>
                             </Box>
@@ -576,8 +569,8 @@ export default function TasksPage() {
                 variant="extended"
                 sx={{
                     position: "fixed",
-                    bottom: 16,
-                    right: 32,
+                    bottom: "calc(1rem + env(safe-area-inset-bottom))",
+                    right: "calc(1rem + env(safe-area-inset-right))",
                 }}
             >
                 <AddTaskIcon
@@ -590,3 +583,9 @@ export default function TasksPage() {
         </div>
     );
 }
+
+TasksPage.propTypes = {
+    isMobile: PropTypes.bool.isRequired,
+};
+
+export default TasksPage;

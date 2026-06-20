@@ -13,8 +13,9 @@ import {
     Tooltip,
     Typography,
 } from "@mui/material";
-import CancelIcon from "@mui/icons-material/Cancel";
-import PauseIcon from "@mui/icons-material/Pause";
+import DeleteIcon from "@mui/icons-material/Delete";
+import IosShareIcon from "@mui/icons-material/IosShare";
+import ShareIcon from "@mui/icons-material/Share";
 import InfoIcon from "@mui/icons-material/Info";
 //import PauseIcon from "@mui/icons-material/Pause";
 
@@ -23,15 +24,20 @@ import dateformat from "dateformat";
 
 import { PauseTask, StopTask } from "../../bindings/hyperion-downloader/services/hyperdownloadservice";
 import LinearProgressWithLabel from "./LinearProgressWithLabel";
+import { DeleteFile, ShareFile } from "../../bindings/hyperion-downloader/services/downloadedFilesService";
 
-function TaskCard(props) {
-    const task = props.task;
+function is24HourTime() {
+    const options = new Intl.DateTimeFormat(undefined, { hour: "numeric" }).resolvedOptions();
+    return options.hourCycle === "h23" || options.hourCycle === "h24";
+}
+
+function FileCard({ file, sx, isIOS, isAndroid, ...props }) {
     const [infoModalOpen, setInfoModalOpen] = useState(false);
     const [pauseButtonLoading, setPauseButtonLoading] = useState(false);
     const [cancelButtonLoading, setCancelButtonLoading] = useState(false);
 
     return (
-        <Card sx={{ ...{ minWidth: 275 }, ...props.sx }}>
+        <Card sx={{ ...{ minWidth: "16rem" }, ...sx }} {...props}>
             <Modal
                 open={infoModalOpen}
                 onClose={() => setInfoModalOpen(false)}
@@ -55,37 +61,32 @@ function TaskCard(props) {
                         <Grid item xs={8}>
                             <Grid container spacing={2} direction={"column"}>
                                 <Typography id="infoModalTitle" variant="h6" component="h2">
-                                    {task.name || "Task"}
-                                </Typography>
-                                <Typography
-                                    id="infoModalTid"
-                                    sx={{
-                                        color: "text.disabled",
-                                        alignSelf: "bottom left",
-                                    }}
-                                >
-                                    {task.uid ? "Task ID: " + task.uid : ""}
+                                    {file.name || "Task"}
                                 </Typography>
                             </Grid>
                         </Grid>
                         <Grid item xs={4}>
                             <Grid container spacing={2} direction={"column"}>
                                 <Typography
-                                    id="infoModalUrl"
+                                    id="infoModalPath"
                                     sx={{
-                                        overflowX: "scroll",
+                                        overflowX: "auto",
                                         whiteSpace: "nowrap",
                                         width: 1,
                                     }}
                                 >
-                                    {task.url ? "URL: " + task.url : ""}
+                                    {file.path ? "Path: " + file.path : ""}
                                 </Typography>
                                 <Typography id="infoModalSize">
-                                    {task.fileSize ? "File Size: " + prettyBytes(task.fileSize) : ""}
+                                    {file.size ? "File Size: " + prettyBytes(file.size) : ""}
                                 </Typography>
-                                <Typography id="infoModalCreatedAt">
-                                    {task.createdAt
-                                        ? "Created At: " + dateformat(task.createdAt, "yyyy-mm-dd HH:MM:ss")
+                                <Typography id="infoModalModifiedAt">
+                                    {file.mtime
+                                        ? "Modified At: " +
+                                          dateformat(
+                                              file.mtime * 1000,
+                                              is24HourTime() ? "yyyy-mm-dd HH:MM:ss" : "yyyy-mm-dd hh:MM:ss",
+                                          )
                                         : ""}
                                 </Typography>
                             </Grid>
@@ -121,7 +122,7 @@ function TaskCard(props) {
                                 width: `calc(100% - 7rem )`,
                             }}
                         >
-                            {task.filename || "Task"}
+                            {file.name || "File"}
                         </Typography>
 
                         <Box
@@ -129,12 +130,11 @@ function TaskCard(props) {
                             alignItems="right"
                             sx={{
                                 ml: "auto",
-                                mr: 1,
                                 height: "2rem",
                                 width: "6rem",
                             }}
                         >
-                            <ButtonGroup variant="contained" aria-label="task buttons">
+                            <ButtonGroup variant="contained" aria-label="file buttons">
                                 <Tooltip title="Info">
                                     <IconButton
                                         aria-label="info"
@@ -147,44 +147,29 @@ function TaskCard(props) {
                                         <InfoIcon />
                                     </IconButton>
                                 </Tooltip>
-                                <Tooltip title="Pause">
+                                <Tooltip title="Share">
                                     <IconButton
-                                        aria-label="Pause"
-                                        onClick={async () => {
-                                            setPauseButtonLoading(true);
-                                            try {
-                                                await PauseTask(task.uid);
-                                            } finally {
-                                                setPauseButtonLoading(false);
-                                            }
-                                        }}
+                                        aria-label="share"
+                                        onClick={() => ShareFile(file.path)}
                                         sx={{
                                             height: "2rem",
                                             width: "2rem",
                                         }}
-                                        loading={pauseButtonLoading}
                                     >
-                                        <PauseIcon />
+                                        {isIOS ? <IosShareIcon /> : <ShareIcon />}
                                     </IconButton>
                                 </Tooltip>
-                                <Tooltip title="Cancel">
+                                <Tooltip title="Delete">
                                     <IconButton
-                                        aria-label="cancel"
-                                        onClick={async () => {
-                                            setCancelButtonLoading(true);
-                                            try {
-                                                await StopTask(task.uid);
-                                            } finally {
-                                                setCancelButtonLoading(false);
-                                            }
-                                        }}
+                                        aria-label="delete"
+                                        onClick={() => DeleteFile(file.path)}
                                         sx={{
                                             height: "2rem",
                                             width: "2rem",
                                         }}
                                         loading={cancelButtonLoading}
                                     >
-                                        <CancelIcon />
+                                        <DeleteIcon />
                                     </IconButton>
                                 </Tooltip>
                             </ButtonGroup>
@@ -199,19 +184,24 @@ function TaskCard(props) {
                     }}
                 >
                     <Typography>
-                        {task.status ? "Status: " : ""}
-                        {task.status || ""}
+                        {file.size ? "Size: " : ""}
+                        {file.size ? prettyBytes(file.size) : ""}
                     </Typography>
                 </Box>
-                <LinearProgressWithLabel value={task.progress ? task.progress * 100 : 0} />
             </CardContent>
         </Card>
     );
 }
 
-TaskCard.propTypes = {
-    task: PropTypes.object.isRequired,
+FileCard.propTypes = {
+    file: PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        path: PropTypes.string.isRequired,
+        size: PropTypes.number,
+        mtime: PropTypes.string,
+        dir: PropTypes.bool,
+    }).isRequired,
     sx: PropTypes.object,
 };
 
-export default TaskCard;
+export default FileCard;

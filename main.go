@@ -19,6 +19,7 @@ func init() {
 	application.RegisterEvent[services.HyperDownloadTasksSnapshot]("tasksSnapshot")
 	application.RegisterEvent[services.HyperDownloadError]("downloadError")
 	application.RegisterEvent[*services.HyperDownloadTask]("downloadCompleted")
+	application.RegisterEvent[string]("fileUpdate")
 }
 
 func main() {
@@ -34,7 +35,6 @@ func main() {
 		},
 		IOS: application.IOSOptions{
 			DisableInputAccessoryView: true,
-			DisableSafeAreaInsets:     true,
 			DisableBounce:             true,
 			BackgroundColour:          application.NewRGBA(18, 18, 18, 255),
 		},
@@ -53,6 +53,7 @@ func main() {
 	app.RegisterService(application.NewService(services.NewConfigService(app)))
 	app.RegisterService(application.NewService(services.NewWindowControls(app)))
 	app.RegisterService(application.NewService(services.NewHyperDownloadService(app)))
+	app.RegisterService(application.NewService(services.NewDownloadedFilesService(app)))
 
 	// Create window
 	app.Window.NewWithOptions(application.WebviewWindowOptions{

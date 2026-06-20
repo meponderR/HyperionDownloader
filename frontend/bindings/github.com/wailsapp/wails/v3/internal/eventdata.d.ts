@@ -14,6 +14,7 @@ declare module "@wailsio/runtime" {
         interface CustomEvents {
             "downloadCompleted": services$0.HyperDownloadTask | null;
             "downloadError": services$0.HyperDownloadError;
+            "fileUpdate": string;
             "tasksSnapshot": services$0.HyperDownloadTasksSnapshot;
         }
     }

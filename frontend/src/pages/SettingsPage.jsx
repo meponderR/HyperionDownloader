@@ -1,5 +1,6 @@
 //React
 import { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 
 //Material UI Components
 import {
@@ -39,17 +40,7 @@ import {
 import { enqueueSnackbar } from "notistack";
 import { Link } from "react-router";
 
-const platform = (() => {
-    if (typeof window.wails?.platform === "function") return window.wails.platform(); // Android
-    if (window.webkit?.messageHandlers?.external) return "ios";
-    return "desktop";
-})();
-
-const isIOS = platform === "ios";
-const isAndroid = platform === "android";
-const isMobile = isIOS || isAndroid;
-
-export default function SettingsPage({ isSettingsOpen, setIsSettingsOpen, theme }) {
+function SettingsPage({ isSettingsOpen, setIsSettingsOpen, theme, isMobile }) {
     // Download
     const [outputLocation, setOutputLocation] = useState("");
     const [defaultCookie, setDefaultCookie] = useState("");
@@ -117,10 +108,13 @@ export default function SettingsPage({ isSettingsOpen, setIsSettingsOpen, theme 
                 {isMobile ? (
                     <Button
                         variant="contained"
-                        sx={{ mb: 4 }}
+                        sx={{
+                            mb: 4,
+                            fontWeight: "bold",
+                        }}
                         onClick={() => {
                             setIsSettingsOpen(false);
-                            window.location.hash = "/";
+                            window.location.hash = "#/";
                         }}
                     >
                         Return to Home
@@ -154,8 +148,8 @@ export default function SettingsPage({ isSettingsOpen, setIsSettingsOpen, theme 
                                             onMouseDown={(event) => event.preventDefault()}
                                             edge="end"
                                             sx={{
-                                                height: "40px",
-                                                width: "40px",
+                                                height: "2.5rem",
+                                                width: "2.5rem",
                                                 mr: 0.25,
                                             }}
                                         >
@@ -226,3 +220,12 @@ export default function SettingsPage({ isSettingsOpen, setIsSettingsOpen, theme 
         </form>
     );
 }
+
+SettingsPage.propTypes = {
+    isSettingsOpen: PropTypes.bool.isRequired,
+    setIsSettingsOpen: PropTypes.func.isRequired,
+    theme: PropTypes.object.isRequired,
+    isMobile: PropTypes.bool.isRequired,
+};
+
+export default SettingsPage;

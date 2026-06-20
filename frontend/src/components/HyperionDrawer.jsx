@@ -6,22 +6,22 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import { grey } from "@mui/material/colors";
 import { Link } from "react-router";
 
-export default function HyperionDrawer({ isSettingsOpen, setIsSettingsOpen, prefersDarkMode, theme }) {
+export default function HyperionDrawer({ isSettingsOpen, setIsSettingsOpen, prefersDarkMode, theme, drawerWidth }) {
     return (
         <Fragment>
             <Drawer
                 sx={{
-                    width: theme.spacing(7) + 1,
+                    width: drawerWidth,
                     flexShrink: 0,
                     "& .MuiDrawer-paper": {
-                        width: theme.spacing(7) + 1,
+                        width: drawerWidth,
                         boxSizing: "border-box",
                     },
                 }}
                 variant="permanent"
                 classes={{
                     paper: {
-                        width: theme.spacing(7) + 1,
+                        width: drawerWidth,
                     },
                 }}
             >

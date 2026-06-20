@@ -37,6 +37,7 @@ import { amber, grey } from "@mui/material/colors";
 import { SnackbarProvider } from "notistack";
 import HyperionDrawer from "./components/HyperionDrawer";
 import HyperionAppBar from "./components/HyperionAppBar";
+import FilesPage from "./pages/FilesPage";
 
 const platform = (() => {
     if (typeof window.wails?.platform === "function") return window.wails.platform(); // Android
@@ -47,6 +48,8 @@ const platform = (() => {
 const isIOS = platform === "ios";
 const isAndroid = platform === "android";
 const isMobile = isIOS || isAndroid;
+
+const drawerWidth = isMobile ? 0 : "7rem";
 
 function App() {
     const [isSettingsOpen, setIsSettingsOpen] = useState(window.location.hash === "#/Settings");
@@ -74,7 +77,7 @@ function App() {
         content: {
             flexGrow: 1,
             padding: theme.spacing(3),
-            marginLeft: isMobile ? 0 : theme.spacing(7) + 1,
+            marginLeft: isMobile ? 0 : drawerWidth,
         },
     };
 
@@ -95,6 +98,7 @@ function App() {
                             isSettingsOpen={isSettingsOpen}
                             setIsSettingsOpen={setIsSettingsOpen}
                             theme={theme}
+                            isMobile={isMobile}
                         />
                         {isMobile ? null : (
                             <HyperionDrawer
@@ -102,6 +106,7 @@ function App() {
                                 setIsSettingsOpen={setIsSettingsOpen}
                                 prefersDarkMode={prefersDarkMode}
                                 theme={theme}
+                                drawerWidth={drawerWidth}
                             />
                         )}
 
@@ -115,17 +120,19 @@ function App() {
                             sx={{
                                 flexGrow: 1,
                                 padding: 2,
-                                marginLeft: isMobile ? 0 : 11,
+                                marginLeft: isMobile ? "1px" : `calc(${drawerWidth} + 1px)`,
+                                marginRight: "1px", // This 1px margin on the right is to allow resizing when a vertical scrollbar is present. Not sure why wails doesn't allow resizing when the scrollbar is present, but this is a workaround to that issue. The 1px margin on the left is to balance.
                                 overflow: "auto",
                                 height: isMobile
-                                    ? "calc(100vh - 48px - env(safe-area-inset-top)-env(safe-area-inset-bottom))"
-                                    : "calc(100vh - 48px)",
+                                    ? "calc(100vh - 3rem - env(safe-area-inset-top) - env(safe-area-inset-bottom))"
+                                    : "calc(100vh - 3rem)",
                                 overscrollBehaviorX: "none",
                             }}
                             component="main"
                         >
                             <Routes>
-                                <Route exact path="/" element={<TasksPage />} />
+                                <Route exact path="/" element={<TasksPage isMobile={isMobile} />} />
+                                <Route path="/Downloads" element={<FilesPage isIOS={isIOS} isAndroid={isAndroid} />} />
                                 <Route
                                     path="/Settings"
                                     element={
@@ -133,6 +140,7 @@ function App() {
                                             isSettingsOpen={isSettingsOpen}
                                             setIsSettingsOpen={setIsSettingsOpen}
                                             theme={theme}
+                                            isMobile={isMobile}
                                         />
                                     }
                                 />

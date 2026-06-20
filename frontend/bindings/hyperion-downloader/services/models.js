@@ -12,6 +12,13 @@ export class Config {
      * @param {Partial<Config>} [$$source = {}] - The source object to create the Config.
      */
     constructor($$source = {}) {
+        if (!("outputDir" in $$source)) {
+            /**
+             * @member
+             * @type {string}
+             */
+            this["outputDir"] = "";
+        }
         if (!("defaultCookie" in $$source)) {
             /**
              * @member
@@ -38,6 +45,62 @@ export class Config {
     static createFrom($$source = {}) {
         let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
         return new Config(/** @type {Partial<Config>} */($$parsedSource));
+    }
+}
+
+export class DownloadedFile {
+    /**
+     * Creates a new DownloadedFile instance.
+     * @param {Partial<DownloadedFile>} [$$source = {}] - The source object to create the DownloadedFile.
+     */
+    constructor($$source = {}) {
+        if (!("name" in $$source)) {
+            /**
+             * @member
+             * @type {string}
+             */
+            this["name"] = "";
+        }
+        if (!("path" in $$source)) {
+            /**
+             * @member
+             * @type {string}
+             */
+            this["path"] = "";
+        }
+        if (!("size" in $$source)) {
+            /**
+             * @member
+             * @type {number}
+             */
+            this["size"] = 0;
+        }
+        if (!("mtime" in $$source)) {
+            /**
+             * @member
+             * @type {number}
+             */
+            this["mtime"] = 0;
+        }
+        if (!("dir" in $$source)) {
+            /**
+             * @member
+             * @type {boolean}
+             */
+            this["dir"] = false;
+        }
+
+        Object.assign(this, $$source);
+    }
+
+    /**
+     * Creates a new DownloadedFile instance from a string or object.
+     * @param {any} [$$source = {}]
+     * @returns {DownloadedFile}
+     */
+    static createFrom($$source = {}) {
+        let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
+        return new DownloadedFile(/** @type {Partial<DownloadedFile>} */($$parsedSource));
     }
 }
 

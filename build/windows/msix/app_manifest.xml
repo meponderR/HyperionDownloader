@@ -8,9 +8,9 @@
   IgnorableNamespaces="uap3">
   
   <Identity 
-    Name="com.example.hyperiondownloader"
+    Name="com.meponder.hyperiondownloader"
     Publisher="CN=meponder"
-    Version="0.1.2.0" 
+    Version="0.1.3.0" 
     ProcessorArchitecture="x64" />
   
   <Properties>
