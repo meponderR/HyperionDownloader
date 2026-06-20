@@ -81,7 +81,7 @@ jobs:
               run: |
                   echo $APPLE_KEY | base64 --decode > AuthKey_${APPLE_KEY_ID}.p8
                   xcrun notarytool store-credentials "notarize-profile" \
-                    --key "/path/to/AuthKey_${APPLE_KEY_ID}.p8" \
+                    --key "AuthKey_${APPLE_KEY_ID}.p8" \
                     --key-id "${APPLE_KEY_ID}" \
                     --issuer "${APPLE_ISSUER_ID}"
 
