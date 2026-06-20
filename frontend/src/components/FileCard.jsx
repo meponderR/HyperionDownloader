@@ -24,7 +24,7 @@ import dateformat from "dateformat";
 
 import { PauseTask, StopTask } from "../../bindings/hyperion-downloader/services/hyperdownloadservice";
 import LinearProgressWithLabel from "./LinearProgressWithLabel";
-import { DeleteFile, ShareFile } from "../../bindings/hyperion-downloader/services/downloadedFilesService";
+import { DeleteFile, ShareFile } from "../../bindings/hyperion-downloader/services/downloadedfilesservice";
 
 function is24HourTime() {
     const options = new Intl.DateTimeFormat(undefined, { hour: "numeric" }).resolvedOptions();
