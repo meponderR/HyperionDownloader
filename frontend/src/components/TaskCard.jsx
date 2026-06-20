@@ -96,18 +96,22 @@ function TaskCard(props) {
             <CardContent
                 sx={{
                     width: "100%",
+                    paddingRight: ".5rem",
+                    paddingBottom: "1rem",
                 }}
             >
                 <Box
-                    display="flex"
                     sx={{
+                        display: "flex",
                         width: "100%",
                     }}
                 >
                     <Box
-                        display="flex"
                         sx={{
-                            width: "100%",
+                            display: "flex",
+                            flexDirection: "row",
+                            width: "calc(100% - 6rem)",
+                            flexGrow: 1,
                         }}
                     >
                         <Typography
@@ -118,84 +122,83 @@ function TaskCard(props) {
                                 overflow: "hidden",
                                 textOverflow: "ellipsis",
                                 whiteSpace: "nowrap",
-                                width: `calc(100% - 7rem )`,
                             }}
                         >
                             {task.filename || "Task"}
                         </Typography>
+                    </Box>
 
-                        <Box
-                            display="flex"
-                            alignItems="right"
-                            sx={{
-                                ml: "auto",
-                                mr: 1,
-                                height: "2rem",
-                                width: "6rem",
-                            }}
-                        >
-                            <ButtonGroup variant="contained" aria-label="task buttons">
-                                <Tooltip title="Info">
-                                    <IconButton
-                                        aria-label="info"
-                                        onClick={() => setInfoModalOpen(true)}
-                                        sx={{
-                                            height: "2rem",
-                                            width: "2rem",
-                                        }}
-                                    >
-                                        <InfoIcon />
-                                    </IconButton>
-                                </Tooltip>
-                                <Tooltip title="Pause">
-                                    <IconButton
-                                        aria-label="Pause"
-                                        onClick={async () => {
-                                            setPauseButtonLoading(true);
-                                            try {
-                                                await PauseTask(task.uid);
-                                            } finally {
-                                                setPauseButtonLoading(false);
-                                            }
-                                        }}
-                                        sx={{
-                                            height: "2rem",
-                                            width: "2rem",
-                                        }}
-                                        loading={pauseButtonLoading}
-                                    >
-                                        <PauseIcon />
-                                    </IconButton>
-                                </Tooltip>
-                                <Tooltip title="Cancel">
-                                    <IconButton
-                                        aria-label="cancel"
-                                        onClick={async () => {
-                                            setCancelButtonLoading(true);
-                                            try {
-                                                await StopTask(task.uid);
-                                            } finally {
-                                                setCancelButtonLoading(false);
-                                            }
-                                        }}
-                                        sx={{
-                                            height: "2rem",
-                                            width: "2rem",
-                                        }}
-                                        loading={cancelButtonLoading}
-                                    >
-                                        <CancelIcon />
-                                    </IconButton>
-                                </Tooltip>
-                            </ButtonGroup>
-                        </Box>
+                    <Box
+                        display="flex"
+                        alignItems="right"
+                        sx={{
+                            ml: "auto",
+                            mr: 1,
+                            height: "2rem",
+                            width: "6rem",
+                        }}
+                    >
+                        <ButtonGroup variant="contained" aria-label="task buttons">
+                            <Tooltip title="Info">
+                                <IconButton
+                                    aria-label="info"
+                                    onClick={() => setInfoModalOpen(true)}
+                                    sx={{
+                                        height: "2rem",
+                                        width: "2rem",
+                                    }}
+                                >
+                                    <InfoIcon />
+                                </IconButton>
+                            </Tooltip>
+                            <Tooltip title="Pause">
+                                <IconButton
+                                    aria-label="Pause"
+                                    onClick={async () => {
+                                        setPauseButtonLoading(true);
+                                        try {
+                                            await PauseTask(task.uid);
+                                        } finally {
+                                            setPauseButtonLoading(false);
+                                        }
+                                    }}
+                                    sx={{
+                                        height: "2rem",
+                                        width: "2rem",
+                                    }}
+                                    loading={pauseButtonLoading}
+                                >
+                                    <PauseIcon />
+                                </IconButton>
+                            </Tooltip>
+                            <Tooltip title="Cancel">
+                                <IconButton
+                                    aria-label="cancel"
+                                    onClick={async () => {
+                                        setCancelButtonLoading(true);
+                                        try {
+                                            await StopTask(task.uid);
+                                        } finally {
+                                            setCancelButtonLoading(false);
+                                        }
+                                    }}
+                                    sx={{
+                                        height: "2rem",
+                                        width: "2rem",
+                                    }}
+                                    loading={cancelButtonLoading}
+                                >
+                                    <CancelIcon />
+                                </IconButton>
+                            </Tooltip>
+                        </ButtonGroup>
                     </Box>
                 </Box>
-                <br />
                 <Box
                     display="flex"
                     sx={{
                         width: "100%",
+                        marginTop: "1rem",
                     }}
                 >
                     <Typography>

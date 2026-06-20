@@ -40,7 +40,7 @@ import {
 import { enqueueSnackbar } from "notistack";
 import { Link } from "react-router";
 
-function SettingsPage({ isSettingsOpen, setIsSettingsOpen, theme, isMobile }) {
+function SettingsPage({ isSettingsOpen, setIsSettingsOpen, theme, isMobile, isIOS, isAndroid }) {
     // Download
     const [outputLocation, setOutputLocation] = useState("");
     const [defaultCookie, setDefaultCookie] = useState("");
@@ -121,7 +121,7 @@ function SettingsPage({ isSettingsOpen, setIsSettingsOpen, theme, isMobile }) {
                     </Button>
                 ) : null}
 
-                {isMobile ? null : (
+                {isIOS ? null : (
                     <TextField
                         variant="outlined"
                         sx={{

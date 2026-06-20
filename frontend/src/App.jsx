@@ -141,6 +141,8 @@ function App() {
                                             setIsSettingsOpen={setIsSettingsOpen}
                                             theme={theme}
                                             isMobile={isMobile}
+                                            isIOS={isIOS}
+                                            isAndroid={isAndroid}
                                         />
                                     }
                                 />

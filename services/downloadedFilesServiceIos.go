@@ -55,12 +55,12 @@ func (dfs *DownloadedFilesService) DeleteFile(path string) error {
 	return err
 }
 
-func (dfs *DownloadedFilesService) ShareFile(path string) error {
+func (dfs *DownloadedFilesService) ShareFile(filePath string) error {
 	// Convert the file path to a file URL
 	fileURL := &url.URL{
 		Scheme: "file",
 		Path:   filePath,
 	}
-	dfs.app.IOS.Share(`{"url": "` + fileURL.String() + `"}`)
+	application.IOS.Share(`{"url": "` + fileURL.String() + `"}`)
 	return nil
 }

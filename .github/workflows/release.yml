@@ -19,6 +19,8 @@ jobs:
 
         runs-on: ${{ matrix.os }}
 
+        environment: MacOS Signing
+
         steps:
             - name: Checkout Code
               uses: actions/checkout@v6
@@ -59,6 +61,33 @@ jobs:
             - name: Install Wails v3 CLI
               run: go install github.com/wailsapp/wails/v3/cmd/wails3@latest
 
+            
+            - name: Import Certificate
+              if: matrix.platform == 'darwin'
+              env:
+                CERTIFICATE_BASE64: ${{ secrets.APPLE_DEVID_CERTIFICATE }}
+                CERTIFICATE_PASSWORD: ${{ secrets.APPLE_DEVID_CERTIFICATE_PASSWORD }}
+              run: |
+                echo $CERTIFICATE_BASE64 | base64 --decode > certificate.p12
+                security create-keychain -p "" build.keychain
+                security default-keychain -s build.keychain
+                security unlock-keychain -p "" build.keychain
+                security import certificate.p12 -k build.keychain -P "$CERTIFICATE_PASSWORD" -T /usr/bin/codesign
+                security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "" build.keychain
+
+            - name: Store Notarization Credentials
+              if: matrix.platform == 'darwin'
+              env:
+                APPLE_ISSUER_ID: ${{ secrets.APPLE_ISSUER_ID }}
+                APPLE_KEY_ID: ${{ secrets.APPLE_KEY_ID }}
+                APPLE_KEY: ${{ secrets.APPLE_KEY }}
+              run: |
+                echo $APPLE_KEY | base64 --decode > AuthKey_${APPLE_KEY_ID}.p8
+                xcrun notarytool store-credentials "notarize-profile" \
+                  --key "/path/to/AuthKey_${APPLE_KEY_ID}.p8" \
+                  --key-id "${APPLE_KEY_ID}" \
+                  --issuer "${APPLE_ISSUER_ID}"
+
             - name: Build Application (Windows)
               if: matrix.platform == 'windows'
               run: |
@@ -79,8 +108,13 @@ jobs:
 
             - name: Build Application (macOS)
               if: matrix.platform == 'darwin'
+              env:
+                SIGN_IDENTITY: ${{ secrets.MACOS_SIGN_IDENTITY }}
               run: |
                   wails3 task darwin:package:universal
+                  wails3 task darwin:sign:notarize \
+                    SIGN_IDENTITY="$SIGN_IDENTITY" \
+                    KEYCHAIN_PROFILE="notarize-profile"
                   mv bin/hyperion-downloader.app bin/Hyperion\ Downloader.app
                   hdiutil create -volname "Hyperion Downloader" -srcfolder bin/Hyperion\ Downloader.app -ov -format UDZO bin/Hyperion-Downloader-macos.dmg
                   zip -r bin/hyperion-downloader-macos.zip bin/Hyperion\ Downloader.app

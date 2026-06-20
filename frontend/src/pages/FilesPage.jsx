@@ -125,6 +125,7 @@ export default function FilesPage({ isIOS, isAndroid }) {
                             marginTop: "1rem",
                             display: "flex",
                             justifyContent: "center",
+                            width: 1,
                         }}
                     >
                         {(() => {

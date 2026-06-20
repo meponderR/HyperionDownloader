@@ -551,7 +551,7 @@ function TasksPage({ isMobile }) {
                                                     display: "flex",
                                                     flexGrow: 1,
                                                     marginY: 1,
-                                                    width: 0.8,
+                                                    width: isMobile ? 1 : 0.8,
                                                 }}
                                             />
                                         ));

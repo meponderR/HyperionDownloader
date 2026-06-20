@@ -75,7 +75,7 @@ function FileCard({ file, sx, isIOS, isAndroid, ...props }) {
                                         width: 1,
                                     }}
                                 >
-                                    {file.path ? "Path: " + file.path : ""}
+                                    {file.path ? "Path: " + isIOS ? `/Hyperion Downloader/Documents/${file.path.split('/Documents/')[1]}` : file.path : ""}
                                 </Typography>
                                 <Typography id="infoModalSize">
                                     {file.size ? "File Size: " + prettyBytes(file.size) : ""}
@@ -83,10 +83,10 @@ function FileCard({ file, sx, isIOS, isAndroid, ...props }) {
                                 <Typography id="infoModalModifiedAt">
                                     {file.mtime
                                         ? "Modified At: " +
-                                          dateformat(
-                                              file.mtime * 1000,
-                                              is24HourTime() ? "yyyy-mm-dd HH:MM:ss" : "yyyy-mm-dd hh:MM:ss",
-                                          )
+                                        dateformat(
+                                            file.mtime * 1000,
+                                            is24HourTime() ? "yyyy-mm-dd HH:MM:ss" : "yyyy-mm-dd hh:MM:ss",
+                                        )
                                         : ""}
                                 </Typography>
                             </Grid>
@@ -97,18 +97,22 @@ function FileCard({ file, sx, isIOS, isAndroid, ...props }) {
             <CardContent
                 sx={{
                     width: "100%",
+                    paddingRight: ".5rem",
+                    paddingBottom: "1rem",
                 }}
             >
                 <Box
-                    display="flex"
                     sx={{
+                        display: "flex",
                         width: "100%",
                     }}
                 >
                     <Box
-                        display="flex"
                         sx={{
-                            width: "100%",
+                            display: "flex",
+                            flexDirection: "row",
+                            width: "calc(100% - 6rem)",
+                            flexGrow: 1,
                         }}
                     >
                         <Typography
@@ -119,68 +123,66 @@ function FileCard({ file, sx, isIOS, isAndroid, ...props }) {
                                 overflow: "hidden",
                                 textOverflow: "ellipsis",
                                 whiteSpace: "nowrap",
-                                width: `calc(100% - 7rem )`,
                             }}
                         >
                             {file.name || "File"}
                         </Typography>
+                    </Box>
 
-                        <Box
-                            display="flex"
-                            alignItems="right"
-                            sx={{
-                                ml: "auto",
-                                height: "2rem",
-                                width: "6rem",
-                            }}
-                        >
-                            <ButtonGroup variant="contained" aria-label="file buttons">
-                                <Tooltip title="Info">
-                                    <IconButton
-                                        aria-label="info"
-                                        onClick={() => setInfoModalOpen(true)}
-                                        sx={{
-                                            height: "2rem",
-                                            width: "2rem",
-                                        }}
-                                    >
-                                        <InfoIcon />
-                                    </IconButton>
-                                </Tooltip>
-                                <Tooltip title="Share">
-                                    <IconButton
-                                        aria-label="share"
-                                        onClick={() => ShareFile(file.path)}
-                                        sx={{
-                                            height: "2rem",
-                                            width: "2rem",
-                                        }}
-                                    >
-                                        {isIOS ? <IosShareIcon /> : <ShareIcon />}
-                                    </IconButton>
-                                </Tooltip>
-                                <Tooltip title="Delete">
-                                    <IconButton
-                                        aria-label="delete"
-                                        onClick={() => DeleteFile(file.path)}
-                                        sx={{
-                                            height: "2rem",
-                                            width: "2rem",
-                                        }}
-                                        loading={cancelButtonLoading}
-                                    >
-                                        <DeleteIcon />
-                                    </IconButton>
-                                </Tooltip>
-                            </ButtonGroup>
-                        </Box>
+                    <Box
+                        sx={{
+                            display: "flex",
+                            ml: "auto",
+                            height: "2rem",
+                            width: "6rem",
+                        }}
+                    >
+                        <ButtonGroup variant="contained" aria-label="file buttons">
+                            <Tooltip title="Info">
+                                <IconButton
+                                    aria-label="info"
+                                    onClick={() => setInfoModalOpen(true)}
+                                    sx={{
+                                        height: "2rem",
+                                        width: "2rem",
+                                    }}
+                                >
+                                    <InfoIcon />
+                                </IconButton>
+                            </Tooltip>
+                            <Tooltip title="Share">
+                                <IconButton
+                                    aria-label="share"
+                                    onClick={() => ShareFile(file.path)}
+                                    sx={{
+                                        height: "2rem",
+                                        width: "2rem",
+                                    }}
+                                >
+                                    {isIOS ? <IosShareIcon /> : <ShareIcon />}
+                                </IconButton>
+                            </Tooltip>
+                            <Tooltip title="Delete">
+                                <IconButton
+                                    aria-label="delete"
+                                    onClick={() => DeleteFile(file.path)}
+                                    sx={{
+                                        height: "2rem",
+                                        width: "2rem",
+                                    }}
+                                    loading={cancelButtonLoading}
+                                >
+                                    <DeleteIcon />
+                                </IconButton>
+                            </Tooltip>
+                        </ButtonGroup>
                     </Box>
                 </Box>
-                <br />
                 <Box
                     display="flex"
                     sx={{
                         width: "100%",
+                        marginTop: "1rem",
                     }}
                 >
                     <Typography>
