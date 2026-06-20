@@ -31,7 +31,7 @@ function HyperionAppBar({ isSettingsOpen, setIsSettingsOpen, theme, isMobile }) 
             <Toolbar
                 variant="dense"
                 style={{
-                    paddingRight: isMobile ? 0 : theme.spacing(2),
+                    paddingRight: 0,
                     paddingLeft: isMobile ? 0 : theme.spacing(2),
                     paddingTop: isMobile ? "env(safe-area-inset-top)" : 0,
                 }}

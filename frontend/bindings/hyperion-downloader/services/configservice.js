@@ -53,6 +53,13 @@ export function GetOutputDir() {
 }
 
 /**
+ * @returns {$CancellablePromise<string>}
+ */
+export function GetPlatform() {
+    return $Call.ByID(3326752422);
+}
+
+/**
  * @param {string} title
  * @returns {$CancellablePromise<string>}
  */

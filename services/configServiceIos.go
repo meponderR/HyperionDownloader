@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"os"
 	"path/filepath"
+	"runtime"
 
 	"github.com/wailsapp/wails/v3/pkg/application"
 )
@@ -21,6 +22,10 @@ type Config struct {
 
 func NewConfigService(app *application.App) *ConfigService {
 	return &ConfigService{app: app}
+}
+
+func (cs *ConfigService) GetPlatform() string {
+	return runtime.GOOS
 }
 
 func getSandboxDir() string {

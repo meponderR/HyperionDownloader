@@ -39,19 +39,7 @@ import HyperionDrawer from "./components/HyperionDrawer";
 import HyperionAppBar from "./components/HyperionAppBar";
 import FilesPage from "./pages/FilesPage";
 
-const platform = (() => {
-    if (typeof window.wails?.platform === "function") return window.wails.platform(); // Android
-    if (window.webkit?.messageHandlers?.external) return "ios";
-    return "desktop";
-})();
-
-const isIOS = platform === "ios";
-const isAndroid = platform === "android";
-const isMobile = isIOS || isAndroid;
-
-const drawerWidth = isMobile ? 0 : "7rem";
-
-function App() {
+function App({ platform }) {
     const [isSettingsOpen, setIsSettingsOpen] = useState(window.location.hash === "#/Settings");
 
     const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
@@ -60,6 +48,12 @@ function App() {
         darkMode = "light";
     }
 
+    const isIOS = platform === "ios";
+    const isAndroid = platform === "android";
+    const isMobile = isIOS || isAndroid;
+
+    const drawerWidth = isMobile ? 0 : "7rem";
+    window.platform = platform;
     const theme = createTheme({
         palette: {
             mode: darkMode,
