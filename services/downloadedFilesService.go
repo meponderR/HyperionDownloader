@@ -27,23 +27,22 @@ type DownloadedFile struct {
 
 func (dfs *DownloadedFilesService) GetFiles(path string) ([]DownloadedFile, error) {
 	files := []DownloadedFile{}
-	err := filepath.Walk(path, func(filePath string, info os.FileInfo, err error) error {
-		if err != nil {
-			return err
-		}
-		if !info.IsDir() {
-			files = append(files, DownloadedFile{
-				Name:  info.Name(),
-				Path:  filePath,
-				Size:  info.Size(),
-				MTime: info.ModTime().Unix(),
-				Dir:   info.IsDir(),
-			})
-		}
-		return nil
-	})
+	entries, err := os.ReadDir(path)
 	if err != nil {
 		return nil, err
+	}
+	for _, entry := range entries {
+		info, err := entry.Info()
+		if err != nil {
+			return nil, err
+		}
+		files = append(files, DownloadedFile{
+			Name:  info.Name(),
+			Path:  filepath.Join(path, info.Name()),
+			Size:  info.Size(),
+			MTime: info.ModTime().Unix(),
+			Dir:   info.IsDir(),
+		})
 	}
 	return files, nil
 }

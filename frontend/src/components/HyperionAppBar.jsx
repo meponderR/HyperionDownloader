@@ -31,9 +31,9 @@ function HyperionAppBar({ isSettingsOpen, setIsSettingsOpen, theme, isMobile }) 
             <Toolbar
                 variant="dense"
                 style={{
-                    paddingRight: isMobile ? 0 : ".75rem",
-                    paddingLeft: isMobile ? 0 : "1rem",
-                    paddingTop: isMobile ? "env(safe-area-inset-top)" : 0,
+                    paddingRight: isMobile ? "var(--safe-right)" : ".75rem",
+                    paddingLeft: isMobile ? "var(--safe-left)" : "1rem",
+                    paddingTop: isMobile ? "var(--safe-top)" : 0,
                 }}
             >
                 {isMobile ? (
@@ -49,11 +49,23 @@ function HyperionAppBar({ isSettingsOpen, setIsSettingsOpen, theme, isMobile }) 
                         <HomeIcon />
                     </IconButton>
                 ) : null}
-                <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
-                    <Typography variant="h6" noWrap>
+                <Button
+                    variant="text"
+                    color="inherit"
+                    component={Link}
+                    to="/"
+                    style={{ textDecoration: "none", color: "inherit", WebkitTapHighlightColor: "transparent" }}
+                >
+                    <Typography
+                        variant="h6"
+                        noWrap
+                        sx={{
+                            textTransform: "none",
+                        }}
+                    >
                         {isMobile ? "Hyperion DL" : "Hyperion Downloader"}
                     </Typography>
-                </Link>
+                </Button>
                 <Box sx={{ flexGrow: 1 }} />
 
                 {isMobile ? (
@@ -64,6 +76,7 @@ function HyperionAppBar({ isSettingsOpen, setIsSettingsOpen, theme, isMobile }) 
                         color="inherit"
                         component={Link}
                         to="/Downloads"
+                        variant="text"
                     >
                         Downloads
                     </Button>

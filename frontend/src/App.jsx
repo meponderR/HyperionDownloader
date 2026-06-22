@@ -38,6 +38,7 @@ import { SnackbarProvider } from "notistack";
 import HyperionDrawer from "./components/HyperionDrawer";
 import HyperionAppBar from "./components/HyperionAppBar";
 import FilesPage from "./pages/FilesPage";
+import * as wRuntime from "@wailsio/runtime";
 
 function App({ platform }) {
     const [isSettingsOpen, setIsSettingsOpen] = useState(window.location.hash === "#/Settings");
@@ -47,6 +48,7 @@ function App({ platform }) {
     if (!prefersDarkMode) {
         darkMode = "light";
     }
+    window.wRuntime = wRuntime;
 
     const isIOS = platform === "ios";
     const isAndroid = platform === "android";
@@ -107,7 +109,7 @@ function App({ platform }) {
                         <Toolbar
                             variant="dense"
                             sx={{
-                                marginBottom: isMobile ? "env(safe-area-inset-top)" : 0,
+                                marginBottom: isMobile ? "var(--safe-top)" : 0,
                             }}
                         />
                         <Box
@@ -118,7 +120,7 @@ function App({ platform }) {
                                 marginRight: "1px", // This 1px margin on the right is to allow resizing when a vertical scrollbar is present. Not sure why wails doesn't allow resizing when the scrollbar is present, but this is a workaround to that issue. The 1px margin on the left is to balance.
                                 overflow: "auto",
                                 height: isMobile
-                                    ? "calc(100vh - 3rem - env(safe-area-inset-top) - env(safe-area-inset-bottom))"
+                                    ? "calc(100vh - 3rem - var(--safe-top) - var(--safe-bottom))"
                                     : "calc(100vh - 3rem)",
                                 overscrollBehaviorX: "none",
                             }}

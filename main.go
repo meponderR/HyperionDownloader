@@ -38,6 +38,7 @@ func main() {
 			DisableBounce:             true,
 			BackgroundColour:          application.NewRGBA(18, 18, 18, 255),
 		},
+		Android: application.AndroidOptions{},
 	}
 
 	// Platform-specific options setup

@@ -29,11 +29,11 @@ export function GetFiles(path) {
 }
 
 /**
- * @param {string} path
+ * @param {string} filePath
  * @returns {$CancellablePromise<void>}
  */
-export function ShareFile(path) {
-    return $Call.ByID(4195080730, path);
+export function ShareFile(filePath) {
+    return $Call.ByID(4195080730, filePath);
 }
 
 // Private type creation functions

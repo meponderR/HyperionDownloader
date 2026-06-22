@@ -1,4 +1,5 @@
 import { defineConfig } from "vite";
+import { resolve } from "path";
 import react from "@vitejs/plugin-react";
 import wails from "@wailsio/runtime/plugins/vite";
 
@@ -10,4 +11,14 @@ export default defineConfig({
         strictPort: true,
     },
     plugins: [react(), wails("./bindings")],
+
+    resolve: {
+        alias: {
+            // Use the local repo runtime sources instead of the published package
+            "@wailsio/runtime": resolve(
+                __dirname,
+                "../../wails/v3/internal/runtime/desktop/@wailsio/runtime/src/index.ts",
+            ),
+        },
+    },
 });

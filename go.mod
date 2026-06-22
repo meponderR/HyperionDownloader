@@ -5,7 +5,7 @@ go 1.25.0
 require (
 	github.com/google/uuid v1.6.0
 	github.com/valyala/fasthttp v1.71.0
-	github.com/wailsapp/wails/v3 v3.0.0-alpha2.103
+	github.com/wailsapp/wails/v3 v3.0.0-alpha2.105
 )
 
 require (

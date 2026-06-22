@@ -12,13 +12,6 @@ export class Config {
      * @param {Partial<Config>} [$$source = {}] - The source object to create the Config.
      */
     constructor($$source = {}) {
-        if (!("outputDir" in $$source)) {
-            /**
-             * @member
-             * @type {string}
-             */
-            this["outputDir"] = "";
-        }
         if (!("defaultCookie" in $$source)) {
             /**
              * @member
@@ -266,6 +259,34 @@ export class HyperDownloadTasksSnapshot {
             $$parsedSource["tasks"] = $$createField0_0($$parsedSource["tasks"]);
         }
         return new HyperDownloadTasksSnapshot(/** @type {Partial<HyperDownloadTasksSnapshot>} */($$parsedSource));
+    }
+}
+
+export class PlatformInfo {
+    /**
+     * Creates a new PlatformInfo instance.
+     * @param {Partial<PlatformInfo>} [$$source = {}] - The source object to create the PlatformInfo.
+     */
+    constructor($$source = {}) {
+        if (!("os" in $$source)) {
+            /**
+             * @member
+             * @type {string}
+             */
+            this["os"] = "";
+        }
+
+        Object.assign(this, $$source);
+    }
+
+    /**
+     * Creates a new PlatformInfo instance from a string or object.
+     * @param {any} [$$source = {}]
+     * @returns {PlatformInfo}
+     */
+    static createFrom($$source = {}) {
+        let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
+        return new PlatformInfo(/** @type {Partial<PlatformInfo>} */($$parsedSource));
     }
 }
 

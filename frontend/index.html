@@ -5,6 +5,12 @@
         <link rel="icon" type="image/svg+xml" href="/hyperion_appicon.png" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
         <style>
+            :root {
+                --safe-top: var(--android-safe-top, env(safe-area-inset-top, 0px));
+                --safe-bottom: var(--android-safe-bottom, env(safe-area-inset-bottom, 0px));
+                --safe-left: var(--android-safe-left, env(safe-area-inset-left, 0px));
+                --safe-right: var(--android-safe-right, env(safe-area-inset-right, 0px));
+            }
             html {
                 --wails-resize: all;
             }
@@ -25,6 +31,20 @@
             }
         </style>
         <title>Hyperion Downloader</title>
+        <!-- Android WebView setup - must run before module scripts to enable window._wails.invoke -->
+        <script>
+            // Android WebView exposes window.wails via addJavascriptInterface
+            // We need to set up window._wails.invoke before the module scripts run
+            if (window.wails && window.wails.invoke) {
+                console.log("[Wails Android Bootstrap] window.wails.invoke detected, setting up _wails");
+                window._wails = window._wails || {};
+                window._wails.invoke = function (m) {
+                    return window.wails.invoke(typeof m === "string" ? m : JSON.stringify(m));
+                };
+            } else {
+                console.log("[Wails Android Bootstrap] window.wails not available yet");
+            }
+        </script>
     </head>
     <body style="overflow-x: hidden">
         <div id="root" style="width: 100%"></div>

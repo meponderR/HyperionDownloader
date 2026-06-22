@@ -36,8 +36,8 @@ github.com/valyala/bytebufferpool v1.0.0 h1:GqA5TC/0021Y/b9FG4Oi9Mr3q7XYx6Kllzaw
 github.com/valyala/bytebufferpool v1.0.0/go.mod h1:6bBcMArwyJ5K/AmCkWv1jt77kVWyCJ6HpOuEn7z0Csc=
 github.com/valyala/fasthttp v1.71.0 h1:tepR7H+Guh9VUqxxcPggYi8R3lGUu2Rsdh+z7/FCY3k=
 github.com/valyala/fasthttp v1.71.0/go.mod h1:z1sDUvOShhXq/C9mwH/fSm1Vb71tUJwmQdgkBrBNwnA=
-github.com/wailsapp/wails/v3 v3.0.0-alpha2.103 h1:gL7MzpN3SFw3rVjusmyNXds9PutZBk/M/AsSyppfN4c=
-github.com/wailsapp/wails/v3 v3.0.0-alpha2.103/go.mod h1:GRW1qYl54Zi/w1mjCzDrMiy76g2BLfNlpqF640hgMf0=
+github.com/wailsapp/wails/v3 v3.0.0-alpha2.105 h1:KV2zqL9fOnX7o8goTwBAwBSfyT6MoZCTWofe3jSbOHM=
+github.com/wailsapp/wails/v3 v3.0.0-alpha2.105/go.mod h1:GRW1qYl54Zi/w1mjCzDrMiy76g2BLfNlpqF640hgMf0=
 github.com/wailsapp/wails/webview2 v1.0.24 h1:uULnjCSaRfMlU84mS3kjLgPsRosEOIusVK1nFOHZHzs=
 github.com/wailsapp/wails/webview2 v1.0.24/go.mod h1:sdf+s0nAdxlzVWf9SCxC15XaxnQPJeY+uU1Ucn3jHQM=
 github.com/xyproto/randomstring v1.0.5 h1:YtlWPoRdgMu3NZtP45drfy1GKoojuR7hmRcnhZqKjWU=

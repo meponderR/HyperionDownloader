@@ -40,18 +40,27 @@ import FileCard from "../components/FileCard";
 import { DeleteTask, DownloadFile, GetTasks } from "../../bindings/hyperion-downloader/services/hyperdownloadservice";
 import { GetOutputDir } from "../../bindings/hyperion-downloader/services/configservice";
 import { GetFiles, DeleteFile } from "../../bindings/hyperion-downloader/services/downloadedfilesservice";
-import { enqueueSnackbar } from "notistack";
+import { closeSnackbar, enqueueSnackbar } from "notistack";
 import NumberField from "../components/NumberField";
 
 export default function FilesPage({ isIOS, isAndroid }) {
     const [files, setFiles] = useState([]);
 
-    function refreshFiles() {
-        GetOutputDir().then((outputDir) => {
-            GetFiles(outputDir).then((files) => {
-                setFiles(files);
-            });
-        });
+    async function refreshFiles() {
+        const refreshSnackbar = enqueueSnackbar("Refreshing files...", { variant: "info", persist: true });
+        try {
+            const outputDir = await GetOutputDir();
+            let files = await GetFiles(outputDir);
+            // Sort files by modification time with most recent at the top
+            files.sort((a, b) => b.MTime - a.MTime);
+
+            setFiles(files);
+            enqueueSnackbar("Files refreshed.", { variant: "success" });
+        } catch (error) {
+            enqueueSnackbar("Error occurred while refreshing files.", { variant: "error" });
+        } finally {
+            closeSnackbar(refreshSnackbar);
+        }
     }
 
     useEffect(() => {
@@ -104,6 +113,7 @@ export default function FilesPage({ isIOS, isAndroid }) {
                             sx={{
                                 position: "absolute",
                                 top: "50%",
+                                width: "100%",
                                 display: "flex",
                                 flexDirection: "column",
                                 alignItems: "center",
@@ -167,8 +177,8 @@ export default function FilesPage({ isIOS, isAndroid }) {
                 variant="extended"
                 sx={{
                     position: "fixed",
-                    bottom: "calc(1rem + env(safe-area-inset-bottom))",
-                    right: "calc(1rem + env(safe-area-inset-right))",
+                    bottom: "calc(1rem + var(--safe-bottom))",
+                    right: "calc(1rem + var(--safe-right))",
                 }}
             >
                 <RefreshIcon

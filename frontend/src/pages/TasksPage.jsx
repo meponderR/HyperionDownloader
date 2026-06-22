@@ -34,7 +34,7 @@ import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 import ContentPasteIcon from "@mui/icons-material/ContentPaste";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-import { Events } from "@wailsio/runtime";
+import { Clipboard, Events } from "@wailsio/runtime";
 
 import TaskCard from "../components/TaskCard";
 import { DeleteTask, DownloadFile, GetTasks } from "../../bindings/hyperion-downloader/services/hyperdownloadservice";
@@ -93,6 +93,7 @@ function TasksPage({ isMobile }) {
 
         const unsubscribeTasks = Events.On("tasksSnapshot", (tasksSnapshot) => {
             setTasks(tasksSnapshot.data.tasks);
+            console.log("Received tasks snapshot:", tasksSnapshot.data.tasks);
         });
 
         const unsubscribeDownload = Events.On("downloadCompleted", (task) => {
@@ -152,7 +153,7 @@ function TasksPage({ isMobile }) {
     async function handleSingleDownload(downloadURL) {
         const cacheDir = await GetCacheDir();
         // Hash url to create unique temp folder that is resumable across app restarts. Use sha256 for uniqueness since the url can be long and we just need a unique identifier for the temp folder. Trim the hash to get a string representation that can be used as a folder name.
-        const urlHash = (await sha256(downloadURL + downloadPath)).slice(0, 12);
+        const urlHash = (await sha256(downloadURL)).slice(0, 12);
 
         const tempDir = `${cacheDir}/Temp/${urlHash}`;
         await DownloadFile(
@@ -230,8 +231,8 @@ function TasksPage({ isMobile }) {
                                                     <IconButton
                                                         aria-label="paste"
                                                         onClick={() => {
-                                                            navigator.clipboard.readText().then((text) => {
-                                                                setDownloadURL(text);
+                                                            Clipboard.Text().then((text) => {
+                                                                setDownloadURL((prev) => prev + text);
                                                             });
                                                         }}
                                                         edge="end"
@@ -569,8 +570,8 @@ function TasksPage({ isMobile }) {
                 variant="extended"
                 sx={{
                     position: "fixed",
-                    bottom: "calc(1rem + env(safe-area-inset-bottom))",
-                    right: "calc(1rem + env(safe-area-inset-right))",
+                    bottom: "calc(1rem + var(--safe-bottom))",
+                    right: "calc(1rem + var(--safe-right))",
                 }}
             >
                 <AddTaskIcon

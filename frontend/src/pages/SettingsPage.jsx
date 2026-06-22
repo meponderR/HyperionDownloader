@@ -63,7 +63,6 @@ function SettingsPage({ isSettingsOpen, setIsSettingsOpen, theme, isMobile, isIO
             style={{
                 display: "flex",
                 width: "100%",
-                height: "100%",
             }}
             noValidate
             autoComplete="off"
@@ -93,6 +92,7 @@ function SettingsPage({ isSettingsOpen, setIsSettingsOpen, theme, isMobile, isIO
                     flexGrow: 1,
                     textAlign: "center",
                     alignContent: "center",
+                    width: "100%",
                 }}
             >
                 <Typography
@@ -128,7 +128,7 @@ function SettingsPage({ isSettingsOpen, setIsSettingsOpen, theme, isMobile, isIO
                             width: 0.8,
                         }}
                         id="outputLocation"
-                        label="Default Download Output Location"
+                        label="Default Output Location"
                         onChange={(event) => {
                             setOutputLocation(event.target.value);
                         }}
@@ -193,8 +193,7 @@ function SettingsPage({ isSettingsOpen, setIsSettingsOpen, theme, isMobile, isIO
                         flexGrow: 1,
                     }}
                 />
-                <Box
-                    display="flex"
+                <Grid
                     sx={{
                         width: "80%",
                         mt: 2,
@@ -215,7 +214,7 @@ function SettingsPage({ isSettingsOpen, setIsSettingsOpen, theme, isMobile, isIO
                             }}
                         />
                     </IconButton>
-                </Box>
+                </Grid>
             </Grid>
         </form>
     );

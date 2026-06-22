@@ -53,10 +53,12 @@ export function GetOutputDir() {
 }
 
 /**
- * @returns {$CancellablePromise<string>}
+ * @returns {$CancellablePromise<$models.PlatformInfo>}
  */
-export function GetPlatform() {
-    return $Call.ByID(3326752422);
+export function GetPlatformInfo() {
+    return $Call.ByID(1891092278).then(/** @type {($result: any) => any} */(($result) => {
+        return $$createType0($result);
+    }));
 }
 
 /**
@@ -72,7 +74,7 @@ export function PickDir(title) {
  */
 export function ReadConfig() {
     return $Call.ByID(1074585641).then(/** @type {($result: any) => any} */(($result) => {
-        return $$createType1($result);
+        return $$createType2($result);
     }));
 }
 
@@ -109,5 +111,6 @@ export function SetOutputDir(outputDir) {
 }
 
 // Private type creation functions
-const $$createType0 = $models.Config.createFrom;
-const $$createType1 = $Create.Nullable($$createType0);
+const $$createType0 = $models.PlatformInfo.createFrom;
+const $$createType1 = $models.Config.createFrom;
+const $$createType2 = $Create.Nullable($$createType1);

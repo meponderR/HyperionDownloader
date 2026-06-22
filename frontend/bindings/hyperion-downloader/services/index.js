@@ -18,5 +18,6 @@ export {
     DownloadedFile,
     HyperDownloadError,
     HyperDownloadTask,
-    HyperDownloadTasksSnapshot
+    HyperDownloadTasksSnapshot,
+    PlatformInfo
 } from "./models.js";

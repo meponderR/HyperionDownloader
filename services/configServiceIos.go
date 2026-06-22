@@ -20,12 +20,18 @@ type Config struct {
 	DefaultUserAgent string `json:"defaultUserAgent"`
 }
 
+type PlatformInfo struct {
+	OS string `json:"os"`
+}
+
 func NewConfigService(app *application.App) *ConfigService {
 	return &ConfigService{app: app}
 }
 
-func (cs *ConfigService) GetPlatform() string {
-	return runtime.GOOS
+func (cs *ConfigService) GetPlatformInfo() PlatformInfo {
+	return PlatformInfo{
+		OS: runtime.GOOS,
+	}
 }
 
 func getSandboxDir() string {
