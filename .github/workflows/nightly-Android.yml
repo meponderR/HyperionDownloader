@@ -15,6 +15,9 @@ jobs:
             - name: Checkout Code
               uses: actions/checkout@v6
 
+            - name: Checkout Wails v3
+              run: git clone --depth 1 https://github.com/wailsapp/wails.git ../wails
+
             - name: Install Linux Dependencies
               run: |
                   sudo apt-get update
@@ -58,10 +61,6 @@ jobs:
               run: |
                   cd frontend
                   pnpm ci
-
-            - name: Install NSIS
-              if: matrix.platform == 'windows'
-              uses: negrutiu/nsis-install@v2
 
             - name: Install Wails v3 CLI
               run: go install github.com/wailsapp/wails/v3/cmd/wails3@latest

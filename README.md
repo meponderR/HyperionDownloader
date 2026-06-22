@@ -1,7 +1,7 @@
 # Hyperion Downloader
 ![Latest Release](https://img.shields.io/github/v/release/meponderR/HyperionDownloader) ![GitHub](https://img.shields.io/github/license/meponderR/HyperionDownloader) ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/meponderR/HyperionDownloader/nightly.yml?label=nightly) ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/meponderR/HyperionDownloader/release.yml?label=release) ![GitHub All Releases](https://img.shields.io/github/downloads/meponderR/HyperionDownloader/total) ![GitHub Issues](https://img.shields.io/github/issues/meponderR/HyperionDownloader) ![GitHub Pull Requests](https://img.shields.io/github/issues-pr/meponderR/HyperionDownloader) 
 
-Hyperion Downloader is a lightweight multithreaded downloader built with Wails. It currently supports Windows, macOS, and Linux. Android support is planned for the near future.
+Hyperion Downloader is a lightweight multithreaded downloader built with Wails. It currently supports Windows, macOS, Linux, iOS, and Android.
 
 ![Hyperion Downloader Logo](https://raw.githubusercontent.com/meponderR/HyperionDownloader/master/assets/icon.png)
 
@@ -29,14 +29,18 @@ Prerequisites:
 - [PNPM](https://pnpm.io/installation)
 - [Wails v3](https://v3.wails.io/quick-start/installation/)
 
-1. Clone the repository:
+1. Clone wails v3:
+```bash
+git clone --depth 1 https://github.com/wailsapp/wails.git
+```
+2. Clone the repository:
 ```bash
 git clone https://github.com/meponderR/HyperionDownloader.git
 cd hyperion-downloader
 ```
-2. Run wails build:
+3. Run wails3 build:
 ```bash
-wails build
+wails3 build
 ```
 
 # License
