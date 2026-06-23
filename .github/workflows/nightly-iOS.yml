@@ -85,16 +85,14 @@ jobs:
                     CODE_SIGN_STYLE=Manual \
                     DEVELOPMENT_TEAM=8H4KB9HHSC \
                     CODE_SIGN_IDENTITY="Apple Distribution" \
-                    PROVISIONING_PROFILE_SPECIFIER="Hyperion Downloader App Store Connect" \
-                    -allowProvisioningUpdates NO
+                    PROVISIONING_PROFILE_SPECIFIER="Hyperion Downloader App Store Connect"
 
             - name: Export IPA
               run: |
                   xcodebuild -exportArchive \
                     -archivePath $PWD/build/HyperionDownloader.xcarchive \
                     -exportOptionsPlist build/ios/xcode/ExportOptions.plist \
-                    -exportPath $PWD/build/ipa \
-                    allowProvisioningUpdates=NO
+                    -exportPath $PWD/build/ipa
 
             - name: "Upload app to TestFlight"
               uses: apple-actions/upload-testflight-build@v4
