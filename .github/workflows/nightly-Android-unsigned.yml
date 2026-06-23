@@ -1,4 +1,4 @@
-name: Nightly Android
+name: Nightly Android (Unsigned)
 
 on:
     push:

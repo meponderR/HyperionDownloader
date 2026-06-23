@@ -1,7 +1,9 @@
-name: Nightly iOS
+name: Nightly iOS (Unsigned)
 
 on:
     push:
+        branches: [master]
+    pull_request:
         branches: [master]
     workflow_dispatch:
 
@@ -53,30 +55,11 @@ jobs:
                   cd frontend
                   pnpm ci
 
-            - name: Import Certificate
-              env:
-                  CERTIFICATE_BASE64: ${{ secrets.APPLE_DISTRIBUTION_CERTIFICATE }}
-                  CERTIFICATE_PASSWORD: ${{ secrets.APPLE_DISTRIBUTION_CERTIFICATE_PASSWORD }}
-                  PROVISIONING_PROFILE_BASE64: ${{ secrets.APPLE_PROVISIONING_PROFILE }}
-              run: |
-                  # Certificate
-                  echo $CERTIFICATE_BASE64 | base64 --decode > certificate.p12
-                  security create-keychain -p "" build.keychain
-                  security default-keychain -s build.keychain
-                  security unlock-keychain -p "" build.keychain
-                  security import certificate.p12 -k build.keychain -P "$CERTIFICATE_PASSWORD" -T /usr/bin/codesign
-                  security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "" build.keychain
-
-                  # Provisioning profile
-                  PROVISIONING_PROFILE_PATH=$RUNNER_TEMP/HET-ASC.mobileprovision
-                  echo $PROVISIONING_PROFILE_BASE64 | base64 --decode > $PROVISIONING_PROFILE_PATH
-                  mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-                  cp $PROVISIONING_PROFILE_PATH ~/Library/MobileDevice/Provisioning\ Profiles/
-
             - name: Set Xcode Build Number
               run: |
+                  export BUILD_NUMBER=(${{ github.run_number }} + 14)
                   cd build/ios/xcode
-                  xcrun agvtool new-version -all ${{ github.run_number }}
+                  xcrun agvtool new-version -all $BUILD_NUMBER
 
             - name: Build Archive
               run: |
@@ -86,11 +69,10 @@ jobs:
                     -archivePath $PWD/build/HyperionDownloader.xcarchive \
                     -sdk iphoneos \
                     -configuration Release \
-                    CODE_SIGN_STYLE=Manual \
-                    DEVELOPMENT_TEAM=8H4KB9HHSC \
-                    CODE_SIGN_IDENTITY="Apple Distribution" \
-                    PROVISIONING_PROFILE_SPECIFIER="Hyperion Downloader App Store Connect" \
-                    OTHER_CODE_SIGN_FLAGS="--keychain build.keychain"
+                    CODE_SIGNING_ALLOWED=NO \
+                    CODE_SIGNING_REQUIRED=NO \
+                    CODE_SIGN_IDENTITY="" \
+                    DEVELOPMENT_TEAM=""
 
             - name: Export IPA
               run: |
@@ -99,10 +81,16 @@ jobs:
                     -exportOptionsPlist build/ios/xcode/ExportOptions.plist \
                     -exportPath $PWD/build/ipa
 
-            - name: "Upload app to TestFlight"
-              uses: apple-actions/upload-testflight-build@v4
+            - name: Create unsigned IPA
+              run: |
+                  cd build
+                  mkdir Payload
+                  cp -R HyperionDownloader.xcarchive/Products/Applications/*.app Payload/
+                  rm -rf Payload/*.app/SC_Info
+                  zip -r HyperionDownloader-unsigned.ipa Payload
+
+            - name: Upload IPA
+              uses: actions/upload-artifact@v4
               with:
-                  app-path: "build/ipa/Hyperion Downloader.ipa"
-                  issuer-id: ${{ secrets.APPLE_ISSUER_ID }}
-                  api-key-id: ${{ secrets.APPLE_KEY_ID }}
-                  api-private-key: ${{ secrets.APPLE_KEY_PLAIN }}
+                  name: ios-unsigned-ipa
+                  path: build/HyperionDownloader-unsigned.ipa
