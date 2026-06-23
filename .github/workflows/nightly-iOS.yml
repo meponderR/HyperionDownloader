@@ -28,6 +28,7 @@ jobs:
                   git remote add fork https://github.com/meponderR/wails.git
                   git fetch fork
                   git merge fork/master
+                  cd v3/cmd/wails3
                   go install
 
             - name: Setup pnpm
