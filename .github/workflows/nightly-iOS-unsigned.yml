@@ -74,13 +74,6 @@ jobs:
                     CODE_SIGN_IDENTITY="" \
                     DEVELOPMENT_TEAM=""
 
-            - name: Export IPA
-              run: |
-                  xcodebuild -exportArchive \
-                    -archivePath $PWD/build/HyperionDownloader.xcarchive \
-                    -exportOptionsPlist build/ios/xcode/ExportOptions.plist \
-                    -exportPath $PWD/build/ipa
-
             - name: Create unsigned IPA
               run: |
                   cd build
