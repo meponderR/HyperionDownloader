@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24765" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
-    <device id="retina6_9" orientation="portrait" appearance="dark"/>
+    <device id="retina6_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24743"/>
@@ -17,11 +17,11 @@
                         <rect key="frame" x="0.0" y="0.0" width="440" height="956"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon" translatesAutoresizingMaskIntoConstraints="NO" id="Aav-Og-Sie" userLabel="Icon">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Icon" translatesAutoresizingMaskIntoConstraints="NO" id="Aav-Og-Sie" userLabel="Icon">
                                 <rect key="frame" x="-36" y="222" width="512" height="512"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="512" id="cpV-Eq-0ZS"/>
-                                    <constraint firstAttribute="width" constant="512" id="oEs-fj-vsn"/>
+                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="512" id="cpV-Eq-0ZS"/>
+                                    <constraint firstAttribute="width" relation="lessThanOrEqual" constant="512" id="oEs-fj-vsn"/>
                                     <constraint firstAttribute="width" secondItem="Aav-Og-Sie" secondAttribute="height" multiplier="1:1" id="wbu-OT-yRY"/>
                                 </constraints>
                             </imageView>
@@ -30,6 +30,7 @@
                         <color key="backgroundColor" name="Background Color"/>
                         <constraints>
                             <constraint firstItem="Aav-Og-Sie" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="94O-cz-e2a"/>
+                            <constraint firstItem="Bcu-3y-fUS" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="Aav-Og-Sie" secondAttribute="bottom" constant="128" id="Bgx-ur-XfV"/>
                             <constraint firstItem="Aav-Og-Sie" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="Zn3-wi-8gq"/>
                         </constraints>
                     </view>
@@ -40,9 +41,9 @@
         </scene>
     </scenes>
     <resources>
-        <image name="icon" width="1024" height="1024"/>
+        <image name="Icon" width="1024" height="1024"/>
         <namedColor name="Background Color">
-            <color red="0.99999994039535522" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>
