@@ -21,6 +21,11 @@ jobs:
                   go-version: "1.26" # Update to your specific Go version if needed
                   cache: true
 
+            - name: Link Go for Xcode Build Scripts
+              run: |
+                  sudo mkdir -p /usr/local/go/bin
+                  sudo ln -sf $(which go) /usr/local/go/bin/go
+
             - name: Checkout Wails fork
               run: |
                   git clone https://github.com/wailsapp/wails.git ../wails
