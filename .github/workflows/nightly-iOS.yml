@@ -48,9 +48,6 @@ jobs:
                   cd frontend
                   pnpm ci
 
-            - name: Install Wails v3 CLI
-              run: go install github.com/wailsapp/wails/v3/cmd/wails3@latest
-
             - name: Import Certificate
               env:
                   CERTIFICATE_BASE64: ${{ secrets.APPLE_DISTRIBUTION_CERTIFICATE }}
@@ -85,7 +82,11 @@ jobs:
                     -archivePath $PWD/build/HyperionDownloader.xcarchive \
                     -sdk iphoneos \
                     -configuration Release \
-                    allowProvisioningUpdates=NO
+                    CODE_SIGN_STYLE=Manual \
+                    DEVELOPMENT_TEAM=8H4KB9HHSC \
+                    CODE_SIGN_IDENTITY="Apple Distribution" \
+                    PROVISIONING_PROFILE_SPECIFIER="Hyperion Downloader App Store Connect" \
+                    -allowProvisioningUpdates NO
 
             - name: Export IPA
               run: |
