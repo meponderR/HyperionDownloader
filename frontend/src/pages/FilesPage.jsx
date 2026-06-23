@@ -47,7 +47,7 @@ export default function FilesPage({ isIOS, isAndroid }) {
     const [files, setFiles] = useState([]);
 
     async function refreshFiles() {
-        const refreshSnackbar = enqueueSnackbar("Refreshing files...", { variant: "info", persist: true });
+        const loadingSnackbar = enqueueSnackbar("Loading files...", { variant: "info", persist: true });
         try {
             const outputDir = await GetOutputDir();
             let files = await GetFiles(outputDir);
@@ -55,11 +55,10 @@ export default function FilesPage({ isIOS, isAndroid }) {
             files.sort((a, b) => b.MTime - a.MTime);
 
             setFiles(files);
-            enqueueSnackbar("Files refreshed.", { variant: "success" });
         } catch (error) {
-            enqueueSnackbar("Error occurred while refreshing files.", { variant: "error" });
+            enqueueSnackbar("Error occurred while loading files.", { variant: "error" });
         } finally {
-            closeSnackbar(refreshSnackbar);
+            closeSnackbar(loadingSnackbar);
         }
     }
 

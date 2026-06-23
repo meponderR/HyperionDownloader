@@ -1,0 +1,104 @@
+name: Nightly iOS
+
+on:
+    push:
+        branches: [master]
+    pull_request:
+        branches: [master]
+    workflow_dispatch:
+
+jobs:
+    build:
+        runs-on: macos-latest
+
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v6
+
+            - name: Checkout Wails fork
+              run: |
+                  git clone --depth 1 https://github.com/wailsapp/wails.git ../wails
+                  cd ../wails
+                  git remote add fork https://github.com/meponderR/wails.git
+                  git fetch fork
+                  git merge fork/master
+                  go install
+
+            - name: Setup Go
+              uses: actions/setup-go@v6
+              with:
+                  go-version: "1.26" # Update to your specific Go version if needed
+                  cache: true
+
+            - name: Setup pnpm
+              uses: pnpm/action-setup@v6
+              with:
+                  version: latest
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v6
+              with:
+                  node-version: "24"
+                  cache: "pnpm"
+                  cache-dependency-path: frontend/pnpm-lock.yaml
+
+            - name: Install Frontend Dependencies
+              run: |
+                  cd frontend
+                  pnpm ci
+
+            - name: Install Wails v3 CLI
+              run: go install github.com/wailsapp/wails/v3/cmd/wails3@latest
+
+            - name: Import Certificate
+              env:
+                  CERTIFICATE_BASE64: ${{ secrets.APPLE_DISTRIBUTION_CERTIFICATE }}
+                  CERTIFICATE_PASSWORD: ${{ secrets.APPLE_DISTRIBUTION_CERTIFICATE_PASSWORD }}
+                  PROVISIONING_PROFILE_BASE64: ${{ secrets.APPLE_PROVISIONING_PROFILE }}
+              run: |
+                  # Certificate
+                  echo $CERTIFICATE_BASE64 | base64 --decode > certificate.p12
+                  security create-keychain -p "" build.keychain
+                  security default-keychain -s build.keychain
+                  security unlock-keychain -p "" build.keychain
+                  security import certificate.p12 -k build.keychain -P "$CERTIFICATE_PASSWORD" -T /usr/bin/codesign
+                  security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "" build.keychain
+
+                  # Provisioning profile
+                  PROVISIONING_PROFILE_PATH=$RUNNER_TEMP/HET-ASC.mobileprovision
+                  echo $PROVISIONING_PROFILE_BASE64 | base64 --decode > $PROVISIONING_PROFILE_PATH
+                  mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+                  cp $PROVISIONING_PROFILE_PATH ~/Library/MobileDevice/Provisioning\ Profiles/
+
+            - name: Set Xcode Build Number
+              run: |
+                  BUILD_NUMBER=$(( ${{ github.run_number }} + 4 ))
+                  cd build/ios/xcode
+                  xcrun agvtool new-version -all $BUILD_NUMBER
+
+            - name: Build Archive
+              run: |
+                  xcodebuild archive \
+                    -project build/ios/xcode/main.xcodeproj \
+                    -scheme "Hyperion Downloader" \
+                    -archivePath $PWD/build/HyperionDownloader.xcarchive \
+                    -sdk iphoneos \
+                    -configuration Release \
+                    allowProvisioningUpdates=NO
+
+            - name: Export IPA
+              run: |
+                  xcodebuild -exportArchive \
+                    -archivePath $PWD/build/HyperionDownloader.xcarchive \
+                    -exportOptionsPlist build/ios/xcode/ExportOptions.plist \
+                    -exportPath $PWD/build/ipa \
+                    allowProvisioningUpdates=NO
+
+            - name: "Upload app to TestFlight"
+              uses: apple-actions/upload-testflight-build@v4
+              with:
+                  app-path: "build/ipa/HyperionDownloader.ipa"
+                  issuer-id: ${{ secrets.APPLE_ISSUER_ID }}
+                  api-key-id: ${{ secrets.APPLE_KEY_ID }}
+                  api-private-key: ${{ secrets.APPLE_KEY_PLAIN }}
+                  uses-non-exempt-encryption: "false"
