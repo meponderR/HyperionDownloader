@@ -104,7 +104,7 @@ jobs:
             - name: "Upload app to TestFlight"
               uses: apple-actions/upload-testflight-build@v4
               with:
-                  app-path: "build/ipa/HyperionDownloader.ipa"
+                  app-path: "build/ipa/Hyperion Downloader.ipa"
                   issuer-id: ${{ secrets.APPLE_ISSUER_ID }}
                   api-key-id: ${{ secrets.APPLE_KEY_ID }}
                   api-private-key: ${{ secrets.APPLE_KEY_PLAIN }}
