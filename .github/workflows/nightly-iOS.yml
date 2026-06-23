@@ -75,9 +75,8 @@ jobs:
 
             - name: Set Xcode Build Number
               run: |
-                  BUILD_NUMBER=$(( ${{ github.run_number }} + 4 ))
                   cd build/ios/xcode
-                  xcrun agvtool new-version -all $BUILD_NUMBER
+                  xcrun agvtool new-version -all ${{ github.run_number }}
 
             - name: Build Archive
               run: |
