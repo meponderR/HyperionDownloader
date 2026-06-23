@@ -1,5 +1,5 @@
 # Hyperion Downloader
-![Latest Release](https://img.shields.io/github/v/release/meponderR/HyperionDownloader) ![GitHub](https://img.shields.io/github/license/meponderR/HyperionDownloader) ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/meponderR/HyperionDownloader/nightly.yml?label=nightly) ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/meponderR/HyperionDownloader/release.yml?label=release) ![GitHub All Releases](https://img.shields.io/github/downloads/meponderR/HyperionDownloader/total) ![GitHub Issues](https://img.shields.io/github/issues/meponderR/HyperionDownloader) ![GitHub Pull Requests](https://img.shields.io/github/issues-pr/meponderR/HyperionDownloader) 
+![Latest Release](https://img.shields.io/github/v/release/meponderR/HyperionDownloader) ![GitHub](https://img.shields.io/github/license/meponderR/HyperionDownloader) ![GitHub Nightly Status](https://img.shields.io/github/actions/workflow/status/meponderR/HyperionDownloader/nightly.yml?label=nightly) ![GitHub Nightly (Android) Status](https://img.shields.io/github/actions/workflow/status/meponderR/HyperionDownloader/nightly-Android-unsigned.yml?label=nightly%20(Android)) ![GitHub Nightly (iOS) Status](https://img.shields.io/github/actions/workflow/status/meponderR/HyperionDownloader/nightly-iOS.yml?label=nightly%20(iOS)) ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/meponderR/HyperionDownloader/release.yml?label=release) ![GitHub All Releases](https://img.shields.io/github/downloads/meponderR/HyperionDownloader/total) ![GitHub Issues](https://img.shields.io/github/issues/meponderR/HyperionDownloader) ![GitHub Pull Requests](https://img.shields.io/github/issues-pr/meponderR/HyperionDownloader) 
 
 Hyperion Downloader is a lightweight multithreaded downloader built with Wails. It currently supports Windows, macOS, Linux, iOS, and Android.
 
@@ -20,7 +20,8 @@ You can download the latest release from the [Releases](https://github.com/mepon
 If you want to resume a download, add the same URL again and it will resume the download.
 
 ## Building from Source
-**WARNING: The new iOS support requires my wails fork, which is not merged upstream. My fork can be found [here](https://github.com/meponderR/wails). Install it and add a replace directive to your go.mod file.**
+
+### Desktop
 
 Prerequisites:
 - [Git](https://git-scm.com/install/)
@@ -28,25 +29,131 @@ Prerequisites:
 - [Node.js 24 or later](https://nodejs.org/en/download)
 - [PNPM](https://pnpm.io/installation)
 - [Wails v3](https://v3.wails.io/quick-start/installation/)
+- (Linux only) [GTK 4](https://www.gtk.org/download/linux.php)
+- (Linux only) [WebKitGTK 6](https://webkitgtk.org/)
+- (Mac only) [Xcode](https://developer.apple.com/xcode/)
 
 1. Clone wails v3:
 ```bash
 git clone --depth 1 https://github.com/wailsapp/wails.git
 ```
-2. Clone the repository:
+1. Clone the repository:
 ```bash
 git clone https://github.com/meponderR/HyperionDownloader.git
-cd hyperion-downloader
+cd HyperionDownloader
 ```
-3. Run wails3 build:
+1. Run wails3 build:
 ```bash
 wails3 build
 ```
 
-# License
+### iOS
+
+Prerequisites:
+- macOS 26 or later
+- [Git](https://git-scm.com/install/)
+- [Go 1.25 or later](https://go.dev/doc/install)
+- [Node.js 24 or later](https://nodejs.org/en/download)
+- [PNPM](https://pnpm.io/installation)
+- [Xcode](https://developer.apple.com/xcode/)
+
+1. Clone my fork of Wails, merge with upstream, and install:
+```bash
+git clone https://github.com/meponderR/wails.git
+cd wails
+git remote add upstream https://github.com/wailsapp/wails.git
+git fetch upstream
+git merge upstream/main
+cd v3/cmd/wails3
+go install
+cd ../../../..
+```
+2. Clone the repository:
+```bash
+git clone https://github.com/meponderR/HyperionDownloader.git
+cd HyperionDownloader
+```
+3. Open the iOS project in Xcode:
+```bash
+open build/ios/xcode/main.xcodeproj
+```
+
+4. In Xcode, select your development team and allow it to configure signing.
+5. Build and run the project on your device or simulator.
+
+### Android
+
+#### Building on Windows
+
+Prerequisites:
+- [Git](https://git-scm.com/install/)
+- [Go 1.25 or later](https://go.dev/doc/install)
+- [Node.js 24 or later](https://nodejs.org/en/download)
+- [OpenJDK 21](https://adoptium.net/temurin/releases?version=21&os=windows&arch=any)
+- [Android Studio](https://developer.android.com/studio)
+
+1. Install the required Android SDK components:
+```powershell
+sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0" "ndk;26.3.11579264"
+```
+2. Clone wails v3:
+```powershell
+git clone --depth 1 https://github.com/wailsapp/wails.git
+```
+3. Clone the repository:
+```powershell
+git clone https://github.com/meponderR/HyperionDownloader.git
+cd HyperionDownloader
+```
+4. Ensure that the `JAVA_HOME`, `ANDROID_HOME`, and `ANDROID_NDK_HOME` environment variables are set correctly. For example:
+```powershell
+setx JAVA_HOME "C:\Program Files\Eclipse Adoptium\jdk-21"
+setx ANDROID_HOME "C:\Users\YourUsername\AppData\Local\Android\Sdk"
+setx ANDROID_NDK_HOME "C:\Users\YourUsername\AppData\Local\Android\Sdk\ndk\26.3.11579264"
+```
+5. Run .\build\android\buildAndroid.ps1 to build the Android APK:
+```powershell
+.\build\android\buildAndroid.ps1 -BuildType "production" #can be "production" or "debug"
+```
+6. Output APKs will be located in the `build\android\app\build\outputs\apk\release\` or `build\android\app\build\outputs\apk\debug\` directories.
+
+#### Building on Linux or macOS
+Prerequisites:
+- [Git](https://git-scm.com/install/)
+- [Go 1.25 or later](https://go.dev/doc/install)
+- [Node.js 24 or later](https://nodejs.org/en/download)
+- [OpenJDK 21](https://adoptium.net/temurin/releases?version=21&os=any&arch=any)
+- [Android Command Line Tools](https://developer.android.com/studio#command-tools)
+
+1. Install the required Android SDK components:
+```bash
+sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0" "ndk;26.3.11579264"
+```
+2. Clone wails v3:
+```bash
+git clone --depth 1 https://github.com/wailsapp/wails.git
+```
+3. Clone the repository:
+```bash
+git clone https://github.com/meponderR/HyperionDownloader.git
+cd HyperionDownloader
+```
+4. Ensure that the `JAVA_HOME`, `CC`, `CXX`, `CGO_ENABLED` environment variables are set correctly. For example:
+```bash
+export ANDROID_HOME=$HOME/Android/Sdk
+export PATH=$PATH:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools
+export CC=$ANDROID_HOME/ndk/26.3.11579264/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android21-clang
+export CXX=$ANDROID_HOME/ndk/26.3.11579264/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android21-clang++
+export CGO_ENABLED=1
+wails3 task android:package:fat
+```
+5. Output APKs will be located in the `build/android/app/build/outputs/apk/release/` directory.
+
+
+## License
 This project is licensed under the ISC License. See the [LICENSE](LICENSE) file for details
 
-# Acknowledgements
+## Acknowledgements
 - [Wails](https://wails.io/)
 - [React](https://reactjs.org/)
 - [Material-UI](https://mui.com/)
@@ -57,7 +164,7 @@ This project is licensed under the ISC License. See the [LICENSE](LICENSE) file 
 - [notistack](https://notistack.com/)
 - [Vite](https://vite.dev/)
 
-# Donations
+## Donations
 If you find this project useful and would like to support its development, you can donate via the following methods:
 - [!["Buy Me A Coffee"](https://cdn.buymeacoffee.com/buttons/v2/default-blue.png)](https://buymeacoffee.com/meponder)
 - Cryptocurrency:
