@@ -17,7 +17,7 @@ jobs:
 
             - name: Checkout Wails fork
               run: |
-                  git clone --depth 1 https://github.com/wailsapp/wails.git ../wails
+                  git clone https://github.com/wailsapp/wails.git ../wails
                   cd ../wails
                   git remote add fork https://github.com/meponderR/wails.git
                   git fetch fork
