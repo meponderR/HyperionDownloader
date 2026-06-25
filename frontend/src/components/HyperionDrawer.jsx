@@ -18,7 +18,7 @@ import SettingsIcon from "../icons/600/SettingsIcon";
 import { grey } from "@mui/material/colors";
 import { Link } from "react-router";
 
-export default function HyperionDrawer({
+function HyperionDrawer({
     open,
     onClose,
     onOpen,
@@ -28,8 +28,6 @@ export default function HyperionDrawer({
     theme,
     drawerWidth,
     isMobile,
-    isIOS,
-    isAndroid,
 }) {
     const DrawerVariant = isMobile ? SwipeableDrawer : Drawer;
 
@@ -107,7 +105,9 @@ export default function HyperionDrawer({
                                         <TaskAltIcon
                                             sx={{
                                                 fontSize: theme.spacing(7),
-                                                color: prefersDarkMode ? "white" : grey[900],
+                                                color: prefersDarkMode
+                                                    ? "white"
+                                                    : grey[900],
                                             }}
                                         />
                                     </ListItemIcon>
@@ -116,9 +116,15 @@ export default function HyperionDrawer({
                                         slotProps={{
                                             primary: {
                                                 sx: {
-                                                    fontSize: theme.typography.body1.fontSize, // Adjust the font size as needed
-                                                    fontWeight: theme.typography.fontWeightBold, // Adjust the font weight as needed
-                                                    color: prefersDarkMode ? "white" : grey[900],
+                                                    fontSize:
+                                                        theme.typography.body1
+                                                            .fontSize, // Adjust the font size as needed
+                                                    fontWeight:
+                                                        theme.typography
+                                                            .fontWeightBold, // Adjust the font weight as needed
+                                                    color: prefersDarkMode
+                                                        ? "white"
+                                                        : grey[900],
                                                 },
                                             },
                                         }}
@@ -163,7 +169,9 @@ export default function HyperionDrawer({
                                             <DownloadIcon
                                                 sx={{
                                                     fontSize: theme.spacing(7),
-                                                    color: prefersDarkMode ? "white" : grey[900],
+                                                    color: prefersDarkMode
+                                                        ? "white"
+                                                        : grey[900],
                                                 }}
                                             />
                                         </ListItemIcon>
@@ -172,9 +180,15 @@ export default function HyperionDrawer({
                                             slotProps={{
                                                 primary: {
                                                     sx: {
-                                                        fontSize: theme.typography.body2.fontSize, // Adjust the font size as needed
-                                                        fontWeight: theme.typography.fontWeightBold, // Adjust the font weight as needed
-                                                        color: prefersDarkMode ? "white" : grey[900],
+                                                        fontSize:
+                                                            theme.typography
+                                                                .body2.fontSize, // Adjust the font size as needed
+                                                        fontWeight:
+                                                            theme.typography
+                                                                .fontWeightBold, // Adjust the font weight as needed
+                                                        color: prefersDarkMode
+                                                            ? "white"
+                                                            : grey[900],
                                                     },
                                                 },
                                             }}
@@ -223,9 +237,13 @@ export default function HyperionDrawer({
                                         // animate the icon when the settings page is open. (rotate 30 degrees like a gear)
                                         sx={{
                                             fontSize: theme.spacing(7),
-                                            transform: isSettingsOpen ? "rotate(150deg)" : "none",
+                                            transform: isSettingsOpen
+                                                ? "rotate(150deg)"
+                                                : "none",
                                             transition: "transform 0.5s",
-                                            color: prefersDarkMode ? "white" : grey[900],
+                                            color: prefersDarkMode
+                                                ? "white"
+                                                : grey[900],
                                         }}
                                     />
                                 </ListItemIcon>
@@ -234,9 +252,15 @@ export default function HyperionDrawer({
                                     slotProps={{
                                         primary: {
                                             sx: {
-                                                fontSize: theme.typography.body1.fontSize, // Adjust the font size as needed
-                                                fontWeight: theme.typography.fontWeightBold, // Adjust the font weight as needed
-                                                color: prefersDarkMode ? "white" : grey[900],
+                                                fontSize:
+                                                    theme.typography.body1
+                                                        .fontSize, // Adjust the font size as needed
+                                                fontWeight:
+                                                    theme.typography
+                                                        .fontWeightBold, // Adjust the font weight as needed
+                                                color: prefersDarkMode
+                                                    ? "white"
+                                                    : grey[900],
                                             },
                                         },
                                     }}
@@ -253,3 +277,17 @@ export default function HyperionDrawer({
         </Fragment>
     );
 }
+
+HyperionDrawer.propTypes = {
+    open: PropTypes.bool.isRequired,
+    onClose: PropTypes.func.isRequired,
+    onOpen: PropTypes.func.isRequired,
+    isSettingsOpen: PropTypes.bool.isRequired,
+    setIsSettingsOpen: PropTypes.func.isRequired,
+    prefersDarkMode: PropTypes.bool.isRequired,
+    theme: PropTypes.object.isRequired,
+    drawerWidth: PropTypes.string.isRequired,
+    isMobile: PropTypes.bool.isRequired,
+};
+
+export default HyperionDrawer;

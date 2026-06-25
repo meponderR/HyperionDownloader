@@ -11,7 +11,11 @@ import { GetPlatformInfo } from "../bindings/hyperion-downloader/services/config
 // Very very dangerous to have an async function here, but it was the best way to get the platform before rendering the app. It should be fast enough.
 (async () => {
     let platform;
-    if (!window.wails || !window.wails.platform || window.wails.platform() === "android") {
+    if (
+        !window.wails ||
+        !window.wails.platform ||
+        window.wails.platform() === "android"
+    ) {
         const platformInfo = await GetPlatformInfo();
         platform = platformInfo.os;
     } else {

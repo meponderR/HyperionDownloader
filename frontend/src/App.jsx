@@ -2,46 +2,36 @@ import TasksPage from "./pages/TasksPage";
 import SettingsPage from "./pages/SettingsPage";
 
 //React
-import { useState, Fragment } from "react";
+import { useState } from "react";
+import PropTypes from "prop-types";
 
 //Material UI Components
 import {
-    AppBar,
     Box,
     createTheme,
     CssBaseline,
-    Divider,
-    Drawer,
-    List,
-    ListItemButton,
-    ListItemIcon,
-    ListItemText,
     ThemeProvider,
     StyledEngineProvider,
     Toolbar,
-    Typography,
     useMediaQuery,
-    Paper,
-    IconButton,
-    Tooltip,
-    Stack,
 } from "@mui/material";
 
 //React Router
-import { HashRouter, Routes, Route, Link } from "react-router";
-import { amber, grey } from "@mui/material/colors";
+import { HashRouter, Routes, Route } from "react-router";
+import { amber } from "@mui/material/colors";
 import { SnackbarProvider } from "notistack";
 import HyperionDrawer from "./components/HyperionDrawer";
 import HyperionAppBar from "./components/HyperionAppBar";
 import FilesPage from "./pages/FilesPage";
-import * as wRuntime from "@wailsio/runtime";
 
 function App({ platform }) {
     const isIOS = platform === "ios";
     const isAndroid = platform === "android";
     const isMobile = isIOS || isAndroid;
 
-    const [isSettingsOpen, setIsSettingsOpen] = useState(window.location.hash === "#/Settings");
+    const [isSettingsOpen, setIsSettingsOpen] = useState(
+        window.location.hash === "#/Settings",
+    );
     const [drawerOpen, setDrawerOpen] = useState(!isMobile);
 
     const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
@@ -59,7 +49,7 @@ function App({ platform }) {
     });
 
     const drawerWidth = "7rem"; //isMobile ? 0 : "7rem";
-    window.platform = platform;
+
     const theme = createTheme({
         palette: {
             mode: darkMode,
@@ -72,14 +62,6 @@ function App({ platform }) {
             },
         },
     });
-
-    const classes = {
-        content: {
-            flexGrow: 1,
-            padding: theme.spacing(3),
-            marginLeft: isMobile ? 0 : drawerWidth,
-        },
-    };
 
     return (
         <Box
@@ -126,7 +108,9 @@ function App({ platform }) {
                             sx={{
                                 flexGrow: 1,
                                 padding: 2,
-                                marginLeft: isMobile ? "1px" : `calc(${drawerWidth} + 1px)`,
+                                marginLeft: isMobile
+                                    ? "1px"
+                                    : `calc(${drawerWidth} + 1px)`,
                                 marginRight: "1px", // This 1px margin on the right is to allow resizing when a vertical scrollbar is present. Not sure why wails doesn't allow resizing when the scrollbar is present, but this is a workaround to that issue. The 1px margin on the left is to balance.
                                 overflow: "auto",
                                 height: isMobile
@@ -137,14 +121,33 @@ function App({ platform }) {
                             component="main"
                         >
                             <Routes>
-                                <Route exact path="/" element={<TasksPage isMobile={isMobile} isIOS={isIOS} />} />
-                                <Route path="/Downloads" element={<FilesPage isIOS={isIOS} isAndroid={isAndroid} />} />
+                                <Route
+                                    exact
+                                    path="/"
+                                    element={
+                                        <TasksPage
+                                            isMobile={isMobile}
+                                            isIOS={isIOS}
+                                        />
+                                    }
+                                />
+                                <Route
+                                    path="/Downloads"
+                                    element={
+                                        <FilesPage
+                                            isIOS={isIOS}
+                                            isAndroid={isAndroid}
+                                        />
+                                    }
+                                />
                                 <Route
                                     path="/Settings"
                                     element={
                                         <SettingsPage
                                             isSettingsOpen={isSettingsOpen}
-                                            setIsSettingsOpen={setIsSettingsOpen}
+                                            setIsSettingsOpen={
+                                                setIsSettingsOpen
+                                            }
                                             theme={theme}
                                             isMobile={isMobile}
                                             isIOS={isIOS}
@@ -160,5 +163,9 @@ function App({ platform }) {
         </Box>
     );
 }
+
+App.propTypes = {
+    platform: PropTypes.string.isRequired,
+};
 
 export default App;

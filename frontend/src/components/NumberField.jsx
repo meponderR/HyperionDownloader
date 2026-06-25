@@ -3,8 +3,6 @@ import PropTypes from "prop-types";
 import { NumberField as BaseNumberField } from "@base-ui/react/number-field";
 import IconButton from "@mui/material/IconButton";
 import FormControl from "@mui/material/FormControl";
-import FormHelperText from "@mui/material/FormHelperText";
-import OutlinedInput from "@mui/material/OutlinedInput";
 import InputAdornment from "@mui/material/InputAdornment";
 import InputLabel from "@mui/material/InputLabel";
 import KeyboardArrowUpIcon from "../icons/400/KeyboardArrowUpIcon";
@@ -14,7 +12,7 @@ import { FilledInput, Typography } from "@mui/material";
 /**
  * This component is a placeholder for FormControl to correctly set the shrink label state on SSR.
  */
-function SSRInitialFilled(_) {
+function SSRInitialFilled() {
     return null;
 }
 SSRInitialFilled.muiName = "Input";
@@ -71,7 +69,11 @@ function NumberField({
                         endAdornment={
                             <React.Fragment>
                                 <InputAdornment>
-                                    <Typography variant="body2" color="text.secondary" sx={{ pr: 1 }}>
+                                    <Typography
+                                        variant="body2"
+                                        color="text.secondary"
+                                        sx={{ pr: 1 }}
+                                    >
                                         {endAdornment}
                                     </Typography>
                                 </InputAdornment>
@@ -92,15 +94,35 @@ function NumberField({
                                     }}
                                 >
                                     <BaseNumberField.Increment
-                                        render={<IconButton size={size} aria-label="Increase" />}
+                                        render={
+                                            <IconButton
+                                                size={size}
+                                                aria-label="Increase"
+                                            />
+                                        }
                                     >
-                                        <KeyboardArrowUpIcon fontSize={size} sx={{ transform: "translateY(2px)" }} />
+                                        <KeyboardArrowUpIcon
+                                            fontSize={size}
+                                            sx={{
+                                                transform: "translateY(2px)",
+                                            }}
+                                        />
                                     </BaseNumberField.Increment>
 
                                     <BaseNumberField.Decrement
-                                        render={<IconButton size={size} aria-label="Decrease" />}
+                                        render={
+                                            <IconButton
+                                                size={size}
+                                                aria-label="Decrease"
+                                            />
+                                        }
                                     >
-                                        <KeyboardArrowDownIcon fontSize={size} sx={{ transform: "translateY(-2px)" }} />
+                                        <KeyboardArrowDownIcon
+                                            fontSize={size}
+                                            sx={{
+                                                transform: "translateY(-2px)",
+                                            }}
+                                        />
                                     </BaseNumberField.Decrement>
                                 </InputAdornment>
                             </React.Fragment>
@@ -124,6 +146,16 @@ NumberField.propTypes = {
     endAdornment: PropTypes.string,
     fullWidth: PropTypes.bool,
     variant: PropTypes.oneOf(["filled", "outlined", "standard"]),
+    ref: PropTypes.oneOfType([
+        PropTypes.func,
+        PropTypes.shape({ current: PropTypes.any }),
+    ]),
+    children: PropTypes.node,
+    onBlur: PropTypes.func,
+    onChange: PropTypes.func,
+    onFocus: PropTypes.func,
+    onKeyDown: PropTypes.func,
+    onKeyUp: PropTypes.func,
 };
 
 export default NumberField;

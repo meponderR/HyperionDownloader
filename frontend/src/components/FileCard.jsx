@@ -8,7 +8,6 @@ import {
     CardContent,
     Grid,
     IconButton,
-    LinearProgress,
     Modal,
     Tooltip,
     Typography,
@@ -21,19 +20,20 @@ import InfoIcon from "../icons/400/InfoIcon";
 import prettyBytes from "pretty-bytes";
 import dateformat from "dateformat";
 
-import { PauseTask, StopTask } from "../../bindings/hyperion-downloader/services/hyperdownloadservice";
-import LinearProgressWithLabel from "./LinearProgressWithLabel";
-import { DeleteFile, ShareFile } from "../../bindings/hyperion-downloader/services/downloadedfilesservice";
+import {
+    DeleteFile,
+    ShareFile,
+} from "../../bindings/hyperion-downloader/services/downloadedfilesservice";
 
 function is24HourTime() {
-    const options = new Intl.DateTimeFormat(undefined, { hour: "numeric" }).resolvedOptions();
+    const options = new Intl.DateTimeFormat(undefined, {
+        hour: "numeric",
+    }).resolvedOptions();
     return options.hourCycle === "h23" || options.hourCycle === "h24";
 }
 
-function FileCard({ file, sx, isIOS, isAndroid, ...props }) {
+function FileCard({ file, sx, isIOS = false, ...props }) {
     const [infoModalOpen, setInfoModalOpen] = useState(false);
-    const [pauseButtonLoading, setPauseButtonLoading] = useState(false);
-    const [cancelButtonLoading, setCancelButtonLoading] = useState(false);
 
     return (
         <Card sx={{ ...{ minWidth: "16rem" }, ...sx }} {...props}>
@@ -59,7 +59,11 @@ function FileCard({ file, sx, isIOS, isAndroid, ...props }) {
                     <Grid container spacing={4}>
                         <Grid item xs={8}>
                             <Grid container spacing={2} direction={"column"}>
-                                <Typography id="infoModalTitle" variant="h6" component="h2">
+                                <Typography
+                                    id="infoModalTitle"
+                                    variant="h6"
+                                    component="h2"
+                                >
                                     {file.name || "Task"}
                                 </Typography>
                             </Grid>
@@ -82,14 +86,18 @@ function FileCard({ file, sx, isIOS, isAndroid, ...props }) {
                                         : ""}
                                 </Typography>
                                 <Typography id="infoModalSize">
-                                    {file.size ? "File Size: " + prettyBytes(file.size) : ""}
+                                    {file.size
+                                        ? "File Size: " + prettyBytes(file.size)
+                                        : ""}
                                 </Typography>
                                 <Typography id="infoModalModifiedAt">
                                     {file.mtime
                                         ? "Modified At: " +
                                           dateformat(
                                               file.mtime * 1000,
-                                              is24HourTime() ? "yyyy-mm-dd HH:MM:ss" : "yyyy-mm-dd hh:MM:ss",
+                                              is24HourTime()
+                                                  ? "yyyy-mm-dd HH:MM:ss"
+                                                  : "yyyy-mm-dd hh:MM:ss",
                                           )
                                         : ""}
                                 </Typography>
@@ -141,7 +149,10 @@ function FileCard({ file, sx, isIOS, isAndroid, ...props }) {
                             width: "6rem",
                         }}
                     >
-                        <ButtonGroup variant="contained" aria-label="file buttons">
+                        <ButtonGroup
+                            variant="contained"
+                            aria-label="file buttons"
+                        >
                             <Tooltip title="Info">
                                 <IconButton
                                     aria-label="info"
@@ -174,7 +185,6 @@ function FileCard({ file, sx, isIOS, isAndroid, ...props }) {
                                         height: "2rem",
                                         width: "2rem",
                                     }}
-                                    loading={cancelButtonLoading}
                                 >
                                     <DeleteIcon />
                                 </IconButton>
@@ -200,6 +210,7 @@ function FileCard({ file, sx, isIOS, isAndroid, ...props }) {
 }
 
 FileCard.propTypes = {
+    isIOS: PropTypes.bool,
     file: PropTypes.shape({
         name: PropTypes.string.isRequired,
         path: PropTypes.string.isRequired,

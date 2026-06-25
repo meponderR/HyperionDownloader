@@ -4,20 +4,12 @@ import PropTypes from "prop-types";
 
 //Material UI Components
 import {
-    Switch,
-    Divider,
-    FormControlLabel,
     Grid,
     IconButton,
     TextField,
     Typography,
     InputAdornment,
-    Select,
-    MenuItem,
-    FormControl,
-    InputLabel,
     Box,
-    Button,
 } from "@mui/material";
 
 //Material UI Icons
@@ -37,9 +29,8 @@ import {
 
 //Utils
 import { enqueueSnackbar } from "notistack";
-import { Link } from "react-router";
 
-function SettingsPage({ isSettingsOpen, setIsSettingsOpen, theme, isMobile, isIOS, isAndroid }) {
+function SettingsPage({ isMobile = false, isIOS = false }) {
     // Download
     const [outputLocation, setOutputLocation] = useState("");
     const [defaultCookie, setDefaultCookie] = useState("");
@@ -74,9 +65,13 @@ function SettingsPage({ isSettingsOpen, setIsSettingsOpen, theme, isMobile, isIO
                         }
                         await SetDefaultCookie(defaultCookie);
                         await SetDefaultUserAgent(defaultUserAgent);
-                        enqueueSnackbar("Settings saved", { variant: "success" });
-                    } catch (error) {
-                        enqueueSnackbar("Failed to save settings", { variant: "error" });
+                        enqueueSnackbar("Settings saved", {
+                            variant: "success",
+                        });
+                    } catch {
+                        enqueueSnackbar("Failed to save settings", {
+                            variant: "error",
+                        });
                     }
                 })();
             }}
@@ -104,22 +99,6 @@ function SettingsPage({ isSettingsOpen, setIsSettingsOpen, theme, isMobile, isIO
                 >
                     Settings
                 </Typography>
-                {isMobile && (
-                    <Button
-                        variant="contained"
-                        sx={{
-                            mb: 4,
-                            fontWeight: "bold",
-                        }}
-                        onClick={() => {
-                            setIsSettingsOpen(false);
-                            window.location.hash = "#/";
-                        }}
-                    >
-                        Return to Home
-                    </Button>
-                )}
-
                 {!isIOS && (
                     <TextField
                         variant="outlined"
@@ -139,12 +118,16 @@ function SettingsPage({ isSettingsOpen, setIsSettingsOpen, theme, isMobile, isIO
                                         <IconButton
                                             aria-label="pick file"
                                             onClick={async () => {
-                                                const pickFile = await PickDir("Select Output Directory");
+                                                const pickFile = await PickDir(
+                                                    "Select Output Directory",
+                                                );
                                                 if (pickFile) {
                                                     setOutputLocation(pickFile);
                                                 }
                                             }}
-                                            onMouseDown={(event) => event.preventDefault()}
+                                            onMouseDown={(event) =>
+                                                event.preventDefault()
+                                            }
                                             edge="end"
                                             sx={{
                                                 height: "2.5rem",
@@ -220,10 +203,8 @@ function SettingsPage({ isSettingsOpen, setIsSettingsOpen, theme, isMobile, isIO
 }
 
 SettingsPage.propTypes = {
-    isSettingsOpen: PropTypes.bool.isRequired,
-    setIsSettingsOpen: PropTypes.func.isRequired,
-    theme: PropTypes.object.isRequired,
-    isMobile: PropTypes.bool.isRequired,
+    isMobile: PropTypes.bool,
+    isIOS: PropTypes.bool,
 };
 
 export default SettingsPage;

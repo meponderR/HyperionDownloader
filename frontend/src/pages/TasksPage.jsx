@@ -18,12 +18,6 @@ import {
     Grid,
     IconButton,
     InputAdornment,
-    InputLabel,
-    LinearProgress,
-    MenuItem,
-    Select,
-    Tab,
-    Tabs,
     TextField,
     Tooltip,
     Typography,
@@ -38,7 +32,11 @@ import KeyboardArrowDownIcon from "../icons/400/KeyboardArrowDownIcon";
 import { Clipboard, Events } from "@wailsio/runtime";
 
 import TaskCard from "../components/TaskCard";
-import { DeleteTask, DownloadFile, GetTasks } from "../../bindings/hyperion-downloader/services/hyperdownloadservice";
+import {
+    DeleteTask,
+    DownloadFile,
+    GetTasks,
+} from "../../bindings/hyperion-downloader/services/hyperdownloadservice";
 import {
     GetCacheDir,
     GetDefaultCookie,
@@ -147,7 +145,9 @@ function TasksPage({ isMobile, isIOS }) {
         const utf8 = new TextEncoder().encode(str);
         const hashBuffer = await crypto.subtle.digest("SHA-256", utf8);
         const hashArray = Array.from(new Uint8Array(hashBuffer));
-        const hashHex = hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
+        const hashHex = hashArray
+            .map((b) => b.toString(16).padStart(2, "0"))
+            .join("");
         return hashHex;
     }
 
@@ -191,7 +191,11 @@ function TasksPage({ isMobile, isIOS }) {
                 >
                     Tasks
                 </Typography>
-                <Dialog open={taskAddDialogOpen} onClose={() => setTaskAddDialogOpen(false)} fullWidth>
+                <Dialog
+                    open={taskAddDialogOpen}
+                    onClose={() => setTaskAddDialogOpen(false)}
+                    fullWidth
+                >
                     <DialogTitle
                         sx={{
                             userSelect: "none",
@@ -225,7 +229,9 @@ function TasksPage({ isMobile, isIOS }) {
                                         fullWidth
                                         multiline
                                         value={downloadURL}
-                                        onChange={(event) => setDownloadURL(event.target.value)}
+                                        onChange={(event) =>
+                                            setDownloadURL(event.target.value)
+                                        }
                                         slotProps={{
                                             input: {
                                                 endAdornment: (
@@ -234,9 +240,19 @@ function TasksPage({ isMobile, isIOS }) {
                                                             <IconButton
                                                                 aria-label="paste"
                                                                 onClick={() => {
-                                                                    Clipboard.Text().then((text) => {
-                                                                        setDownloadURL((prev) => prev + text);
-                                                                    });
+                                                                    Clipboard.Text().then(
+                                                                        (
+                                                                            text,
+                                                                        ) => {
+                                                                            setDownloadURL(
+                                                                                (
+                                                                                    prev,
+                                                                                ) =>
+                                                                                    prev +
+                                                                                    text,
+                                                                            );
+                                                                        },
+                                                                    );
                                                                 }}
                                                                 edge="end"
                                                                 sx={{
@@ -267,7 +283,9 @@ function TasksPage({ isMobile, isIOS }) {
                                             label="Output Location"
                                             value={downloadPath}
                                             onChange={(event) => {
-                                                setDownloadPath(event.target.value);
+                                                setDownloadPath(
+                                                    event.target.value,
+                                                );
                                             }}
                                             slotProps={{
                                                 input: {
@@ -278,12 +296,22 @@ function TasksPage({ isMobile, isIOS }) {
                                                                     aria-label="pick file"
                                                                     onClick={async () => {
                                                                         const pickFile =
-                                                                            await PickDir("Select Output Directory");
-                                                                        if (pickFile) {
-                                                                            setDownloadPath(pickFile);
+                                                                            await PickDir(
+                                                                                "Select Output Directory",
+                                                                            );
+                                                                        if (
+                                                                            pickFile
+                                                                        ) {
+                                                                            setDownloadPath(
+                                                                                pickFile,
+                                                                            );
                                                                         }
                                                                     }}
-                                                                    onMouseDown={(event) => event.preventDefault()}
+                                                                    onMouseDown={(
+                                                                        event,
+                                                                    ) =>
+                                                                        event.preventDefault()
+                                                                    }
                                                                     edge="end"
                                                                     sx={{
                                                                         width: 40,
@@ -314,11 +342,14 @@ function TasksPage({ isMobile, isIOS }) {
                                         aria-controls="advanced-options-content"
                                         id="advanced-options-header"
                                     >
-                                        <Typography>Advanced Options</Typography>
+                                        <Typography>
+                                            Advanced Options
+                                        </Typography>
                                     </AccordionSummary>
                                     <AccordionDetails
                                         sx={{
-                                            maxHeight: 0.18 * window.innerHeight,
+                                            maxHeight:
+                                                0.18 * window.innerHeight,
                                             overflowY: "scroll",
                                         }}
                                     >
@@ -335,9 +366,15 @@ function TasksPage({ isMobile, isIOS }) {
                                                         variant="filled"
                                                         id="concurrentDownloadsInput"
                                                         label="Concurrent Downloads"
-                                                        value={concurrentDownloads}
-                                                        onValueChange={(value) => {
-                                                            setConcurrentDownloads(value);
+                                                        value={
+                                                            concurrentDownloads
+                                                        }
+                                                        onValueChange={(
+                                                            value,
+                                                        ) => {
+                                                            setConcurrentDownloads(
+                                                                value,
+                                                            );
                                                         }}
                                                         min={1}
                                                     />
@@ -354,8 +391,12 @@ function TasksPage({ isMobile, isIOS }) {
                                                         id="targetPartSizeInput"
                                                         label="Max Part Size"
                                                         value={targetPartSize}
-                                                        onValueChange={(value) => {
-                                                            setTargetPartSize(value);
+                                                        onValueChange={(
+                                                            value,
+                                                        ) => {
+                                                            setTargetPartSize(
+                                                                value,
+                                                            );
                                                         }}
                                                         min={0.5}
                                                         step={0.5}
@@ -384,9 +425,15 @@ function TasksPage({ isMobile, isIOS }) {
                                                         variant="filled"
                                                         id="concurrentDownloadsInput"
                                                         label="Concurrent Downloads"
-                                                        value={concurrentDownloads}
-                                                        onValueChange={(value) => {
-                                                            setConcurrentDownloads(value);
+                                                        value={
+                                                            concurrentDownloads
+                                                        }
+                                                        onValueChange={(
+                                                            value,
+                                                        ) => {
+                                                            setConcurrentDownloads(
+                                                                value,
+                                                            );
                                                         }}
                                                         min={1}
                                                     />
@@ -402,8 +449,12 @@ function TasksPage({ isMobile, isIOS }) {
                                                         id="targetPartSizeInput"
                                                         label="Max Part Size"
                                                         value={targetPartSize}
-                                                        onValueChange={(value) => {
-                                                            setTargetPartSize(value);
+                                                        onValueChange={(
+                                                            value,
+                                                        ) => {
+                                                            setTargetPartSize(
+                                                                value,
+                                                            );
                                                         }}
                                                         min={0.5}
                                                         step={0.5}
@@ -424,7 +475,11 @@ function TasksPage({ isMobile, isIOS }) {
                                                 id="cookiesInput"
                                                 label="Cookies"
                                                 value={cookies}
-                                                onChange={(event) => setCookies(event.target.value)}
+                                                onChange={(event) =>
+                                                    setCookies(
+                                                        event.target.value,
+                                                    )
+                                                }
                                             />
                                         </FormControl>
                                         <FormControl
@@ -439,7 +494,11 @@ function TasksPage({ isMobile, isIOS }) {
                                                 id="userAgentInput"
                                                 label="User Agent"
                                                 value={userAgent}
-                                                onChange={(event) => setUserAgent(event.target.value)}
+                                                onChange={(event) =>
+                                                    setUserAgent(
+                                                        event.target.value,
+                                                    )
+                                                }
                                             />
                                         </FormControl>
                                         <FormControl
@@ -454,7 +513,11 @@ function TasksPage({ isMobile, isIOS }) {
                                                 id="refererInput"
                                                 label="Referer"
                                                 value={referer}
-                                                onChange={(event) => setReferer(event.target.value)}
+                                                onChange={(event) =>
+                                                    setReferer(
+                                                        event.target.value,
+                                                    )
+                                                }
                                             />
                                         </FormControl>
                                         <FormControl
@@ -469,7 +532,11 @@ function TasksPage({ isMobile, isIOS }) {
                                                 id="authorizationHeaderInput"
                                                 label="Authorization Header"
                                                 value={authorizationHeader}
-                                                onChange={(event) => setAuthorizationHeader(event.target.value)}
+                                                onChange={(event) =>
+                                                    setAuthorizationHeader(
+                                                        event.target.value,
+                                                    )
+                                                }
                                             />
                                         </FormControl>
                                     </AccordionDetails>
@@ -478,7 +545,9 @@ function TasksPage({ isMobile, isIOS }) {
                         </Box>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={() => setTaskAddDialogOpen(false)}>Cancel</Button>
+                        <Button onClick={() => setTaskAddDialogOpen(false)}>
+                            Cancel
+                        </Button>
                         <Button
                             onClick={() => {
                                 setTaskAddDialogOpen(false);
@@ -495,7 +564,9 @@ function TasksPage({ isMobile, isIOS }) {
                         <Typography>{errorMessage}</Typography>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={() => setErrorDialogOpen(false)}>Close</Button>
+                        <Button onClick={() => setErrorDialogOpen(false)}>
+                            Close
+                        </Button>
                     </DialogActions>
                 </Dialog>
                 <Box
@@ -541,16 +612,26 @@ function TasksPage({ isMobile, isIOS }) {
                                 >
                                     <AddTaskIcon sx={{ fontSize: "4rem" }} />
                                 </IconButton>
-                                <Typography variant="h4">No Active Tasks</Typography>
+                                <Typography variant="h4">
+                                    No Active Tasks
+                                </Typography>
                             </Box>
                         </Box>
                     ) : (
-                        <Grid display="flex" container spacing={1} alignItems="center" justifyContent="center">
+                        <Grid
+                            display="flex"
+                            container
+                            spacing={1}
+                            alignItems="center"
+                            justifyContent="center"
+                        >
                             {(() => {
                                 if (tasks) {
                                     if (tasks.length >= 1) {
                                         // Sort tasks by created time with most recent at the top
-                                        let sortedTasks = [...tasks].sort((a, b) => b.createdAt - a.createdAt);
+                                        const sortedTasks = [...tasks].sort(
+                                            (a, b) => b.createdAt - a.createdAt,
+                                        );
                                         return sortedTasks.map((task) => (
                                             <TaskCard
                                                 key={task.uid}
@@ -594,6 +675,7 @@ function TasksPage({ isMobile, isIOS }) {
 
 TasksPage.propTypes = {
     isMobile: PropTypes.bool.isRequired,
+    isIOS: PropTypes.bool.isRequired,
 };
 
 export default TasksPage;

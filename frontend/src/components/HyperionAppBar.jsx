@@ -1,27 +1,34 @@
 import PropTypes from "prop-types";
 
-import { AppBar, Box, Button, IconButton, Toolbar, Typography } from "@mui/material";
+import {
+    AppBar,
+    Box,
+    Button,
+    IconButton,
+    Toolbar,
+    Typography,
+} from "@mui/material";
 import RemoveIcon from "../icons/600/RemoveIcon";
 import CheckBoxOutlineBlankIcon from "../icons/600/CheckBoxOutlineBlankIcon";
 import CloseIcon from "../icons/600/CloseIcon";
-import SettingsIcon from "../icons/600/SettingsIcon";
 import MenuIcon from "../icons/600/MenuIcon";
 
 import { Link } from "react-router";
 
-import { Minimise, Maximise, Close } from "../../bindings/hyperion-downloader/services/windowcontrols";
+import {
+    Minimise,
+    Maximise,
+    Close,
+} from "../../bindings/hyperion-downloader/services/windowcontrols";
 import { Fragment } from "react";
 import DownloadIcon from "../icons/600/DownloadIcon";
 
 function HyperionAppBar({
-    isSettingsOpen,
     setIsSettingsOpen,
     toggleDrawer,
     closeDrawer,
     theme,
     isMobile,
-    isIOS,
-    isAndroid,
 }) {
     return (
         <AppBar
@@ -166,8 +173,9 @@ function HyperionAppBar({
 }
 
 HyperionAppBar.propTypes = {
-    isSettingsOpen: PropTypes.bool.isRequired,
     setIsSettingsOpen: PropTypes.func.isRequired,
+    toggleDrawer: PropTypes.func.isRequired,
+    closeDrawer: PropTypes.func.isRequired,
     theme: PropTypes.object.isRequired,
     isMobile: PropTypes.bool.isRequired,
 };

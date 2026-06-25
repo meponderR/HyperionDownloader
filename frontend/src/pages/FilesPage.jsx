@@ -1,32 +1,9 @@
 //React
 import { Fragment, useEffect, useState } from "react";
+import PropTypes from "prop-types";
 
 //Material UI Components
-import {
-    Accordion,
-    AccordionDetails,
-    AccordionSummary,
-    Box,
-    Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    Divider,
-    Fab,
-    FormControl,
-    Grid,
-    IconButton,
-    InputAdornment,
-    InputLabel,
-    LinearProgress,
-    MenuItem,
-    Select,
-    Tab,
-    Tabs,
-    TextField,
-    Typography,
-} from "@mui/material";
+import { Box, Divider, Fab, Grid, Typography } from "@mui/material";
 
 //Material UI Icons
 import RefreshIcon from "../icons/600/RefreshIcon";
@@ -34,26 +11,31 @@ import RefreshIcon from "../icons/600/RefreshIcon";
 import { Events } from "@wailsio/runtime";
 
 import FileCard from "../components/FileCard";
-import { DeleteTask, DownloadFile, GetTasks } from "../../bindings/hyperion-downloader/services/hyperdownloadservice";
 import { GetOutputDir } from "../../bindings/hyperion-downloader/services/configservice";
-import { GetFiles, DeleteFile } from "../../bindings/hyperion-downloader/services/downloadedfilesservice";
+import { GetFiles } from "../../bindings/hyperion-downloader/services/downloadedfilesservice";
 import { closeSnackbar, enqueueSnackbar } from "notistack";
-import NumberField from "../components/NumberField";
 
-export default function FilesPage({ isIOS, isAndroid }) {
+function FilesPage({ isIOS = false, isAndroid = false }) {
     const [files, setFiles] = useState([]);
 
     async function refreshFiles() {
-        const loadingSnackbar = enqueueSnackbar("Loading files...", { variant: "info", persist: true });
+        const loadingSnackbar = enqueueSnackbar("Loading files...", {
+            variant: "info",
+            persist: true,
+        });
         try {
             const outputDir = await GetOutputDir();
-            let files = await GetFiles(outputDir);
+            const fileList = await GetFiles(outputDir);
             // Sort files by modification time with most recent at the top
-            files.sort((a, b) => b.MTime - a.MTime);
+            const sortedFileList = [...fileList].sort(
+                (a, b) => b.MTime - a.MTime,
+            );
 
-            setFiles(files);
-        } catch (error) {
-            enqueueSnackbar("Error occurred while loading files.", { variant: "error" });
+            setFiles(sortedFileList);
+        } catch {
+            enqueueSnackbar("Error occurred while loading files.", {
+                variant: "error",
+            });
         } finally {
             closeSnackbar(loadingSnackbar);
         }
@@ -120,7 +102,9 @@ export default function FilesPage({ isIOS, isAndroid }) {
                                 paddingX: 1,
                             }}
                         >
-                            <Typography variant="h4">No Files Downloaded</Typography>
+                            <Typography variant="h4">
+                                No Files Downloaded
+                            </Typography>
                         </Box>
                     </Box>
                 ) : (
@@ -138,8 +122,7 @@ export default function FilesPage({ isIOS, isAndroid }) {
                             if (files) {
                                 if (files.length >= 1) {
                                     // Sort files by modification time with most recent at the top
-                                    let sortedFiles = [...files].sort((a, b) => b.MTime - a.MTime);
-                                    return sortedFiles.map((file) => (
+                                    return files.map((file) => (
                                         <Grid
                                             key={file.name}
                                             sx={{
@@ -187,3 +170,10 @@ export default function FilesPage({ isIOS, isAndroid }) {
         </Fragment>
     );
 }
+
+FilesPage.propTypes = {
+    isIOS: PropTypes.bool,
+    isAndroid: PropTypes.bool,
+};
+
+export default FilesPage;
