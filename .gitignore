@@ -23,6 +23,7 @@ build/android/build/
 build/android/app/build/
 build/android/local.properties
 build/android/app/src/main/jniLibs/*/libwails.so
+build/android/release-keystore.jks
 
 # Desktop packaging
 build/linux/appimage/build
