@@ -22,7 +22,7 @@ importers:
         version: 5.2.10
       '@material-symbols/svg-400':
         specifier: ^0.45.2
-        version: 0.45.3
+        version: 0.45.2
       '@material-symbols/svg-600':
         specifier: ^0.45.2
         version: 0.45.2
