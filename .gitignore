@@ -35,3 +35,4 @@ build/windows/nsis/*.exe
 *.iml
 .DS_Store
 **/.DS_Store
+.vscode/settings.json

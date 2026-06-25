@@ -67,7 +67,7 @@ function NumberField({
                             input: props,
                         }}
                         endAdornment={
-                            <React.Fragment>
+                            <>
                                 <InputAdornment>
                                     <Typography
                                         variant="body2"
@@ -125,7 +125,7 @@ function NumberField({
                                         />
                                     </BaseNumberField.Decrement>
                                 </InputAdornment>
-                            </React.Fragment>
+                            </>
                         }
                         sx={{ pr: 0 }}
                     />

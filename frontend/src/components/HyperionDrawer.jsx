@@ -1,4 +1,3 @@
-import { Fragment } from "react";
 import PropTypes from "prop-types";
 import {
     Box,
@@ -32,7 +31,7 @@ function HyperionDrawer({
     const DrawerVariant = isMobile ? SwipeableDrawer : Drawer;
 
     return (
-        <Fragment>
+        <>
             <DrawerVariant
                 sx={{
                     width: drawerWidth,
@@ -274,7 +273,7 @@ function HyperionDrawer({
                     </List>
                 </Paper>
             </DrawerVariant>
-        </Fragment>
+        </>
     );
 }
 

@@ -1,5 +1,5 @@
 //React
-import { Fragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 
 //Material UI Components
@@ -354,7 +354,7 @@ function TasksPage({ isMobile, isIOS }) {
                                         }}
                                     >
                                         {isMobile ? (
-                                            <Fragment>
+                                            <>
                                                 <FormControl
                                                     sx={{
                                                         marginBottom: 1,
@@ -403,7 +403,7 @@ function TasksPage({ isMobile, isIOS }) {
                                                         endAdornment="MiB"
                                                     />
                                                 </FormControl>
-                                            </Fragment>
+                                            </>
                                         ) : (
                                             <Grid
                                                 display="flex"

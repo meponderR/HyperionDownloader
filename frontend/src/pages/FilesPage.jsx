@@ -1,5 +1,5 @@
 //React
-import { Fragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 
 //Material UI Components
@@ -54,7 +54,7 @@ function FilesPage({ isIOS = false, isAndroid = false }) {
     }, []);
 
     return (
-        <Fragment>
+        <>
             <Grid
                 container
                 spacing={0}
@@ -167,7 +167,7 @@ function FilesPage({ isIOS = false, isAndroid = false }) {
                 />
                 Refresh
             </Fab>
-        </Fragment>
+        </>
     );
 }
 

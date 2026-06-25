@@ -20,8 +20,9 @@ import {
     Maximise,
     Close,
 } from "../../bindings/hyperion-downloader/services/windowcontrols";
-import { Fragment } from "react";
+
 import DownloadIcon from "../icons/600/DownloadIcon";
+import TasksAltIcon from "../icons/600/TasksAltIcon";
 
 function HyperionAppBar({
     setIsSettingsOpen,
@@ -55,7 +56,7 @@ function HyperionAppBar({
                 }}
             >
                 {isMobile ? (
-                    <Fragment>
+                    <>
                         <IconButton
                             size="large"
                             edge="start"
@@ -82,7 +83,7 @@ function HyperionAppBar({
                                 Hyperion DL
                             </Typography>
                         </Button>
-                    </Fragment>
+                    </>
                 ) : (
                     <Typography
                         variant="h6"
@@ -145,27 +146,50 @@ function HyperionAppBar({
                         </IconButton>
                     </Box>
                 ) : (
-                    <IconButton
-                        size="large"
-                        aria-label="downloads"
-                        component={Link}
-                        to="/Downloads"
-                        color="inherit"
-                        style={{
-                            "--wails-draggable": "no-drag",
-                        }}
-                        sx={{
-                            borderRadius: 0,
-                        }}
-                        onClick={() => {
-                            if (isMobile) {
-                                closeDrawer();
-                            }
-                            setIsSettingsOpen(true);
-                        }}
-                    >
-                        <DownloadIcon />
-                    </IconButton>
+                    <>
+                        <IconButton
+                            size="large"
+                            aria-label="tasks"
+                            component={Link}
+                            to="/"
+                            color="inherit"
+                            style={{
+                                "--wails-draggable": "no-drag",
+                            }}
+                            sx={{
+                                borderRadius: 0,
+                            }}
+                            onClick={() => {
+                                if (isMobile) {
+                                    closeDrawer();
+                                }
+                                setIsSettingsOpen(true);
+                            }}
+                        >
+                            <TasksAltIcon />
+                        </IconButton>
+                        <IconButton
+                            size="large"
+                            aria-label="downloads"
+                            component={Link}
+                            to="/Downloads"
+                            color="inherit"
+                            style={{
+                                "--wails-draggable": "no-drag",
+                            }}
+                            sx={{
+                                borderRadius: 0,
+                            }}
+                            onClick={() => {
+                                if (isMobile) {
+                                    closeDrawer();
+                                }
+                                setIsSettingsOpen(true);
+                            }}
+                        >
+                            <DownloadIcon />
+                        </IconButton>
+                    </>
                 )}
             </Toolbar>
         </AppBar>
