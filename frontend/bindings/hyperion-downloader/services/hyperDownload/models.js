@@ -6,104 +6,6 @@
 // @ts-ignore: Unused imports
 import { Create as $Create } from "@wailsio/runtime";
 
-export class Config {
-    /**
-     * Creates a new Config instance.
-     * @param {Partial<Config>} [$$source = {}] - The source object to create the Config.
-     */
-    constructor($$source = {}) {
-        if (!("outputDir" in $$source)) {
-            /**
-             * @member
-             * @type {string}
-             */
-            this["outputDir"] = "";
-        }
-        if (!("defaultCookie" in $$source)) {
-            /**
-             * @member
-             * @type {string}
-             */
-            this["defaultCookie"] = "";
-        }
-        if (!("defaultUserAgent" in $$source)) {
-            /**
-             * @member
-             * @type {string}
-             */
-            this["defaultUserAgent"] = "";
-        }
-
-        Object.assign(this, $$source);
-    }
-
-    /**
-     * Creates a new Config instance from a string or object.
-     * @param {any} [$$source = {}]
-     * @returns {Config}
-     */
-    static createFrom($$source = {}) {
-        let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
-        return new Config(/** @type {Partial<Config>} */($$parsedSource));
-    }
-}
-
-export class DownloadedFile {
-    /**
-     * Creates a new DownloadedFile instance.
-     * @param {Partial<DownloadedFile>} [$$source = {}] - The source object to create the DownloadedFile.
-     */
-    constructor($$source = {}) {
-        if (!("name" in $$source)) {
-            /**
-             * @member
-             * @type {string}
-             */
-            this["name"] = "";
-        }
-        if (!("path" in $$source)) {
-            /**
-             * @member
-             * @type {string}
-             */
-            this["path"] = "";
-        }
-        if (!("size" in $$source)) {
-            /**
-             * @member
-             * @type {number}
-             */
-            this["size"] = 0;
-        }
-        if (!("mtime" in $$source)) {
-            /**
-             * @member
-             * @type {number}
-             */
-            this["mtime"] = 0;
-        }
-        if (!("dir" in $$source)) {
-            /**
-             * @member
-             * @type {boolean}
-             */
-            this["dir"] = false;
-        }
-
-        Object.assign(this, $$source);
-    }
-
-    /**
-     * Creates a new DownloadedFile instance from a string or object.
-     * @param {any} [$$source = {}]
-     * @returns {DownloadedFile}
-     */
-    static createFrom($$source = {}) {
-        let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
-        return new DownloadedFile(/** @type {Partial<DownloadedFile>} */($$parsedSource));
-    }
-}
-
 export class HyperDownloadError {
     /**
      * Creates a new HyperDownloadError instance.
@@ -266,34 +168,6 @@ export class HyperDownloadTasksSnapshot {
             $$parsedSource["tasks"] = $$createField0_0($$parsedSource["tasks"]);
         }
         return new HyperDownloadTasksSnapshot(/** @type {Partial<HyperDownloadTasksSnapshot>} */($$parsedSource));
-    }
-}
-
-export class PlatformInfo {
-    /**
-     * Creates a new PlatformInfo instance.
-     * @param {Partial<PlatformInfo>} [$$source = {}] - The source object to create the PlatformInfo.
-     */
-    constructor($$source = {}) {
-        if (!("os" in $$source)) {
-            /**
-             * @member
-             * @type {string}
-             */
-            this["os"] = "";
-        }
-
-        Object.assign(this, $$source);
-    }
-
-    /**
-     * Creates a new PlatformInfo instance from a string or object.
-     * @param {any} [$$source = {}]
-     * @returns {PlatformInfo}
-     */
-    static createFrom($$source = {}) {
-        let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
-        return new PlatformInfo(/** @type {Partial<PlatformInfo>} */($$parsedSource));
     }
 }
 

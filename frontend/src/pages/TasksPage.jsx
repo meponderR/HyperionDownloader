@@ -37,14 +37,14 @@ import {
     DeleteTask,
     DownloadFile,
     GetTasks,
-} from "../../bindings/hyperion-downloader/services/hyperdownloadservice";
+} from "../../bindings/hyperion-downloader/services/hyperdownload/hyperdownloadservice";
 import {
     GetCacheDir,
     GetDefaultCookie,
     GetDefaultUserAgent,
     GetOutputDir,
     PickDir,
-} from "../../bindings/hyperion-downloader/services/configservice";
+} from "../../bindings/hyperion-downloader/services/config/configservice";
 import { enqueueSnackbar } from "notistack";
 import NumberField from "../components/NumberField";
 

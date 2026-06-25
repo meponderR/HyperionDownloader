@@ -1,6 +1,6 @@
-//go:build !ios && !android
+//go:build !ios && !android && !darwin
 
-package services
+package config
 
 import (
 	"encoding/json"

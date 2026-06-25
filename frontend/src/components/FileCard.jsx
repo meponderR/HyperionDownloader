@@ -23,7 +23,7 @@ import dateformat from "dateformat";
 import {
     DeleteFile,
     ShareFile,
-} from "../../bindings/hyperion-downloader/services/downloadedfilesservice";
+} from "../../bindings/hyperion-downloader/services/downloadedFiles/downloadedfilesservice";
 
 function is24HourTime() {
     const options = new Intl.DateTimeFormat(undefined, {

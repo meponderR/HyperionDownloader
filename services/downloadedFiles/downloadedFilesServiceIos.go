@@ -1,6 +1,6 @@
-//go:build android
+//go:build ios
 
-package services
+package downloadedFiles
 
 import (
 	"net/url"
@@ -60,6 +60,6 @@ func (dfs *DownloadedFilesService) ShareFile(filePath string) error {
 		Scheme: "file",
 		Path:   filePath,
 	}
-	application.Android.Share(`{"url": "` + fileURL.String() + `"}`)
+	application.IOS.Share(`{"url": "` + fileURL.String() + `"}`)
 	return nil
 }

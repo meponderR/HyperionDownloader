@@ -11,8 +11,8 @@ import RefreshIcon from "../icons/600/RefreshIcon";
 import { Events } from "@wailsio/runtime";
 
 import FileCard from "../components/FileCard";
-import { GetOutputDir } from "../../bindings/hyperion-downloader/services/configservice";
-import { GetFiles } from "../../bindings/hyperion-downloader/services/downloadedfilesservice";
+import { GetOutputDir } from "../../bindings/hyperion-downloader/services/config/configservice";
+import { GetFiles } from "../../bindings/hyperion-downloader/services/downloadedFiles/downloadedfilesservice";
 import { closeSnackbar, enqueueSnackbar } from "notistack";
 
 function FilesPage({ isIOS = false, isAndroid = false }) {

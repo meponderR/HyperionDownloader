@@ -15,7 +15,7 @@ import * as $models from "./models.js";
  * @returns {$CancellablePromise<void>}
  */
 export function DeleteFile(path) {
-    return $Call.ByID(633513800, path);
+    return $Call.ByID(916766455, path);
 }
 
 /**
@@ -23,7 +23,7 @@ export function DeleteFile(path) {
  * @returns {$CancellablePromise<$models.DownloadedFile[]>}
  */
 export function GetFiles(path) {
-    return $Call.ByID(758892482, path).then(/** @type {($result: any) => any} */(($result) => {
+    return $Call.ByID(1721162117, path).then(/** @type {($result: any) => any} */(($result) => {
         return $$createType1($result);
     }));
 }
@@ -33,7 +33,7 @@ export function GetFiles(path) {
  * @returns {$CancellablePromise<void>}
  */
 export function ShareFile(filePath) {
-    return $Call.ByID(4195080730, filePath);
+    return $Call.ByID(1500229659, filePath);
 }
 
 // Private type creation functions

@@ -7,15 +7,15 @@ import type { Events } from "@wailsio/runtime";
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore: Unused imports
-import type * as services$0 from "../../../../../hyperion-downloader/services/models.js";
+import type * as hyperDownload$0 from "../../../../../hyperion-downloader/services/hyperDownload/models.js";
 
 declare module "@wailsio/runtime" {
     namespace Events {
         interface CustomEvents {
-            "downloadCompleted": services$0.HyperDownloadTask | null;
-            "downloadError": services$0.HyperDownloadError;
+            "downloadCompleted": hyperDownload$0.HyperDownloadTask | null;
+            "downloadError": hyperDownload$0.HyperDownloadError;
             "fileUpdate": string;
-            "tasksSnapshot": services$0.HyperDownloadTasksSnapshot;
+            "tasksSnapshot": hyperDownload$0.HyperDownloadTasksSnapshot;
         }
     }
 }

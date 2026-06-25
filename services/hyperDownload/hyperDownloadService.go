@@ -1,6 +1,6 @@
 //go:build !android
 
-package services
+package hyperDownload
 
 import (
 	"hyperion-downloader/internal/pkg/hyperDownload"

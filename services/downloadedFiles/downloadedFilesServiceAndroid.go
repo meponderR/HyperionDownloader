@@ -1,8 +1,9 @@
-//go:build !ios && !android
+//go:build android
 
-package services
+package downloadedFiles
 
 import (
+	"net/url"
 	"os"
 	"path/filepath"
 
@@ -54,5 +55,11 @@ func (dfs *DownloadedFilesService) DeleteFile(path string) error {
 }
 
 func (dfs *DownloadedFilesService) ShareFile(filePath string) error {
+	// Convert the file path to a file URL
+	fileURL := &url.URL{
+		Scheme: "file",
+		Path:   filePath,
+	}
+	application.Android.Share(`{"url": "` + fileURL.String() + `"}`)
 	return nil
 }

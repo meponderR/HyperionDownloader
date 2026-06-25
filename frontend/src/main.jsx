@@ -7,7 +7,7 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 
-import { GetPlatformInfo } from "../bindings/hyperion-downloader/services/configservice";
+import { GetPlatformInfo } from "../bindings/hyperion-downloader/services/config/configservice";
 
 // Very very dangerous to have an async function here, but it was the best way to get the platform before rendering the app. It should be fast enough.
 (async () => {

@@ -8,7 +8,7 @@ import { Create as $Create } from "@wailsio/runtime";
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore: Unused imports
-import * as services$0 from "../../../../../hyperion-downloader/services/models.js";
+import * as hyperDownload$0 from "../../../../../hyperion-downloader/services/hyperDownload/models.js";
 
 function configure() {
     Object.freeze(Object.assign($Create.Events, {
@@ -19,9 +19,9 @@ function configure() {
 }
 
 // Private type creation functions
-const $$createType0 = services$0.HyperDownloadTask.createFrom;
+const $$createType0 = hyperDownload$0.HyperDownloadTask.createFrom;
 const $$createType1 = $Create.Nullable($$createType0);
-const $$createType2 = services$0.HyperDownloadError.createFrom;
-const $$createType3 = services$0.HyperDownloadTasksSnapshot.createFrom;
+const $$createType2 = hyperDownload$0.HyperDownloadError.createFrom;
+const $$createType3 = hyperDownload$0.HyperDownloadTasksSnapshot.createFrom;
 
 configure();

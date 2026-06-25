@@ -22,7 +22,7 @@ import dateformat from "dateformat";
 import {
     PauseTask,
     StopTask,
-} from "../../bindings/hyperion-downloader/services/hyperdownloadservice";
+} from "../../bindings/hyperion-downloader/services/hyperdownload/hyperdownloadservice";
 import LinearProgressWithLabel from "./LinearProgressWithLabel";
 
 function TaskCard(props) {

@@ -8,7 +8,7 @@ import { Call as $Call, CancellablePromise as $CancellablePromise, Create as $Cr
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore: Unused imports
-import * as hyperStructs$0 from "../internal/pkg/hyperStructs/models.js";
+import * as hyperStructs$0 from "../../internal/pkg/hyperStructs/models.js";
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore: Unused imports
@@ -19,7 +19,7 @@ import * as $models from "./models.js";
  * @returns {$CancellablePromise<void>}
  */
 export function DeleteTask(uid) {
-    return $Call.ByID(2578727881, uid);
+    return $Call.ByID(3542767808, uid);
 }
 
 /**
@@ -32,14 +32,14 @@ export function DeleteTask(uid) {
  * @returns {$CancellablePromise<void>}
  */
 export function DownloadFile(url, outputDir, tempDir, concurrentDownloads, targetPartSize, advancedOptions) {
-    return $Call.ByID(2748092517, url, outputDir, tempDir, concurrentDownloads, targetPartSize, advancedOptions);
+    return $Call.ByID(1480043384, url, outputDir, tempDir, concurrentDownloads, targetPartSize, advancedOptions);
 }
 
 /**
  * @returns {$CancellablePromise<$models.HyperDownloadTask[]>}
  */
 export function GetTasks() {
-    return $Call.ByID(2168677265).then(/** @type {($result: any) => any} */(($result) => {
+    return $Call.ByID(1098437092).then(/** @type {($result: any) => any} */(($result) => {
         return $$createType1($result);
     }));
 }
@@ -49,7 +49,7 @@ export function GetTasks() {
  * @returns {$CancellablePromise<void>}
  */
 export function PauseTask(uid) {
-    return $Call.ByID(793022198, uid);
+    return $Call.ByID(3605496725, uid);
 }
 
 /**
@@ -57,7 +57,7 @@ export function PauseTask(uid) {
  * @returns {$CancellablePromise<void>}
  */
 export function StopTask(uid) {
-    return $Call.ByID(4030641326, uid);
+    return $Call.ByID(1043459043, uid);
 }
 
 // Private type creation functions

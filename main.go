@@ -6,6 +6,9 @@ import (
 	"log"
 
 	"hyperion-downloader/services"
+	"hyperion-downloader/services/config"
+	"hyperion-downloader/services/downloadedFiles"
+	"hyperion-downloader/services/hyperDownload"
 	"hyperion-downloader/setups"
 
 	"github.com/wailsapp/wails/v3/pkg/application"
@@ -16,9 +19,9 @@ var assets embed.FS
 
 func init() {
 	// Register events
-	application.RegisterEvent[services.HyperDownloadTasksSnapshot]("tasksSnapshot")
-	application.RegisterEvent[services.HyperDownloadError]("downloadError")
-	application.RegisterEvent[*services.HyperDownloadTask]("downloadCompleted")
+	application.RegisterEvent[hyperDownload.HyperDownloadTasksSnapshot]("tasksSnapshot")
+	application.RegisterEvent[hyperDownload.HyperDownloadError]("downloadError")
+	application.RegisterEvent[*hyperDownload.HyperDownloadTask]("downloadCompleted")
 	application.RegisterEvent[string]("fileUpdate")
 }
 
@@ -51,10 +54,10 @@ func main() {
 	setups.IosSpecificAppSetup(app)
 
 	// Register services
-	app.RegisterService(application.NewService(services.NewConfigService(app)))
+	app.RegisterService(application.NewService(config.NewConfigService(app)))
 	app.RegisterService(application.NewService(services.NewWindowControls(app)))
-	app.RegisterService(application.NewService(services.NewHyperDownloadService(app)))
-	app.RegisterService(application.NewService(services.NewDownloadedFilesService(app)))
+	app.RegisterService(application.NewService(hyperDownload.NewHyperDownloadService(app)))
+	app.RegisterService(application.NewService(downloadedFiles.NewDownloadedFilesService(app)))
 
 	// Create window
 	app.Window.NewWithOptions(application.WebviewWindowOptions{

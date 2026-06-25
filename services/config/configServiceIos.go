@@ -1,6 +1,6 @@
-//go:build android
+//go:build ios
 
-package services
+package config
 
 import (
 	"encoding/json"
@@ -35,64 +35,26 @@ func (cs *ConfigService) GetPlatformInfo() PlatformInfo {
 	}
 }
 
-func getExternalStoragePath() string {
-	StorageJsonString := application.Android.StorageJSON()
-	var StorageJson struct {
-		InternalStorage string `json:"internalStorage"`
-		InternalCache   string `json:"internalCache"`
-		ExternalStorage string `json:"externalStorage"`
-	}
-	err := json.Unmarshal([]byte(StorageJsonString), &StorageJson)
-	if err != nil {
-		return ""
-	}
-	return StorageJson.ExternalStorage
-}
-func getInternalStoragePath() string {
-	StorageJsonString := application.Android.StorageJSON()
-	var StorageJson struct {
-		InternalStorage string `json:"internalStorage"`
-		InternalCache   string `json:"internalCache"`
-		ExternalStorage string `json:"externalStorage"`
-	}
-	err := json.Unmarshal([]byte(StorageJsonString), &StorageJson)
-	if err != nil {
-		return ""
-	}
-	return StorageJson.InternalStorage
-}
-func getInternalCachePath() string {
-	StorageJsonString := application.Android.StorageJSON()
-	var StorageJson struct {
-		InternalStorage string `json:"internalStorage"`
-		InternalCache   string `json:"internalCache"`
-		ExternalStorage string `json:"externalStorage"`
-	}
-	err := json.Unmarshal([]byte(StorageJsonString), &StorageJson)
-	if err != nil {
-		return ""
-	}
-	return StorageJson.InternalCache
+func getSandboxDir() string {
+	sandboxDir, _ := os.UserHomeDir()
+	return sandboxDir
 }
 
 func (cs *ConfigService) GetAppDataDir() string {
-	dataDir := getInternalStoragePath()
+	dataDir := filepath.Join(getSandboxDir(), "Library", "Application Support")
 	// Ensure the directory exists
 	os.MkdirAll(dataDir, 0755)
 	return dataDir
 }
 
 func (cs *ConfigService) GetDownloadsDir() string {
-	homeDir, err := os.UserHomeDir()
-	if err != nil {
-		return getExternalStoragePath()
-	}
-	downloadsDir := filepath.Join(homeDir, "Download")
+	downloadsDir := filepath.Join(getSandboxDir(), "Documents")
 	return downloadsDir
 }
 
 func (cs *ConfigService) GetCacheDir() string {
-	return getExternalStoragePath()
+	cacheDir := filepath.Join(getSandboxDir(), "Library", "Caches", "HyperionDownloader")
+	return cacheDir
 }
 
 func (cs *ConfigService) ReadConfig() (*Config, error) {

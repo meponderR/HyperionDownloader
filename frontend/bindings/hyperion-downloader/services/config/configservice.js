@@ -14,49 +14,49 @@ import * as $models from "./models.js";
  * @returns {$CancellablePromise<string>}
  */
 export function GetAppDataDir() {
-    return $Call.ByID(3971836095);
+    return $Call.ByID(3327466064);
 }
 
 /**
  * @returns {$CancellablePromise<string>}
  */
 export function GetCacheDir() {
-    return $Call.ByID(2657066464);
+    return $Call.ByID(3634806983);
 }
 
 /**
  * @returns {$CancellablePromise<string>}
  */
 export function GetDefaultCookie() {
-    return $Call.ByID(696262752);
+    return $Call.ByID(2394006225);
 }
 
 /**
  * @returns {$CancellablePromise<string>}
  */
 export function GetDefaultUserAgent() {
-    return $Call.ByID(3451079734);
+    return $Call.ByID(1586852197);
 }
 
 /**
  * @returns {$CancellablePromise<string>}
  */
 export function GetDownloadsDir() {
-    return $Call.ByID(2920978241);
+    return $Call.ByID(3253954786);
 }
 
 /**
  * @returns {$CancellablePromise<string>}
  */
 export function GetOutputDir() {
-    return $Call.ByID(911157087);
+    return $Call.ByID(2366844882);
 }
 
 /**
  * @returns {$CancellablePromise<$models.PlatformInfo>}
  */
 export function GetPlatformInfo() {
-    return $Call.ByID(1891092278).then(/** @type {($result: any) => any} */(($result) => {
+    return $Call.ByID(1149989297).then(/** @type {($result: any) => any} */(($result) => {
         return $$createType0($result);
     }));
 }
@@ -66,14 +66,14 @@ export function GetPlatformInfo() {
  * @returns {$CancellablePromise<string>}
  */
 export function PickDir(title) {
-    return $Call.ByID(544703537, title);
+    return $Call.ByID(392576982, title);
 }
 
 /**
  * @returns {$CancellablePromise<$models.Config | null>}
  */
 export function ReadConfig() {
-    return $Call.ByID(1074585641).then(/** @type {($result: any) => any} */(($result) => {
+    return $Call.ByID(3397071224).then(/** @type {($result: any) => any} */(($result) => {
         return $$createType2($result);
     }));
 }
@@ -83,7 +83,7 @@ export function ReadConfig() {
  * @returns {$CancellablePromise<void>}
  */
 export function SaveConfig(config) {
-    return $Call.ByID(2383596460, config);
+    return $Call.ByID(2592737649, config);
 }
 
 /**
@@ -91,7 +91,7 @@ export function SaveConfig(config) {
  * @returns {$CancellablePromise<void>}
  */
 export function SetDefaultCookie(cookie) {
-    return $Call.ByID(3289522124, cookie);
+    return $Call.ByID(3465788365, cookie);
 }
 
 /**
@@ -99,7 +99,7 @@ export function SetDefaultCookie(cookie) {
  * @returns {$CancellablePromise<void>}
  */
 export function SetDefaultUserAgent(userAgent) {
-    return $Call.ByID(57529906, userAgent);
+    return $Call.ByID(995178897, userAgent);
 }
 
 /**
@@ -107,7 +107,7 @@ export function SetDefaultUserAgent(userAgent) {
  * @returns {$CancellablePromise<void>}
  */
 export function SetOutputDir(outputDir) {
-    return $Call.ByID(4061964979, outputDir);
+    return $Call.ByID(2352653830, outputDir);
 }
 
 // Private type creation functions

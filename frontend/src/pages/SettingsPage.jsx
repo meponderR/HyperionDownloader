@@ -25,7 +25,7 @@ import {
     SetDefaultUserAgent,
     SetOutputDir,
     PickDir,
-} from "../../bindings/hyperion-downloader/services/configservice";
+} from "../../bindings/hyperion-downloader/services/config/configservice";
 
 //Utils
 import { enqueueSnackbar } from "notistack";
