@@ -13,11 +13,10 @@ import {
     Tooltip,
     Typography,
 } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
-import IosShareIcon from "@mui/icons-material/IosShare";
-import ShareIcon from "@mui/icons-material/Share";
-import InfoIcon from "@mui/icons-material/Info";
-//import PauseIcon from "@mui/icons-material/Pause";
+import DeleteIcon from "../icons/400/DeleteIcon";
+import IosShareIcon from "../icons/400/IosShareIcon";
+import ShareIcon from "../icons/400/ShareIcon";
+import InfoIcon from "../icons/400/InfoIcon";
 
 import prettyBytes from "pretty-bytes";
 import dateformat from "dateformat";
@@ -75,7 +74,12 @@ function FileCard({ file, sx, isIOS, isAndroid, ...props }) {
                                         width: 1,
                                     }}
                                 >
-                                    {file.path ? "Path: " + isIOS ? `/Hyperion Downloader/Documents/${file.path.split('/Documents/')[1]}` : file.path : ""}
+                                    {file.path
+                                        ? "Path: " +
+                                          (isIOS
+                                              ? `/Hyperion Downloader/Documents/${file.path.split("/Documents/")[1]}`
+                                              : file.path)
+                                        : ""}
                                 </Typography>
                                 <Typography id="infoModalSize">
                                     {file.size ? "File Size: " + prettyBytes(file.size) : ""}
@@ -83,10 +87,10 @@ function FileCard({ file, sx, isIOS, isAndroid, ...props }) {
                                 <Typography id="infoModalModifiedAt">
                                     {file.mtime
                                         ? "Modified At: " +
-                                        dateformat(
-                                            file.mtime * 1000,
-                                            is24HourTime() ? "yyyy-mm-dd HH:MM:ss" : "yyyy-mm-dd hh:MM:ss",
-                                        )
+                                          dateformat(
+                                              file.mtime * 1000,
+                                              is24HourTime() ? "yyyy-mm-dd HH:MM:ss" : "yyyy-mm-dd hh:MM:ss",
+                                          )
                                         : ""}
                                 </Typography>
                             </Grid>

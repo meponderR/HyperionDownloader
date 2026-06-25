@@ -27,10 +27,6 @@ import {
     Stack,
 } from "@mui/material";
 
-//Material UI Icons
-import TaskAltIcon from "@mui/icons-material/TaskAlt";
-import SettingsIcon from "@mui/icons-material/Settings";
-
 //React Router
 import { HashRouter, Routes, Route, Link } from "react-router";
 import { amber, grey } from "@mui/material/colors";
@@ -41,20 +37,28 @@ import FilesPage from "./pages/FilesPage";
 import * as wRuntime from "@wailsio/runtime";
 
 function App({ platform }) {
+    const isIOS = platform === "ios";
+    const isAndroid = platform === "android";
+    const isMobile = isIOS || isAndroid;
+
     const [isSettingsOpen, setIsSettingsOpen] = useState(window.location.hash === "#/Settings");
+    const [drawerOpen, setDrawerOpen] = useState(!isMobile);
 
     const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
     let darkMode = "dark";
     if (!prefersDarkMode) {
         darkMode = "light";
     }
-    window.wRuntime = wRuntime;
 
-    const isIOS = platform === "ios";
-    const isAndroid = platform === "android";
-    const isMobile = isIOS || isAndroid;
+    window.addEventListener("hashchange", () => {
+        if (window.location.hash === "#/Settings") {
+            setIsSettingsOpen(true);
+        } else {
+            setIsSettingsOpen(false);
+        }
+    });
 
-    const drawerWidth = isMobile ? 0 : "7rem";
+    const drawerWidth = "7rem"; //isMobile ? 0 : "7rem";
     window.platform = platform;
     const theme = createTheme({
         palette: {
@@ -95,16 +99,22 @@ function App({ platform }) {
                             setIsSettingsOpen={setIsSettingsOpen}
                             theme={theme}
                             isMobile={isMobile}
+                            toggleDrawer={() => setDrawerOpen(!drawerOpen)}
+                            closeDrawer={() => setDrawerOpen(false)}
                         />
-                        {isMobile ? null : (
-                            <HyperionDrawer
-                                isSettingsOpen={isSettingsOpen}
-                                setIsSettingsOpen={setIsSettingsOpen}
-                                prefersDarkMode={prefersDarkMode}
-                                theme={theme}
-                                drawerWidth={drawerWidth}
-                            />
-                        )}
+                        <HyperionDrawer
+                            open={drawerOpen}
+                            onClose={() => setDrawerOpen(false)}
+                            onOpen={() => setDrawerOpen(true)}
+                            isSettingsOpen={isSettingsOpen}
+                            setIsSettingsOpen={setIsSettingsOpen}
+                            prefersDarkMode={prefersDarkMode}
+                            theme={theme}
+                            drawerWidth={drawerWidth}
+                            isMobile={isMobile}
+                            isIOS={isIOS}
+                            isAndroid={isAndroid}
+                        />
 
                         <Toolbar
                             variant="dense"
@@ -127,7 +137,7 @@ function App({ platform }) {
                             component="main"
                         >
                             <Routes>
-                                <Route exact path="/" element={<TasksPage isMobile={isMobile} />} />
+                                <Route exact path="/" element={<TasksPage isMobile={isMobile} isIOS={isIOS} />} />
                                 <Route path="/Downloads" element={<FilesPage isIOS={isIOS} isAndroid={isAndroid} />} />
                                 <Route
                                     path="/Settings"

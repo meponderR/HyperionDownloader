@@ -1,15 +1,41 @@
 import { Fragment } from "react";
 import PropTypes from "prop-types";
-import { Box, Drawer, List, ListItemButton, ListItemIcon, ListItemText, Paper, Stack, Toolbar } from "@mui/material";
-import TaskAltIcon from "@mui/icons-material/TaskAlt";
-import SettingsIcon from "@mui/icons-material/Settings";
+import {
+    Box,
+    Drawer,
+    List,
+    ListItemButton,
+    ListItemIcon,
+    ListItemText,
+    Paper,
+    Stack,
+    SwipeableDrawer,
+    Toolbar,
+} from "@mui/material";
+import TaskAltIcon from "../icons/600/TasksAltIcon";
+import DownloadIcon from "../icons/600/DownloadIcon";
+import SettingsIcon from "../icons/600/SettingsIcon";
 import { grey } from "@mui/material/colors";
 import { Link } from "react-router";
 
-export default function HyperionDrawer({ isSettingsOpen, setIsSettingsOpen, prefersDarkMode, theme, drawerWidth }) {
+export default function HyperionDrawer({
+    open,
+    onClose,
+    onOpen,
+    isSettingsOpen,
+    setIsSettingsOpen,
+    prefersDarkMode,
+    theme,
+    drawerWidth,
+    isMobile,
+    isIOS,
+    isAndroid,
+}) {
+    const DrawerVariant = isMobile ? SwipeableDrawer : Drawer;
+
     return (
         <Fragment>
-            <Drawer
+            <DrawerVariant
                 sx={{
                     width: drawerWidth,
                     flexShrink: 0,
@@ -18,12 +44,15 @@ export default function HyperionDrawer({ isSettingsOpen, setIsSettingsOpen, pref
                         boxSizing: "border-box",
                     },
                 }}
-                variant="permanent"
+                variant={isMobile ? "temporary" : "permanent"}
                 classes={{
                     paper: {
                         width: drawerWidth,
                     },
                 }}
+                open={open}
+                onClose={onClose}
+                onOpen={onOpen}
             >
                 <Toolbar variant="dense" />
                 <Paper
@@ -52,7 +81,12 @@ export default function HyperionDrawer({ isSettingsOpen, setIsSettingsOpen, pref
                                     height: theme.spacing(10),
                                 }}
                                 draggable="false"
-                                onClick={() => setIsSettingsOpen(false)}
+                                onClick={() => {
+                                    setIsSettingsOpen(false);
+                                    if (isMobile) {
+                                        onClose();
+                                    }
+                                }}
                             >
                                 <Stack
                                     direction="column" // Stack items vertically
@@ -93,6 +127,63 @@ export default function HyperionDrawer({ isSettingsOpen, setIsSettingsOpen, pref
                                     />
                                 </Stack>
                             </ListItemButton>
+                            {isMobile && (
+                                <ListItemButton
+                                    key="Downloads"
+                                    component={Link}
+                                    to="/Downloads"
+                                    sx={{
+                                        alignItems: "center",
+                                        height: theme.spacing(10),
+                                    }}
+                                    draggable="false"
+                                    onClick={() => {
+                                        setIsSettingsOpen(false);
+                                        if (isMobile) {
+                                            onClose();
+                                        }
+                                    }}
+                                >
+                                    <Stack
+                                        direction="column" // Stack items vertically
+                                        alignItems="center" // Center items horizontally in the stack
+                                        justifyContent="center" // Center items vertically in the stack
+                                        sx={{
+                                            width: "100%", // Ensure the stack takes the full width of the ListItemButton
+                                        }}
+                                    >
+                                        <ListItemIcon
+                                            sx={{
+                                                minWidth: "auto", // Remove the default minWidth of ListItemIcon
+                                                justifyContent: "center", // Center the icon
+                                            }}
+                                        >
+                                            <DownloadIcon
+                                                sx={{
+                                                    fontSize: theme.spacing(7),
+                                                    color: prefersDarkMode ? "white" : grey[900],
+                                                }}
+                                            />
+                                        </ListItemIcon>
+                                        <ListItemText
+                                            primary="DOWNLOADS" // Label text
+                                            slotProps={{
+                                                primary: {
+                                                    sx: {
+                                                        fontSize: theme.typography.body2.fontSize, // Adjust the font size as needed
+                                                        fontWeight: theme.typography.fontWeightBold, // Adjust the font weight as needed
+                                                        color: prefersDarkMode ? "white" : grey[900],
+                                                    },
+                                                },
+                                            }}
+                                            sx={{
+                                                textAlign: "center", // Center the label text
+                                                mt: theme.spacing(0.25), // Adjust the margin top as needed
+                                            }}
+                                        />
+                                    </Stack>
+                                </ListItemButton>
+                            )}
                         </List>
                     </Box>
                     <List>
@@ -104,7 +195,12 @@ export default function HyperionDrawer({ isSettingsOpen, setIsSettingsOpen, pref
                                 alignItems: "center",
                                 height: theme.spacing(10),
                             }}
-                            onClick={() => setIsSettingsOpen(true)}
+                            onClick={() => {
+                                setIsSettingsOpen(true);
+                                if (isMobile) {
+                                    onClose();
+                                }
+                            }}
                             draggable="false"
                         >
                             <Stack
@@ -151,7 +247,7 @@ export default function HyperionDrawer({ isSettingsOpen, setIsSettingsOpen, pref
                         </ListItemButton>
                     </List>
                 </Paper>
-            </Drawer>
+            </DrawerVariant>
         </Fragment>
     );
 }

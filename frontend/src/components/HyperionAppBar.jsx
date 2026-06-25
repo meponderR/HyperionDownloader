@@ -1,17 +1,28 @@
 import PropTypes from "prop-types";
 
 import { AppBar, Box, Button, IconButton, Toolbar, Typography } from "@mui/material";
-import RemoveIcon from "@mui/icons-material/Remove";
-import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
-import CloseIcon from "@mui/icons-material/Close";
-import SettingsIcon from "@mui/icons-material/Settings";
-import HomeIcon from "@mui/icons-material/Home";
+import RemoveIcon from "../icons/600/RemoveIcon";
+import CheckBoxOutlineBlankIcon from "../icons/600/CheckBoxOutlineBlankIcon";
+import CloseIcon from "../icons/600/CloseIcon";
+import SettingsIcon from "../icons/600/SettingsIcon";
+import MenuIcon from "../icons/600/MenuIcon";
 
 import { Link } from "react-router";
 
 import { Minimise, Maximise, Close } from "../../bindings/hyperion-downloader/services/windowcontrols";
+import { Fragment } from "react";
+import DownloadIcon from "../icons/600/DownloadIcon";
 
-function HyperionAppBar({ isSettingsOpen, setIsSettingsOpen, theme, isMobile }) {
+function HyperionAppBar({
+    isSettingsOpen,
+    setIsSettingsOpen,
+    toggleDrawer,
+    closeDrawer,
+    theme,
+    isMobile,
+    isIOS,
+    isAndroid,
+}) {
     return (
         <AppBar
             position="fixed"
@@ -37,25 +48,35 @@ function HyperionAppBar({ isSettingsOpen, setIsSettingsOpen, theme, isMobile }) 
                 }}
             >
                 {isMobile ? (
-                    <IconButton
-                        size="large"
-                        edge="start"
-                        component={Link}
-                        to="/"
-                        color="inherit"
-                        aria-label="home"
-                        sx={{ ml: 0 }}
-                    >
-                        <HomeIcon />
-                    </IconButton>
-                ) : null}
-                <Button
-                    variant="text"
-                    color="inherit"
-                    component={Link}
-                    to="/"
-                    style={{ textDecoration: "none", color: "inherit", WebkitTapHighlightColor: "transparent" }}
-                >
+                    <Fragment>
+                        <IconButton
+                            size="large"
+                            edge="start"
+                            onClick={toggleDrawer}
+                            color="inherit"
+                            aria-label="menu"
+                            sx={{ ml: 0, borderRadius: 0 }}
+                        >
+                            <MenuIcon />
+                        </IconButton>
+                        <Button
+                            variant="text"
+                            color="inherit"
+                            onClick={toggleDrawer}
+                            style={{ textDecoration: "none", color: "inherit" }}
+                        >
+                            <Typography
+                                variant="h6"
+                                noWrap
+                                sx={{
+                                    textTransform: "none",
+                                }}
+                            >
+                                Hyperion DL
+                            </Typography>
+                        </Button>
+                    </Fragment>
+                ) : (
                     <Typography
                         variant="h6"
                         noWrap
@@ -63,24 +84,10 @@ function HyperionAppBar({ isSettingsOpen, setIsSettingsOpen, theme, isMobile }) 
                             textTransform: "none",
                         }}
                     >
-                        {isMobile ? "Hyperion DL" : "Hyperion Downloader"}
+                        Hyperion Downloader
                     </Typography>
-                </Button>
+                )}
                 <Box sx={{ flexGrow: 1 }} />
-
-                {isMobile ? (
-                    <Button
-                        sx={{
-                            fontWeight: "bold",
-                        }}
-                        color="inherit"
-                        component={Link}
-                        to="/Downloads"
-                        variant="text"
-                    >
-                        Downloads
-                    </Button>
-                ) : null}
                 {!isMobile ? (
                     <Box sx={{ display: "flex" }}>
                         <IconButton
@@ -133,9 +140,9 @@ function HyperionAppBar({ isSettingsOpen, setIsSettingsOpen, theme, isMobile }) 
                 ) : (
                     <IconButton
                         size="large"
-                        aria-label="settings"
+                        aria-label="downloads"
                         component={Link}
-                        to="/Settings"
+                        to="/Downloads"
                         color="inherit"
                         style={{
                             "--wails-draggable": "no-drag",
@@ -143,14 +150,14 @@ function HyperionAppBar({ isSettingsOpen, setIsSettingsOpen, theme, isMobile }) 
                         sx={{
                             borderRadius: 0,
                         }}
-                        //onClick={() => setIsSettingsOpen(true)}
+                        onClick={() => {
+                            if (isMobile) {
+                                closeDrawer();
+                            }
+                            setIsSettingsOpen(true);
+                        }}
                     >
-                        <SettingsIcon
-                            sx={{
-                                transform: isSettingsOpen ? "rotate(150deg)" : "none",
-                                transition: "transform 0.5s",
-                            }}
-                        />
+                        <DownloadIcon />
                     </IconButton>
                 )}
             </Toolbar>

@@ -25,14 +25,15 @@ import {
     Tab,
     Tabs,
     TextField,
+    Tooltip,
     Typography,
 } from "@mui/material";
 
 //Material UI Icons
-import AddTaskIcon from "@mui/icons-material/AddTask";
-import FolderOpenIcon from "@mui/icons-material/FolderOpen";
-import ContentPasteIcon from "@mui/icons-material/ContentPaste";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import AddTaskIcon from "../icons/400/AddTaskIcon";
+import FolderIcon from "../icons/400/FolderIcon";
+import ContentPasteIcon from "../icons/600/ContentPasteIcon";
+import KeyboardArrowDownIcon from "../icons/400/KeyboardArrowDownIcon";
 
 import { Clipboard, Events } from "@wailsio/runtime";
 
@@ -48,7 +49,7 @@ import {
 import { enqueueSnackbar } from "notistack";
 import NumberField from "../components/NumberField";
 
-function TasksPage({ isMobile }) {
+function TasksPage({ isMobile, isIOS }) {
     const [tasks, setTasks] = useState([]);
     const [taskAddDialogOpen, setTaskAddDialogOpen] = useState(false);
 
@@ -228,22 +229,26 @@ function TasksPage({ isMobile }) {
                                         slotProps={{
                                             input: {
                                                 endAdornment: (
-                                                    <IconButton
-                                                        aria-label="paste"
-                                                        onClick={() => {
-                                                            Clipboard.Text().then((text) => {
-                                                                setDownloadURL((prev) => prev + text);
-                                                            });
-                                                        }}
-                                                        edge="end"
-                                                        sx={{
-                                                            width: 40,
-                                                            height: 40,
-                                                            mr: 0.5,
-                                                        }}
-                                                    >
-                                                        <ContentPasteIcon />
-                                                    </IconButton>
+                                                    <InputAdornment position="end">
+                                                        <Tooltip title="Paste">
+                                                            <IconButton
+                                                                aria-label="paste"
+                                                                onClick={() => {
+                                                                    Clipboard.Text().then((text) => {
+                                                                        setDownloadURL((prev) => prev + text);
+                                                                    });
+                                                                }}
+                                                                edge="end"
+                                                                sx={{
+                                                                    width: 40,
+                                                                    height: 40,
+                                                                    mr: 0.5,
+                                                                }}
+                                                            >
+                                                                <ContentPasteIcon />
+                                                            </IconButton>
+                                                        </Tooltip>
+                                                    </InputAdornment>
                                                 ),
                                             },
                                         }}
@@ -255,7 +260,7 @@ function TasksPage({ isMobile }) {
                                         marginBottom: 1,
                                     }}
                                 >
-                                    {isMobile ? null : (
+                                    {isIOS ? null : (
                                         <TextField
                                             variant="filled"
                                             id="outputLocationInput"
@@ -268,25 +273,27 @@ function TasksPage({ isMobile }) {
                                                 input: {
                                                     endAdornment: (
                                                         <InputAdornment position="end">
-                                                            <IconButton
-                                                                aria-label="pick file"
-                                                                onClick={async () => {
-                                                                    const pickFile =
-                                                                        await PickDir("Select Output Directory");
-                                                                    if (pickFile) {
-                                                                        setDownloadPath(pickFile);
-                                                                    }
-                                                                }}
-                                                                onMouseDown={(event) => event.preventDefault()}
-                                                                edge="end"
-                                                                sx={{
-                                                                    width: 40,
-                                                                    height: 40,
-                                                                    mr: 0.5,
-                                                                }}
-                                                            >
-                                                                <FolderOpenIcon />
-                                                            </IconButton>
+                                                            <Tooltip title="Pick Directory">
+                                                                <IconButton
+                                                                    aria-label="pick file"
+                                                                    onClick={async () => {
+                                                                        const pickFile =
+                                                                            await PickDir("Select Output Directory");
+                                                                        if (pickFile) {
+                                                                            setDownloadPath(pickFile);
+                                                                        }
+                                                                    }}
+                                                                    onMouseDown={(event) => event.preventDefault()}
+                                                                    edge="end"
+                                                                    sx={{
+                                                                        width: 40,
+                                                                        height: 40,
+                                                                        mr: 0.5,
+                                                                    }}
+                                                                >
+                                                                    <FolderIcon />
+                                                                </IconButton>
+                                                            </Tooltip>
                                                         </InputAdornment>
                                                     ),
                                                 },
@@ -303,7 +310,7 @@ function TasksPage({ isMobile }) {
                                     elevation={16}
                                 >
                                     <AccordionSummary
-                                        expandIcon={<ExpandMoreIcon />}
+                                        expandIcon={<KeyboardArrowDownIcon />}
                                         aria-controls="advanced-options-content"
                                         id="advanced-options-header"
                                     >

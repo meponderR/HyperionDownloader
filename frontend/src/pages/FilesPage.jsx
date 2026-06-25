@@ -29,10 +29,7 @@ import {
 } from "@mui/material";
 
 //Material UI Icons
-import RefreshIcon from "@mui/icons-material/Refresh";
-import FolderOpenIcon from "@mui/icons-material/FolderOpen";
-import ContentPasteIcon from "@mui/icons-material/ContentPaste";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import RefreshIcon from "../icons/600/RefreshIcon";
 
 import { Events } from "@wailsio/runtime";
 

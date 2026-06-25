@@ -13,10 +13,9 @@ import {
     Tooltip,
     Typography,
 } from "@mui/material";
-import CancelIcon from "@mui/icons-material/Cancel";
-import PauseIcon from "@mui/icons-material/Pause";
-import InfoIcon from "@mui/icons-material/Info";
-//import PauseIcon from "@mui/icons-material/Pause";
+import CancelIcon from "../icons/400/CancelIcon";
+import PauseIcon from "../icons/400/PauseIcon";
+import InfoIcon from "../icons/400/InfoIcon";
 
 import prettyBytes from "pretty-bytes";
 import dateformat from "dateformat";

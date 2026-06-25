@@ -21,9 +21,8 @@ import {
 } from "@mui/material";
 
 //Material UI Icons
-import ContentPasteIcon from "@mui/icons-material/ContentPaste";
-import SaveIcon from "@mui/icons-material/Save";
-import FolderOpenIcon from "@mui/icons-material/FolderOpen";
+import SaveIcon from "../icons/400/SaveIcon";
+import FolderIcon from "../icons/400/FolderIcon";
 
 //Bindings
 import {
@@ -105,7 +104,7 @@ function SettingsPage({ isSettingsOpen, setIsSettingsOpen, theme, isMobile, isIO
                 >
                     Settings
                 </Typography>
-                {isMobile ? (
+                {isMobile && (
                     <Button
                         variant="contained"
                         sx={{
@@ -119,9 +118,9 @@ function SettingsPage({ isSettingsOpen, setIsSettingsOpen, theme, isMobile, isIO
                     >
                         Return to Home
                     </Button>
-                ) : null}
+                )}
 
-                {isIOS ? null : (
+                {!isIOS && (
                     <TextField
                         variant="outlined"
                         sx={{
@@ -153,7 +152,7 @@ function SettingsPage({ isSettingsOpen, setIsSettingsOpen, theme, isMobile, isIO
                                                 mr: 0.25,
                                             }}
                                         >
-                                            <FolderOpenIcon />
+                                            <FolderIcon />
                                         </IconButton>
                                     </InputAdornment>
                                 ),

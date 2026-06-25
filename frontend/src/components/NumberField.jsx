@@ -7,8 +7,8 @@ import FormHelperText from "@mui/material/FormHelperText";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputAdornment from "@mui/material/InputAdornment";
 import InputLabel from "@mui/material/InputLabel";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "../icons/400/KeyboardArrowUpIcon";
+import KeyboardArrowDownIcon from "../icons/400/KeyboardArrowDownIcon";
 import { FilledInput, Typography } from "@mui/material";
 
 /**
@@ -19,7 +19,16 @@ function SSRInitialFilled(_) {
 }
 SSRInitialFilled.muiName = "Input";
 
-function NumberField({ id: idProp, label, error, size = "medium", endAdornment = "", fullWidth, variant = "filled", ...other }) {
+function NumberField({
+    id: idProp,
+    label,
+    error,
+    size = "medium",
+    endAdornment = "",
+    fullWidth,
+    variant = "filled",
+    ...other
+}) {
     let id = React.useId();
     if (idProp) {
         id = idProp;
@@ -62,11 +71,7 @@ function NumberField({ id: idProp, label, error, size = "medium", endAdornment =
                         endAdornment={
                             <React.Fragment>
                                 <InputAdornment>
-                                    <Typography
-                                        variant="body2"
-                                        color="text.secondary"
-                                        sx={{ pr: 1 }}
-                                    >
+                                    <Typography variant="body2" color="text.secondary" sx={{ pr: 1 }}>
                                         {endAdornment}
                                     </Typography>
                                 </InputAdornment>
@@ -87,31 +92,15 @@ function NumberField({ id: idProp, label, error, size = "medium", endAdornment =
                                     }}
                                 >
                                     <BaseNumberField.Increment
-                                        render={
-                                            <IconButton
-                                                size={size}
-                                                aria-label="Increase"
-                                            />
-                                        }
+                                        render={<IconButton size={size} aria-label="Increase" />}
                                     >
-                                        <KeyboardArrowUpIcon
-                                            fontSize={size}
-                                            sx={{ transform: "translateY(2px)" }}
-                                        />
+                                        <KeyboardArrowUpIcon fontSize={size} sx={{ transform: "translateY(2px)" }} />
                                     </BaseNumberField.Increment>
 
                                     <BaseNumberField.Decrement
-                                        render={
-                                            <IconButton
-                                                size={size}
-                                                aria-label="Decrease"
-                                            />
-                                        }
+                                        render={<IconButton size={size} aria-label="Decrease" />}
                                     >
-                                        <KeyboardArrowDownIcon
-                                            fontSize={size}
-                                            sx={{ transform: "translateY(-2px)" }}
-                                        />
+                                        <KeyboardArrowDownIcon fontSize={size} sx={{ transform: "translateY(-2px)" }} />
                                     </BaseNumberField.Decrement>
                                 </InputAdornment>
                             </React.Fragment>
