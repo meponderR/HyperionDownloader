@@ -99,10 +99,20 @@ jobs:
                     -exportOptionsPlist build/ios/xcode/ExportOptions.plist \
                     -exportPath $PWD/build/ipa
 
-            - name: "Upload app to TestFlight"
-              uses: apple-actions/upload-testflight-build@v4
-              with:
-                  app-path: "build/ipa/Hyperion Downloader.ipa"
-                  issuer-id: ${{ secrets.APPLE_ISSUER_ID }}
-                  api-key-id: ${{ secrets.APPLE_KEY_ID }}
-                  api-private-key: ${{ secrets.APPLE_KEY_PLAIN }}
+            - name: Install Fastlane
+              run: gem install fastlane --no-document
+
+            - name: Distribute to TestFlight Nightly Group
+              env:
+                  APP_STORE_CONNECT_KEY_ID: ${{ secrets.APPLE_KEY_ID }}
+                  APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APPLE_ISSUER_ID }}
+                  APP_STORE_CONNECT_PRIVATE_KEY: ${{ secrets.APPLE_KEY_PLAIN }}
+              run: |
+                  fastlane pilot upload \
+                    --ipa "build/ipa/Hyperion Downloader.ipa" \
+                    --api_key_path "" \
+                    --skip_waiting_by_default false \
+                    --distribute_external true \
+                    --groups "Nightly" \
+                    --submit_beta_review true \
+                    --localized_test_info "{\"en-US\": \"Automated CI build\"}"
