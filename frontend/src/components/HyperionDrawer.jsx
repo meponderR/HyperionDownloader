@@ -62,6 +62,8 @@ export default function HyperionDrawer({
                         background: prefersDarkMode ? grey[900] : grey[400],
                         display: "flex",
                         flexDirection: "column",
+                        paddingTop: "env(safe-area-inset-top)",
+                        paddingBottom: "env(safe-area-inset-bottom)",
                     }}
                     elevation={8}
                     square
