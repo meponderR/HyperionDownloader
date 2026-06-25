@@ -12,6 +12,13 @@ export class Config {
      * @param {Partial<Config>} [$$source = {}] - The source object to create the Config.
      */
     constructor($$source = {}) {
+        if (!("outputDir" in $$source)) {
+            /**
+             * @member
+             * @type {string}
+             */
+            this["outputDir"] = "";
+        }
         if (!("defaultCookie" in $$source)) {
             /**
              * @member

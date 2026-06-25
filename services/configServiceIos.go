@@ -16,6 +16,7 @@ type ConfigService struct {
 }
 
 type Config struct {
+	OutputDir        string `json:"outputDir"`
 	DefaultCookie    string `json:"defaultCookie"`
 	DefaultUserAgent string `json:"defaultUserAgent"`
 }
