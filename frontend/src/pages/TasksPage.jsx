@@ -13,6 +13,7 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
+    Divider,
     Fab,
     FormControl,
     Grid,
@@ -569,6 +570,11 @@ function TasksPage({ isMobile, isIOS }) {
                         </Button>
                     </DialogActions>
                 </Dialog>
+                <Divider
+                    sx={{
+                        width: "100%",
+                    }}
+                />
                 <Box
                     display="flex"
                     sx={{
