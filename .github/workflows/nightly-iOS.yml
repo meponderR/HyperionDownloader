@@ -115,4 +115,4 @@ jobs:
                     --distribute_external true \
                     --groups "Nightly" \
                     --submit_beta_review true \
-                    --localized_test_info "{\"en-US\": \"Automated CI build\"}"
+                    --localized-build-info "{\"en-US\": \"Automated CI build\"}"
