@@ -21,7 +21,7 @@ importers:
         specifier: ^5.2.10
         version: 5.2.10
       '@material-symbols/svg-400':
-        specifier: ^0.45.3
+        specifier: ^0.45.2
         version: 0.45.3
       '@material-symbols/svg-600':
         specifier: ^0.45.2
