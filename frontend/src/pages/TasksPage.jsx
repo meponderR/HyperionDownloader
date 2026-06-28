@@ -37,7 +37,7 @@ import {
     DeleteTask,
     DownloadFile,
     GetTasks,
-} from "../../bindings/hyperion-downloader/services/hyperdownload/hyperdownloadservice";
+} from "../../bindings/hyperion-downloader/services/hyperDownload/hyperdownloadservice";
 import {
     GetCacheDir,
     GetDefaultCookie,
