@@ -110,7 +110,6 @@ jobs:
               run: |
                   fastlane pilot upload \
                     --ipa "build/ipa/Hyperion Downloader.ipa" \
-                    --api_key_path "" \
                     --skip_waiting_by_default false \
                     --distribute_external true \
                     --groups "Nightly" \
