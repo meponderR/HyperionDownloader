@@ -115,3 +115,22 @@ jobs:
                     --distribute_external true \
                     --groups "Nightly" \
                     --submit_beta_review true
+
+            - name: Upload to TestFlight
+              uses: apple-actions/upload-testflight-build@v5
+              with:
+                  app-path: build/ipa/Hyperion Downloader.ipa
+                  issuer-id: ${{ secrets.APPLE_ISSUER_ID }}
+                  api-key-id: ${{ secrets.APPLE_KEY_ID }}
+                  api-private-key: ${{ secrets.APPLE_KEY_PLAIN }}
+                  wait-for-processing: "true"
+
+            - name: Distribute to TestFlight Group
+              uses: kapilvats/testflight-distributor@v1
+              with:
+                  issuer-id: ${{ secrets.APPLE_ISSUER_ID }}
+                  api-key-id: ${{ secrets.APPLE_KEY_ID }}
+                  api-private-key: ${{ secrets.APPLE_KEY_PLAIN }}
+                  bundle-id: "com.meponder.hyperiondownloader"
+                  build-number: ${{ github.run_number }}
+                  group-name: "Nightly"
