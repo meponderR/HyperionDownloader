@@ -107,11 +107,11 @@ jobs:
                   APP_STORE_CONNECT_KEY_ID: ${{ secrets.APPLE_KEY_ID }}
                   APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APPLE_ISSUER_ID }}
                   APP_STORE_CONNECT_PRIVATE_KEY: ${{ secrets.APPLE_KEY_PLAIN }}
+                  PILOT_LOCALIZED_BUILD_INFO: '{"en-US": "Automated CI build"}'
               run: |
                   fastlane pilot upload \
                     --ipa "build/ipa/Hyperion Downloader.ipa" \
                     --skip_waiting_for_build_processing false \
                     --distribute_external true \
                     --groups "Nightly" \
-                    --submit_beta_review true \
-                    --localized-build-info "{\"en-US\": \"Automated CI build\"}"
+                    --submit_beta_review true
