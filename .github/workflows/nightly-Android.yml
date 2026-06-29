@@ -40,7 +40,7 @@ jobs:
             - name: Setup Go
               uses: actions/setup-go@v6
               with:
-                  go-version: "1.26" # Update to your specific Go version if needed
+                  go-version: "1.26"
                   cache: true
 
             - name: Setup pnpm
@@ -64,12 +64,11 @@ jobs:
               run: go install github.com/wailsapp/wails/v3/cmd/wails3@latest
 
             - name: Build Application (Android)
+              env:
+                  ANDROID_HOME: /usr/local/lib/android/sdk
+                  ANDROID_NDK_HOME: /usr/local/lib/android/sdk/ndk/26.3.11579264
               run: |
-                  export ANDROID_HOME=$HOME/Android/Sdk
                   export PATH=$PATH:$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools
-                  export CC=$ANDROID_HOME/ndk/26.3.11579264/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android21-clang
-                  export CXX=$ANDROID_HOME/ndk/26.3.11579264/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android21-clang++
-                  export CGO_ENABLED=1
                   wails3 task android:package:fat
 
             - name: Sign Android APK
