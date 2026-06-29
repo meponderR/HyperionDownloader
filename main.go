@@ -1,7 +1,9 @@
 package main
 
 import (
+	"context"
 	"embed"
+	"time"
 
 	"log"
 
@@ -9,9 +11,12 @@ import (
 	"hyperion-downloader/services/config"
 	"hyperion-downloader/services/downloadedFiles"
 	"hyperion-downloader/services/hyperDownload"
+	"hyperion-downloader/services/updaterService"
 	"hyperion-downloader/setups"
 
 	"github.com/wailsapp/wails/v3/pkg/application"
+	"github.com/wailsapp/wails/v3/pkg/updater"
+	"github.com/wailsapp/wails/v3/pkg/updater/providers/github"
 )
 
 //go:embed all:frontend/dist
@@ -58,6 +63,7 @@ func main() {
 	app.RegisterService(application.NewService(services.NewWindowControls(app)))
 	app.RegisterService(application.NewService(hyperDownload.NewHyperDownloadService(app)))
 	app.RegisterService(application.NewService(downloadedFiles.NewDownloadedFilesService(app)))
+	app.RegisterService(application.NewService(updaterService.NewUpdaterService(app)))
 
 	// Create window
 	app.Window.NewWithOptions(application.WebviewWindowOptions{
@@ -75,8 +81,39 @@ func main() {
 		URL:              "/",
 	})
 
+	// Set up auto-updater
+	const currentVersion = "0.1.4"
+
+	gh, err := github.New(github.Config{
+		Repository:    "meponderR/HyperionDownloader",
+		ChecksumAsset: "SHA256SUMS",
+	})
+	if err != nil {
+		log.Fatalf("github.New: %v", err)
+	}
+
+	if err := app.Updater.Init(updater.Config{
+		CurrentVersion: currentVersion,
+		Providers:      []updater.Provider{gh},
+		CheckInterval:  6 * time.Hour,
+	}); err != nil {
+		log.Fatalf("Updater.Init: %v", err)
+	}
+
+	// Set up application menu
+	menu := app.Menu.New()
+	app.Menu.SetApplicationMenu(menu)
+	appMenu := menu.AddSubmenu("App")
+	appMenu.Add("Check for Updates…").OnClick(func(*application.Context) {
+		go func() {
+			if err := app.Updater.CheckAndInstall(context.Background()); err != nil {
+				app.Logger.Error("update", "error", err)
+			}
+		}()
+	})
+
 	// Run application
-	err := app.Run()
+	err = app.Run()
 	if err != nil {
 		log.Fatal(err)
 	}

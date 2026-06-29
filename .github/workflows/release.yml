@@ -35,7 +35,7 @@ jobs:
             - name: Setup Go
               uses: actions/setup-go@v6
               with:
-                  go-version: "1.26" # Update to your specific Go version if needed
+                  go-version: "1.26"
                   cache: true
 
             - name: Setup pnpm
@@ -103,8 +103,8 @@ jobs:
               if: matrix.platform == 'linux'
               run: |
                   wails3 package GOOS=linux
-                  mv bin/hyperion-downloader bin/hyperion-downloader-linux
-                  mv bin/hyperion-downloader-x86_64.AppImage bin/hyperion-downloader-x86_64-linux.AppImage
+                  mv bin/hyperion-downloader bin/hyperion-downloader-linux-amd64 
+                  mv bin/hyperion-downloader-x86_64.AppImage bin/hyperion-downloader-amd64-linux.AppImage
 
             - name: Build Application (macOS)
               if: matrix.platform == 'darwin'
@@ -133,15 +133,49 @@ jobs:
                       bin/Hyperion-Downloader-macos.dmg
                       bin/hyperion-downloader-macos.zip
 
-            - name: Create Release
-              uses: softprops/action-gh-release@v3.0.0
+    checksum:
+        name: Generate SHA256SUMS
+        needs: build
+        runs-on: ubuntu-latest
+        steps:
+            - name: Create workspace directory
+              run: mkdir bin
+
+            - name: Download all artifacts
+              uses: actions/download-artifact@v7
               with:
-                  files: |
-                      bin/hyperion-downloader-amd64-windows.exe
-                      bin/hyperion-downloader-arm64-windows.exe
-                      bin/hyperion-downloader-amd64-windows-installer.exe
-                      bin/hyperion-downloader-arm64-windows-installer.exe
-                      bin/hyperion-downloader-linux
-                      bin/hyperion-downloader-x86_64-linux.AppImage
-                      bin/Hyperion-Downloader-macos.dmg
-                      bin/hyperion-downloader-macos.zip
+                  pattern: hyperion-downloader-*
+                  path: bin
+                  merge-multiple: true
+
+            - name: Generate SHA256SUMS file
+              run: |
+                  cd bin
+                  shasum -a 256 * > SHA256SUMS
+                  cat SHA256SUMS
+
+            - name: Upload SHA256SUMS Artifact
+              uses: actions/upload-artifact@v7
+              with:
+                  name: hyperion-downloader-checksums
+                  path: bin/SHA256SUMS
+
+    release:
+        name: Create Release
+        needs: checksum
+        runs-on: ubuntu-latest
+        steps:
+            - name: Create release directory
+              run: mkdir artifacts
+
+            - name: Download all build binaries
+              uses: actions/download-artifact@v7
+              with:
+                  pattern: hyperion-downloader-*
+                  path: artifacts
+                  merge-multiple: true
+
+            - name: Publish GitHub Release
+              uses: softprops/action-gh-release@v3
+              with:
+                  files: artifacts/*

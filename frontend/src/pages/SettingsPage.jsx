@@ -10,6 +10,7 @@ import {
     Typography,
     InputAdornment,
     Box,
+    Button,
 } from "@mui/material";
 
 //Material UI Icons
@@ -26,6 +27,7 @@ import {
     SetOutputDir,
     PickDir,
 } from "../../bindings/hyperion-downloader/services/config/configservice";
+import { CheckForUpdates } from "../../bindings/hyperion-downloader/services/updaterService/updaterservice";
 
 //Utils
 import { enqueueSnackbar } from "notistack";
@@ -169,6 +171,18 @@ function SettingsPage({ isMobile = false, isIOS = false }) {
                     }}
                     value={defaultCookie}
                 />
+                {!isMobile && (
+                    <Button
+                        variant="contained"
+                        sx={{
+                            width: 0.8,
+                            mt: 2,
+                        }}
+                        onClick={CheckForUpdates}
+                    >
+                        Check for Updates
+                    </Button>
+                )}
                 <Box
                     display="flex"
                     sx={{

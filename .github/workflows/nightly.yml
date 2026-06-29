@@ -37,7 +37,7 @@ jobs:
             - name: Setup Go
               uses: actions/setup-go@v6
               with:
-                  go-version: "1.26" # Update to your specific Go version if needed
+                  go-version: "1.26"
                   cache: true
 
             - name: Setup pnpm
@@ -134,3 +134,29 @@ jobs:
                       bin/hyperion-downloader-x86_64-linux.AppImage
                       bin/Hyperion-Downloader-macos.dmg
                       bin/hyperion-downloader-macos.zip
+    checksum:
+        name: Generate SHA256SUMS
+        needs: build
+        runs-on: ubuntu-latest
+        steps:
+            - name: Create workspace directory
+              run: mkdir bin
+
+            - name: Download all artifacts
+              uses: actions/download-artifact@v8
+              with:
+                  pattern: hyperion-downloader-*
+                  path: bin
+                  merge-multiple: true
+
+            - name: Generate SHA256SUMS file
+              run: |
+                  cd bin
+                  shasum -a 256 * > SHA256SUMS
+                  cat SHA256SUMS
+
+            - name: Upload SHA256SUMS Artifact
+              uses: actions/upload-artifact@v7
+              with:
+                  name: hyperion-downloader-checksums
+                  path: bin/SHA256SUMS

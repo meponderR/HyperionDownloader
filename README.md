@@ -6,7 +6,7 @@ Hyperion Downloader is a lightweight multithreaded downloader built with Wails. 
 ![Hyperion Downloader Logo](https://raw.githubusercontent.com/meponderR/HyperionDownloader/master/assets/icon.png)
 
 ## Download
-You can download the latest release from the [Releases](https://github.com/meponderR/HyperionDownloader/releases/latest) page. iOS builds are available on [TestFlight](https://testflight.apple.com/join/TabaaenF).
+You can download the latest release from the [Releases](https://github.com/meponderR/HyperionDownloader/releases/latest) page. iOS builds are available on [TestFlight](https://testflight.apple.com/join/TabaaenF). Android builds will eventually be available on Google Play. They are currently available as a release on GitHub.
 
 ## Features
 - Multithreaded downloading
