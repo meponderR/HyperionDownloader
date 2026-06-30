@@ -17,7 +17,7 @@
         PackageDisplayName="Hyperion Downloader"
         PublisherName="CN=meponder"
         PublisherDisplayName="meponder"
-        Version="0.1.4.0"
+        Version="0.1.5.0"
         PackageDescription="A multi-threaded downloader built with Go and Wails.">
         <Capabilities>
             <Capability Name="runFullTrust" />

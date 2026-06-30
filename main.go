@@ -82,7 +82,7 @@ func main() {
 	})
 
 	// Set up auto-updater
-	const currentVersion = "0.1.4"
+	const currentVersion = "0.1.5"
 
 	gh, err := github.New(github.Config{
 		Repository:    "meponderR/HyperionDownloader",
