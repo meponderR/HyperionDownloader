@@ -105,8 +105,8 @@ jobs:
               if: matrix.platform == 'linux'
               run: |
                   wails3 package GOOS=linux
-                  mv bin/hyperion-downloader bin/hyperion-downloader-linux
-                  mv bin/hyperion-downloader-x86_64.AppImage bin/hyperion-downloader-x86_64-linux.AppImage
+                  mv bin/hyperion-downloader bin/hyperion-downloader-amd64-linux
+                  mv bin/hyperion-downloader-x86_64.AppImage bin/hyperion-downloader-amd64-linux.AppImage
 
             - name: Build Application (macOS)
               if: matrix.platform == 'darwin'
@@ -130,8 +130,8 @@ jobs:
                       bin/hyperion-downloader-arm64-windows.exe
                       bin/hyperion-downloader-amd64-windows-installer.exe
                       bin/hyperion-downloader-arm64-windows-installer.exe
-                      bin/hyperion-downloader-linux
-                      bin/hyperion-downloader-x86_64-linux.AppImage
+                      bin/hyperion-downloader-amd64-linux
+                      bin/hyperion-downloader-hyperion-downloader-amd64-linux-linux.AppImage
                       bin/Hyperion-Downloader-macos.dmg
                       bin/hyperion-downloader-macos.zip
     checksum:
