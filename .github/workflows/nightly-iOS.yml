@@ -109,11 +109,11 @@ jobs:
                   wait-for-processing: "true"
 
             - name: Distribute to TestFlight Nightly Group
-              uses: kapilvats/testflight-distributor@v1
+              uses: shichen85/submit-for-testflight-review@v1
               with:
+                  app-id: ${{ secrets.APPLE_APP_ID }}
                   issuer-id: ${{ secrets.APPLE_ISSUER_ID }}
                   api-key-id: ${{ secrets.APPLE_KEY_ID }}
                   api-private-key: ${{ secrets.APPLE_KEY_PLAIN }}
-                  bundle-id: "com.meponder.hyperiondownloader"
-                  build-number: ${{ github.run_number }}
+                  bundle-version-string: ${{ github.run_number }}
                   group-name: "Nightly"
