@@ -2,7 +2,7 @@ package hyperStructs
 
 type HyperFilePart struct {
 	Url        string `json:"url"`        // URL to download this part from. Must support HTTP Range requests.
-	Filename   string `json:"filename"`   // i.e. file.25 (Should have minumal padding to ensure correct ordering when sorted lexicographically)
+	Filename   string `json:"filename"`   // i.e. file.25 (Should have minimal padding to ensure correct ordering when sorted lexicographically)
 	PartNumber int    `json:"partNumber"` // Part number, starting from 0
 	StartByte  int64  `json:"startByte"`  // Start byte for this part, inclusive, starting from 0
 	EndByte    int64  `json:"endByte"`    // End byte for this part, inclusive
