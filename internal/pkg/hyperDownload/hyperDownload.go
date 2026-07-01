@@ -25,6 +25,7 @@ var fastClient = &fasthttp.Client{
 	MaxIdleConnDuration: 15 * time.Second, // Keeps TCP connections warm between chunks
 	ReadTimeout:         5 * time.Minute,  // Hard cutoff for hanging downloads
 	WriteTimeout:        10 * time.Second, // Time allowed to send the request headers
+	StreamResponseBody:  true,             // Stream the response body to avoid buffering large files in memory
 }
 
 func ConstructHyperFile(urlString string, concurrentDownloads int, targetPartSize int64, advancedOptions *hyperStructs.HyperDownloadAdvancedOptions, redirectCount int) (*hyperStructs.HyperFile, error) {
@@ -256,8 +257,20 @@ func DownloadPart(part hyperStructs.HyperFilePart, outputDir string, advancedOpt
 		statusCode := resp.StatusCode()
 
 		if statusCode == fasthttp.StatusPartialContent || statusCode == fasthttp.StatusOK {
-			// Save the part to a file
-			err = os.WriteFile(filename, resp.Body(), 0644)
+			// Create the part file
+			partFile, err := os.Create(filename)
+			defer partFile.Close()
+			if err != nil {
+				return fmt.Errorf("failed to create part file: %w", err)
+			}
+
+			// Create body stream
+			bodyStream := resp.BodyStream()
+			defer resp.CloseBodyStream()
+
+			// Copy the response body to the part file
+			_, err = io.Copy(partFile, bodyStream)
+
 			if err != nil {
 				return fmt.Errorf("failed to save part to file: %w", err)
 			}
@@ -426,6 +439,12 @@ func CombineParts(partsDir string, outputFilePath string, functions hyperStructs
 }
 
 func DownloadFile(url string, outputDir string, tempDir string, concurrentDownloads int, targetPartSize int64, advancedOptions *hyperStructs.HyperDownloadAdvancedOptions, functions hyperStructs.HyperFunctions) error {
+	// Time the download process
+	startTime := time.Now()
+	defer func() {
+		elapsed := time.Since(startTime)
+		fmt.Printf("Download completed in %s\n", elapsed)
+	}()
 	// Check if a download.json file exists in the tempDir, if it does, we can assume that this is a resumed download and we can skip the metadata fetching and go straight to downloading the parts, otherwise we need to fetch the metadata and emit the gotMetadata event
 	downloadJsonPath := filepath.Join(tempDir, "download.json")
 	_, err := os.Stat(downloadJsonPath)
